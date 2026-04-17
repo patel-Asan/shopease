@@ -20,6 +20,7 @@ import {
   FaSun,
   FaMoon,
   FaGem,
+  FaKey,
 } from "react-icons/fa";
 
 export default function DeliveryDashboard() {
@@ -32,6 +33,10 @@ export default function DeliveryDashboard() {
   const [isMobile, setIsMobile] = useState(false);
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [activePage, setActivePage] = useState("dashboard");
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [otp, setOtp] = useState("");
+  const [verifying, setVerifying] = useState(false);
+  const [otpVerified, setOtpVerified] = useState({});
 
   const accentColor = "#c9a962";
   const accentLight = "#e8d5a3";
@@ -66,12 +71,48 @@ export default function DeliveryDashboard() {
     try {
       setLoading(true);
       const res = await apiFetch("/orders/delivery/my");
-      setOrders(res.data || []);
+      const ordersData = res.data || [];
+      setOrders(ordersData);
+      
+      const verifiedMap = {};
+      ordersData.forEach(order => {
+        if (order.otp?.verified) {
+          verifiedMap[order._id] = true;
+        }
+      });
+      setOtpVerified(verifiedMap);
     } catch (err) {
       console.error(err);
       toast.error("Failed to load delivery orders");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const verifyOtp = async (orderId) => {
+    if (!otp || otp.length !== 6) {
+      toast.error("Please enter valid 6-digit OTP");
+      return;
+    }
+
+    setVerifying(true);
+    try {
+      const data = await apiFetch(`/orders/delivery/verify-otp/${orderId}`, {
+        method: "PATCH",
+        body: { otp }
+      });
+
+      if (data.success) {
+        setOtpVerified(prev => ({ ...prev, [orderId]: true }));
+        setOtp("");
+        setSelectedOrder(null);
+        toast.success("OTP verified! You can complete delivery now.");
+        loadOrders();
+      }
+    } catch (error) {
+      toast.error(error.message || "Invalid OTP");
+    } finally {
+      setVerifying(false);
     }
   };
 
@@ -390,6 +431,20 @@ export default function DeliveryDashboard() {
       transition: "all 0.3s ease",
       boxShadow: `0 4px 15px ${accentColor}30`,
     },
+    smallBtn: {
+      padding: "4px 8px",
+      border: "none",
+      borderRadius: "6px",
+      color: "#fff",
+      fontSize: "0.75rem",
+      fontWeight: 600,
+      cursor: "pointer",
+    },
+    otpInput: {
+      border: "1px solid rgba(102, 126, 234, 0.3)",
+      borderRadius: "8px",
+      outline: "none",
+    },
     mobileCards: {
       display: isMobile ? "flex" : "none",
       flexDirection: "column",
@@ -700,27 +755,55 @@ export default function DeliveryDashboard() {
                           </td>
                           <td style={styles.td}>
                             {order.status !== "Delivered" && (
-                              <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                style={styles.deliverBtn}
-                                onClick={() => markDelivered(order._id)}
-                                onMouseEnter={(e) => {
-                                  if (!isMobile) {
-                                    e.currentTarget.style.transform = "translateY(-2px)";
-                                    e.currentTarget.style.boxShadow = `0 8px 25px ${accentColor}40`;
-                                  }
-                                }}
-                                onMouseLeave={(e) => {
-                                  if (!isMobile) {
-                                    e.currentTarget.style.transform = "translateY(0)";
-                                    e.currentTarget.style.boxShadow = `0 4px 15px ${accentColor}30`;
-                                  }
-                                }}
-                              >
-                                <FaCheck style={{ fontSize: "0.85rem" }} />
-                                Delivered
-                              </motion.button>
+                              <>
+                                {otpVerified[order._id] ? (
+                                  <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    style={{ ...styles.deliverBtn, background: "#10b981" }}
+                                    onClick={() => markDelivered(order._id)}
+                                  >
+                                    <FaCheck style={{ fontSize: "0.85rem" }} />
+                                    Complete
+                                  </motion.button>
+                                ) : selectedOrder === order._id ? (
+                                  <div style={{ display: "flex", flexDirection: "column", gap: "8px", alignItems: "center" }}>
+                                    <input
+                                      type="text"
+                                      maxLength={6}
+                                      placeholder="OTP"
+                                      value={otp}
+                                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                                      style={{ ...styles.otpInput, width: "80px", padding: "8px", fontSize: "14px", textAlign: "center" }}
+                                    />
+                                    <div style={{ display: "flex", gap: "4px" }}>
+                                      <button
+                                        style={{ ...styles.smallBtn, background: "#10b981" }}
+                                        onClick={() => verifyOtp(order._id)}
+                                        disabled={verifying || otp.length !== 6}
+                                      >
+                                        {verifying ? "..." : "Verify"}
+                                      </button>
+                                      <button
+                                        style={{ ...styles.smallBtn, background: "#6b7280" }}
+                                        onClick={() => { setSelectedOrder(null); setOtp(""); }}
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    style={{ ...styles.deliverBtn, background: "#6366f1" }}
+                                    onClick={() => setSelectedOrder(order._id)}
+                                  >
+                                    <FaKey style={{ fontSize: "0.85rem" }} />
+                                    OTP
+                                  </motion.button>
+                                )}
+                              </>
                             )}
                           </td>
                         </motion.tr>

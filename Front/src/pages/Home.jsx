@@ -11,6 +11,14 @@ export default function Home() {
   const { isDarkMode } = useTheme();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const loadProducts = async () => {
     setLoading(true);
@@ -141,12 +149,37 @@ export default function Home() {
     },
   };
 
+  const getResponsiveStyles = () => {
+    if (isMobile) {
+      return {
+        container: { padding: "20px 16px" },
+        heroSection: { padding: "30px 20px", marginBottom: "30px", borderRadius: "16px" },
+        heroTitle: { fontSize: "22px" },
+        heroSubtitle: { fontSize: "14px", maxWidth: "100%" },
+        adminSection: { padding: "16px", marginBottom: "20px", borderRadius: "16px" },
+        productsHeader: { flexDirection: "column", alignItems: "flex-start", gap: "12px" },
+        productsTitle: { fontSize: "20px" },
+        productsCount: { fontSize: "12px", padding: "6px 12px" },
+        productsGrid: { gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" },
+        emptyContainer: { padding: "40px 20px", borderRadius: "16px" },
+        emptyIcon: { fontSize: "40px" },
+        emptyTitle: { fontSize: "18px" },
+        emptyText: { fontSize: "14px" },
+        loadingContainer: { minHeight: "40vh" },
+      };
+    }
+    return {};
+  };
+
+  const responsiveStyles = getResponsiveStyles();
+  const mergedStyles = { ...styles, ...responsiveStyles };
+
   if (loading) {
     return (
-      <div style={styles.container}>
-        <div style={styles.loadingContainer}>
-          <div style={styles.spinner} />
-          <p style={styles.loadingText}>Loading products...</p>
+      <div style={mergedStyles.container}>
+        <div style={mergedStyles.loadingContainer}>
+          <div style={mergedStyles.spinner} />
+          <p style={mergedStyles.loadingText}>Loading products...</p>
         </div>
         <style>{`
           @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -156,8 +189,8 @@ export default function Home() {
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.heroSection}>
+    <div style={mergedStyles.container}>
+      <div style={mergedStyles.heroSection}>
         <h1 style={styles.heroTitle}>
           <FaFire style={{ marginRight: "12px", color: accentColor }} />
           Discover Premium Products
@@ -168,29 +201,29 @@ export default function Home() {
       </div>
 
       {user?.role === "admin" && (
-        <div style={styles.adminSection}>
+        <div style={mergedStyles.adminSection}>
           <AddProduct onAdded={loadProducts} />
         </div>
       )}
 
       {products.length === 0 ? (
-        <div style={styles.emptyContainer}>
-          <div style={styles.emptyIcon}>📦</div>
-          <h3 style={styles.emptyTitle}>No Products Yet</h3>
-          <p style={styles.emptyText}>
+        <div style={mergedStyles.emptyContainer}>
+          <div style={mergedStyles.emptyIcon}>📦</div>
+          <h3 style={mergedStyles.emptyTitle}>No Products Yet</h3>
+          <p style={mergedStyles.emptyText}>
             {user?.role === "admin" ? "Start by adding your first product!" : "Check back soon for exciting products!"}
           </p>
         </div>
       ) : (
         <>
-          <div style={styles.productsHeader}>
-            <h2 style={styles.productsTitle}>
+          <div style={mergedStyles.productsHeader}>
+            <h2 style={mergedStyles.productsTitle}>
               <FaStar style={{ marginRight: "10px", color: accentColor }} />
               All Products
             </h2>
-            <span style={styles.productsCount}>{products.length} products</span>
+            <span style={mergedStyles.productsCount}>{products.length} products</span>
           </div>
-          <div style={styles.productsGrid}>
+          <div style={mergedStyles.productsGrid}>
             {products.map((p, index) => (
               <div key={p._id} style={{ animation: `fadeInUp 0.5s ease-out ${index * 0.05}s both` }}>
                 <ProductCard product={p} onProductChange={loadProducts} />

@@ -315,7 +315,7 @@ const ProductPage = () => {
     },
     pageButton: (active) => ({
       padding: isMobile ? "10px 16px" : "12px 20px",
-      border: "none",
+      border: `1px solid ${isDarkMode ? "rgba(201, 169, 98, 0.2)" : "#e2e8f0"}`,
       borderRadius: "12px",
       background: active 
         ? `linear-gradient(135deg, ${accentColor} 0%, ${accentLight} 100%)` 
@@ -325,7 +325,6 @@ const ProductPage = () => {
       fontWeight: 600,
       fontSize: isMobile ? "0.9rem" : "0.95rem",
       transition: "all 0.3s ease",
-      border: `1px solid ${isDarkMode ? "rgba(201, 169, 98, 0.2)" : "#e2e8f0"}`,
       boxShadow: active ? `0 4px 15px ${accentColor}30` : "none",
     }),
     loadingContainer: {

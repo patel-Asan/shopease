@@ -120,7 +120,7 @@ export const NotificationProvider = ({ children }) => {
 
     const interval = setInterval(() => {
       fetchUnreadCount();
-    }, 30000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [user]);

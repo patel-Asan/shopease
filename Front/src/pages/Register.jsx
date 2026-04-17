@@ -99,16 +99,10 @@ export default function Register() {
 
     setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append("username", form.username);
-      formData.append("email", form.email);
-      formData.append("password", form.password);
-      formData.append("role", "user");
-      if (form.profileImage) {
-        formData.append("profileImage", form.profileImage);
-      }
-
-      const data = await apiFetch("/auth/register", { method: "POST", body: formData });
+      const data = await apiFetch("/auth/register", {
+        method: "POST",
+        body: { username: form.username, email: form.email, password: form.password, role: "user" }
+      });
 
       if (data.accessToken) {
         localStorage.setItem("authToken", data.accessToken);

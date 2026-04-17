@@ -762,7 +762,7 @@ const sendResetPasswordEmail = async (email, resetUrl) => {
  
     // Email content
     const message = {
-      from: `"ShopEase" <${process.env.EMAIL_USER}>`,
+      // from: `"ShopEase" s ke aandar teen folder the product ke `,
       to: email,
       subject: "🔐 Reset Your ShopEase Password",
       html: htmlTemplate,
@@ -916,297 +916,18 @@ const testEmailConnection = async () => {
   }
 };
  
-// Welcome email template
-const getWelcomeEmailTemplate = (username) => {
-  return `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Welcome to ShopEase COLLECTIVE</title>
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-          margin: 0;
-          padding: 0;
-          min-height: 100vh;
-        }
-        
-        .container {
-          max-width: 600px;
-          margin: 40px auto;
-          padding: 20px;
-        }
-        
-        .card {
-          background: #ffffff;
-          border-radius: 24px;
-          overflow: hidden;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-        }
-        
-        .header {
-          background: linear-gradient(135deg, #c9a962 0%, #d4b978 50%, #c9a962 100%);
-          padding: 50px 30px;
-          text-align: center;
-          position: relative;
-        }
-        
-        .header::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></svg>');
-          background-size: 100px;
-          opacity: 0.3;
-        }
-        
-        .logo {
-          font-family: 'Playfair Display', serif;
-          font-size: 2.5rem;
-          font-weight: 700;
-          color: #1a1a2e;
-          letter-spacing: 8px;
-          margin-bottom: 10px;
-          position: relative;
-          z-index: 1;
-        }
-        
-        .tagline {
-          font-size: 0.95rem;
-          color: rgba(26, 26, 46, 0.7);
-          letter-spacing: 3px;
-          text-transform: uppercase;
-          position: relative;
-          z-index: 1;
-        }
-        
-        .celebration {
-          font-size: 4rem;
-          margin-bottom: 20px;
-          animation: bounce 2s infinite;
-        }
-        
-        .content {
-          padding: 50px 40px;
-          background: #ffffff;
-        }
-        
-        .welcome-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 2rem;
-          font-weight: 600;
-          color: #1a1a2e;
-          margin-bottom: 10px;
-          text-align: center;
-        }
-        
-        .username {
-          color: #c9a962;
-          font-weight: 700;
-        }
-        
-        .message {
-          color: #64748b;
-          font-size: 1rem;
-          line-height: 1.8;
-          text-align: center;
-          margin: 25px 0 35px;
-        }
-        
-        .features {
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-          margin-bottom: 35px;
-        }
-        
-        .feature {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          padding: 15px 20px;
-          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-          border-radius: 12px;
-          border-left: 4px solid #c9a962;
-        }
-        
-        .feature-icon {
-          font-size: 1.5rem;
-        }
-        
-        .feature-text {
-          color: #475569;
-          font-size: 0.95rem;
-        }
-        
-        .feature-text strong {
-          color: #1a1a2e;
-        }
-        
-        .cta-container {
-          text-align: center;
-          margin: 35px 0;
-        }
-        
-        .cta-button {
-          display: inline-block;
-          padding: 16px 45px;
-          background: linear-gradient(135deg, #c9a962 0%, #d4b978 100%);
-          color: #1a1a2e !important;
-          text-decoration: none;
-          border-radius: 50px;
-          font-weight: 600;
-          font-size: 1rem;
-          letter-spacing: 1px;
-          box-shadow: 0 10px 25px -5px rgba(201, 169, 98, 0.4);
-          transition: all 0.3s ease;
-        }
-        
-        .cta-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 15px 30px -5px rgba(201, 169, 98, 0.5);
-        }
-        
-        .footer {
-          background: #f8fafc;
-          padding: 35px 40px;
-          text-align: center;
-          border-top: 1px solid #e2e8f0;
-        }
-        
-        .footer-text {
-          color: #64748b;
-          font-size: 0.9rem;
-          line-height: 1.7;
-          margin-bottom: 20px;
-        }
-        
-        .social-links {
-          margin-bottom: 20px;
-        }
-        
-        .social-link {
-          display: inline-block;
-          margin: 0 12px;
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #c9a962 0%, #d4b978 100%);
-          border-radius: 50%;
-          line-height: 40px;
-          text-align: center;
-          color: #1a1a2e;
-          text-decoration: none;
-          font-size: 1.1rem;
-          transition: transform 0.3s ease;
-        }
-        
-        .social-link:hover {
-          transform: translateY(-3px);
-        }
-        
-        .copyright {
-          color: #94a3b8;
-          font-size: 0.8rem;
-        }
-        
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        @media (max-width: 600px) {
-          .container { margin: 20px auto; padding: 10px; }
-          .header { padding: 40px 20px; }
-          .content { padding: 35px 25px; }
-          .footer { padding: 25px 20px; }
-          .logo { font-size: 2rem; letter-spacing: 5px; }
-          .welcome-title { font-size: 1.6rem; }
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <div class="card">
-          <div class="header">
-            <div class="logo">ShopEase</div>
-            <div class="tagline">Collective</div>
-          </div>
-          
-          <div class="content">
-            <div class="celebration">🎉</div>
-            <h1 class="welcome-title">Welcome to ShopEase COLLECTIVE!</h1>
-            <p class="message">
-              Dear <span class="username">${username}</span>,<br><br>
-              Thank you for joining our exclusive community. We're thrilled to have you as part of the ShopEase COLLECTIVE family!
-            </p>
-            
-            <div class="features">
-              <div class="feature">
-                <span class="feature-icon">🛍️</span>
-                <span class="feature-text"><strong>Exclusive Collection</strong> - Access to premium luxury products</span>
-              </div>
-              <div class="feature">
-                <span class="feature-icon">🎁</span>
-                <span class="feature-text"><strong>Special Offers</strong> - Early access to sales and promotions</span>
-              </div>
-              <div class="feature">
-                <span class="feature-icon">🚚</span>
-                <span class="feature-text"><strong>Free Shipping</strong> - On orders above ₹999</span>
-              </div>
-              <div class="feature">
-                <span class="feature-icon">💎</span>
-                <span class="feature-text"><strong>Premium Quality</strong> - Curated luxury items just for you</span>
-              </div>
-            </div>
-            
-            <div class="cta-container">
-              <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}" class="cta-button">
-                Start Shopping
-              </a>
-            </div>
-          </div>
-          
-          <div class="footer">
-            <p class="footer-text">
-              Thank you for choosing ShopEase COLLECTIVE.<br>
-              Experience luxury like never before.
-            </p>
-            
-            <div class="social-links">
-              <a href="#" class="social-link">📘</a>
-              <a href="#" class="social-link">🐦</a>
-              <a href="#" class="social-link">📷</a>
-            </div>
-            
-            <p class="copyright">
-              © ${new Date().getFullYear()} ShopEase COLLECTIVE. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </div>
-    </body>
-    </html>
-  `;
-};
-
 // Send welcome email
 const sendWelcomeEmail = async (email, username) => {
   try {
     console.log("🔄 Starting welcome email process...");
     console.log("📧 Email:", email, "Username:", username);
     
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.log("⚠️ EMAIL credentials not configured - skipping welcome email");
+      return { success: false, message: "Email not configured" };
+    }
+    
     const smtpConfig = getSmtpConfig();
-    console.log("📋 SMTP Config:", smtpConfig);
 
     const transporter = nodemailer.createTransport({
       host: smtpConfig.host,
@@ -1214,7 +935,7 @@ const sendWelcomeEmail = async (email, username) => {
       secure: smtpConfig.secure,
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS ? "***" : "MISSING",
+        pass: process.env.EMAIL_PASS,
       },
       connectionTimeout: 30000,
       greetingTimeout: 30000,
@@ -1224,46 +945,276 @@ const sendWelcomeEmail = async (email, username) => {
       }
     });
 
-    console.log("🔄 Verifying SMTP connection...");
-    await transporter.verify();
-    console.log("✅ SMTP connection verified!");
-
-    const htmlTemplate = getWelcomeEmailTemplate(username);
-
     const message = {
-      from: `"ShopEase COLLECTIVE" <${process.env.EMAIL_USER}>`,
+      from: `"ShopEase" <${process.env.EMAIL_USER}>`,
+      replyTo: email,
       to: email,
-      subject: "🎉 Welcome to ShopEase COLLECTIVE - Thank You for Joining!",
-      html: htmlTemplate,
+      subject: "🎉 Welcome to ShopEase - Thank You for Joining!",
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Welcome to ShopEase</title>
+        </head>
+        <body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;">
+          <div style="max-width:600px;margin:40px auto;padding:20px;">
+            <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 25px 50px rgba(0,0,0,0.3);">
+              <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:40px 30px;text-align:center;">
+                <h1 style="color:#fff;margin:0;font-size:2rem;">🎉 Welcome to ShopEase!</h1>
+              </div>
+              <div style="padding:40px;text-align:center;">
+                <h2 style="color:#1f2937;margin-bottom:20px;">Hello ${username}!</h2>
+                <p style="color:#6b7280;font-size:1rem;line-height:1.8;margin-bottom:30px;">
+                  Thank you for joining our exclusive community. We're thrilled to have you as part of the ShopEase family!
+                </p>
+                <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}" style="display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;text-decoration:none;border-radius:50px;font-weight:600;font-size:1rem;">
+                  Start Shopping
+                </a>
+                <p style="color:#9ca3af;font-size:0.85rem;margin-top:30px;">
+                  © ${new Date().getFullYear()} ShopEase. All rights reserved.
+                </p>
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
       text: `
-        Welcome to ShopEase COLLECTIVE, ${username}!
+        Welcome to ShopEase, ${username}!
         
         Thank you for joining our exclusive community. We're thrilled to have you!
         
-        What awaits you:
-        - Exclusive luxury products
-        - Special offers and early access to sales
-        - Premium quality curated items
+        Start shopping now: ${process.env.FRONTEND_URL || 'http://localhost:5173'}
         
-        Start shopping now: ${process.env.FRONTEND_URL || 'http://localhost:3000'}
-        
-        © ${new Date().getFullYear()} ShopEase COLLECTIVE. All rights reserved.
+        © ${new Date().getFullYear()} ShopEase. All rights reserved.
       `,
     };
 
-    console.log("📤 Sending welcome email...");
-    const info = await transporter.sendMail(message);
-    console.log("✅ Welcome email sent! Message ID:", info.messageId);
+    await transporter.sendMail(message);
     
-    return { success: true, messageId: info.messageId };
+    return { success: true };
 
   } catch (error) {
-    console.error("❌ Welcome email error:", {
-      message: error.message,
-      code: error.code,
-      command: error.command
-    });
     return { success: false, message: error.message, code: error.code };
+  }
+};
+
+// OTP Email Template
+const getOtpEmailTemplate = (otp, orderId, username) => {
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Delivery OTP - ShopEase</title>
+    </head>
+    <body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;">
+      <div style="max-width:600px;margin:40px auto;padding:20px;">
+        <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 25px 50px rgba(0,0,0,0.3);">
+          <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:40px 30px;text-align:center;">
+            <h1 style="color:#fff;margin:0;font-size:2rem;">🔐 Delivery OTP</h1>
+          </div>
+          <div style="padding:40px;text-align:center;">
+            <h2 style="color:#1f2937;margin-bottom:10px;">Hello ${username}!</h2>
+            <p style="color:#6b7280;font-size:1rem;margin-bottom:30px;">
+              Your delivery verification code is ready
+            </p>
+            
+            <div style="background:linear-gradient(135deg,#f3f4f6 0%,#e5e7eb 100%);border-radius:16px;padding:30px;margin-bottom:30px;">
+              <p style="color:#6b7280;font-size:0.9rem;margin-bottom:10px;">Order ID</p>
+              <p style="color:#1f2937;font-weight:700;font-size:1.1rem;margin-bottom:20px;">#${orderId}</p>
+              <p style="color:#6b7280;font-size:0.9rem;margin-bottom:10px;">Your OTP Code</p>
+              <p style="color:#667eea;font-weight:800;font-size:3rem;letter-spacing:8px;margin:0;">${otp}</p>
+            </div>
+            
+            <div style="background:#fef3c7;border-radius:12px;padding:20px;margin-bottom:20px;text-align:left;">
+              <p style="color:#92400e;font-weight:600;margin-bottom:8px;">⚠️ Important:</p>
+              <ul style="color:#b45309;font-size:0.9rem;margin:0;padding-left:20px;line-height:1.8;">
+                <li>This OTP is valid for <strong>10 minutes</strong> only</li>
+                <li>Share this OTP only with the delivery person</li>
+                <li>Never share OTP with anyone else</li>
+              </ul>
+            </div>
+            
+            <p style="color:#9ca3af;font-size:0.85rem;margin-top:20px;">
+              © ${new Date().getFullYear()} ShopEase. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+};
+
+// Send OTP Email
+const sendDeliveryOtpEmail = async (email, otp, orderId, username) => {
+  try {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      return { success: false, message: "Email not configured" };
+    }
+    
+    const smtpConfig = getSmtpConfig();
+
+    const transporter = nodemailer.createTransport({
+      host: smtpConfig.host,
+      port: smtpConfig.port,
+      secure: smtpConfig.secure,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
+
+    const message = {
+      from: `"ShopEase" <${process.env.EMAIL_USER}>`,
+      replyTo: email,
+      to: email,
+      subject: `🔐 Delivery OTP for Order #${orderId}`,
+      html: getOtpEmailTemplate(otp, orderId, username),
+      text: `
+        Hello ${username}!
+        
+        Your Delivery OTP for Order #${orderId} is: ${otp}
+        
+        This OTP is valid for 10 minutes.
+        Share this OTP only with the delivery person.
+        
+        © ${new Date().getFullYear()} ShopEase
+      `,
+    };
+
+    await transporter.sendMail(message);
+    return { success: true };
+
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};
+
+// Order Status Update Email
+const getOrderStatusEmailTemplate = (orderId, status, username, note = '') => {
+  const statusColors = {
+    'Pending': '#f59e0b',
+    'Confirmed': '#3b82f6',
+    'Processing': '#8b5cf6',
+    'Shipped': '#06b6d4',
+    'Out Of Delivery': '#f97316',
+    'Delivered': '#10b981',
+    'Cancelled': '#ef4444'
+  };
+  
+  const statusIcons = {
+    'Pending': '⏳',
+    'Confirmed': '✅',
+    'Processing': '📦',
+    'Shipped': '🚚',
+    'Out Of Delivery': '📍',
+    'Delivered': '🎉',
+    'Cancelled': '❌'
+  };
+
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Order Status Update - ShopEase</title>
+    </head>
+    <body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;">
+      <div style="max-width:600px;margin:40px auto;padding:20px;">
+        <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 25px 50px rgba(0,0,0,0.3);">
+          <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:40px 30px;text-align:center;">
+            <h1 style="color:#fff;margin:0;font-size:2rem;">${statusIcons[status] || '📦'} Order Update</h1>
+          </div>
+          <div style="padding:40px;text-align:center;">
+            <h2 style="color:#1f2937;margin-bottom:10px;">Hello ${username}!</h2>
+            <p style="color:#6b7280;font-size:1rem;margin-bottom:30px;">
+              Your order status has been updated
+            </p>
+            
+            <div style="background:linear-gradient(135deg,#f3f4f6 0%,#e5e7eb 100%);border-radius:16px;padding:30px;margin-bottom:30px;">
+              <p style="color:#6b7280;font-size:0.9rem;margin-bottom:10px;">Order ID</p>
+              <p style="color:#1f2937;font-weight:700;font-size:1.1rem;margin-bottom:20px;">#${orderId}</p>
+              <p style="color:#6b7280;font-size:0.9rem;margin-bottom:10px;">Current Status</p>
+              <div style="display:inline-block;background:${statusColors[status] || '#667eea'};color:#fff;padding:10px 24px;border-radius:50px;font-weight:600;font-size:1rem;">
+                ${status}
+              </div>
+            </div>
+            
+            ${note ? `
+            <div style="background:#f0fdf4;border-radius:12px;padding:20px;margin-bottom:20px;text-align:left;">
+              <p style="color:#166534;font-size:0.95rem;margin:0;">${note}</p>
+            </div>
+            ` : ''}
+            
+            <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/orders" style="display:inline-block;padding:14px 35px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;text-decoration:none;border-radius:50px;font-weight:600;">
+              View Order Details
+            </a>
+            
+            <p style="color:#9ca3af;font-size:0.85rem;margin-top:30px;">
+              © ${new Date().getFullYear()} ShopEase. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+};
+
+// Send Order Status Email
+const sendOrderStatusEmail = async (email, orderId, status, username, note = '') => {
+  try {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      return { success: false, message: "Email not configured" };
+    }
+    
+    const smtpConfig = getSmtpConfig();
+
+    const transporter = nodemailer.createTransport({
+      host: smtpConfig.host,
+      port: smtpConfig.port,
+      secure: smtpConfig.secure,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
+
+    const message = {
+      from: `"ShopEase" <${process.env.EMAIL_USER}>`,
+      replyTo: email,
+      to: email,
+      subject: `📦 Order #${orderId} - Status: ${status}`,
+      html: getOrderStatusEmailTemplate(orderId, status, username, note),
+      text: `
+        Hello ${username}!
+        
+        Your Order #${orderId} status has been updated to: ${status}
+        ${note ? `Note: ${note}` : ''}
+        
+        View order details: ${process.env.FRONTEND_URL || 'http://localhost:5173'}/orders
+        
+        © ${new Date().getFullYear()} ShopEase
+      `,
+    };
+
+    await transporter.sendMail(message);
+    return { success: true };
+
+  } catch (error) {
+    return { success: false, message: error.message };
   }
 };
 
@@ -1271,6 +1222,8 @@ module.exports = {
   sendResetPasswordEmail, 
   sendPasswordChangedEmail,
   sendWelcomeEmail,
+  sendDeliveryOtpEmail,
+  sendOrderStatusEmail,
   testEmailConnection 
 };
  

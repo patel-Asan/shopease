@@ -1,4 +1,4 @@
- 
+  
 const router = require("express").Router();
 const { 
   login, 
@@ -6,9 +6,10 @@ const {
   refreshToken, 
   updateProfile, 
   logout,
-  forgotPassword,        // ← NEW
-  verifyResetToken,       // ← NEW
-  resetPassword          // ← NEW
+  forgotPassword,
+  verifyResetToken,
+  resetPassword,
+  testEmail
 } = require("../controllers/authController");
 const { auth } = require("../middleware/auth");
 const { uploadProfile } = require("../middleware/upload");
@@ -24,7 +25,10 @@ router.post("/logout", logout);
 router.post("/forgot-password", forgotPassword);
 router.get("/verify-reset-token/:token", verifyResetToken);
 router.post("/reset-password/:token", resetPassword);
- 
+
+// Test email configuration
+router.post("/test-email", testEmail);
+
 module.exports = router;
  
  

@@ -24,6 +24,7 @@ const notificationSchema = new mongoose.Schema({
       "ORDER_OUT_FOR_DELIVERY",
       "PAYMENT_RECEIVED",
       "NEW_USER",
+      "NEW_REGISTRATION",
       "DELIVERY_ASSIGNED",
       "LOW_STOCK",
       "NEW_MESSAGE",

@@ -1,8 +1,18 @@
 import axios from "axios";
 import { toast } from "react-toastify";
- 
+
 // Base API URL
 const BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
+
+// Cloudinary Config
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || "your_cloud_name";
+
+// Helper to get Cloudinary image URL
+export const getImageUrl = (path) => {
+  if (!path) return null;
+  if (path.startsWith("http")) return path; // Already full URL
+  return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${path}`;
+};
  
 // Axios instance
 const API = axios.create({

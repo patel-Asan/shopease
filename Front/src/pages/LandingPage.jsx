@@ -269,6 +269,59 @@ export default function LandingPage() {
 
   const s = getStyles();
 
+  const getResponsiveStyles = () => {
+    if (isMobile) {
+      return {
+        hero: { ...s.hero, flexDirection: "column", padding: "120px 20px 60px", textAlign: "center" },
+        heroContent: { ...s.heroContent, maxWidth: "100%" },
+        heroTitle: { ...s.heroTitle, marginBottom: "16px" },
+        heroTitleLine1: { display: "block", fontSize: "28px", fontWeight: "400", lineHeight: "1.2", marginBottom: "8px", color: textSecondary },
+        heroTitleLine2: { display: "block", fontSize: "32px", fontWeight: "700", lineHeight: "1.2", background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColorLight} 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" },
+        heroSubtitle: { fontSize: "15px", marginBottom: "24px", maxWidth: "100%" },
+        heroButtons: { display: "flex", gap: "12px", marginBottom: "30px", justifyContent: "center", flexWrap: "wrap" },
+        heroPrimaryBtn: { display: "flex", alignItems: "center", gap: "8px", padding: "14px 24px", background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColorLight} 100%)`, border: "none", borderRadius: "60px", fontSize: "14px", fontWeight: "600", cursor: "pointer", color: isDarkMode ? "#050507" : "white", boxShadow: `0 8px 30px ${accentColor}40`, transition: "all 0.3s ease" },
+        heroSecondaryBtn: { display: "flex", alignItems: "center", gap: "8px", padding: "14px 24px", background: "transparent", border: "1px solid", borderRadius: "60px", fontSize: "14px", fontWeight: "500", cursor: "pointer", color: textColor, borderColor: borderColor, transition: "all 0.3s ease" },
+        heroTrust: { display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" },
+        heroVisual: { display: "none" },
+        scrollIndicator: { display: "none" },
+        navContent: { padding: "0 20px" },
+        statsSection: { padding: "30px 20px", gap: "16px" },
+        statCard: { minWidth: "140px", padding: "16px 20px" },
+        statValue: { fontSize: "22px" },
+        showcaseTeaser: { padding: "60px 20px" },
+        showcaseGrid: { gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" },
+        showcaseCard: { padding: "20px 16px" },
+        showcaseCardIcon: { width: "44px", height: "44px", fontSize: "20px" },
+        showcaseCardTitle: { fontSize: "14px" },
+        showcaseCardDesc: { fontSize: "12px" },
+        howItWorks: { padding: "60px 20px" },
+        stepsGrid: { gridTemplateColumns: "1fr", gap: "16px" },
+        stepCard: { padding: "24px" },
+        features: { padding: "60px 20px" },
+        featuresGrid: { gridTemplateColumns: "1fr", gap: "16px" },
+        featureCard: { padding: "24px" },
+        testimonials: { padding: "60px 20px" },
+        testimonialCard: { padding: "24px" },
+        testimonialText: { fontSize: "16px" },
+        mapSection: { padding: "60px 20px" },
+        mapContainer: { flexDirection: "column", gap: "24px" },
+        mapWrapper: { minHeight: "300px" },
+        mapIframe: { minHeight: "300px" },
+        cta: { padding: "80px 20px" },
+        ctaButtons: { flexWrap: "wrap" },
+        ctaButton: { padding: "16px 32px", fontSize: "15px" },
+        footer: { padding: "60px 20px 30px" },
+        footerContent: { flexDirection: "column", gap: "40px" },
+        footerBrand: { maxWidth: "100%" },
+        footerLinks: { flexWrap: "wrap", gap: "30px" },
+      };
+    }
+    return {};
+  };
+
+  const responsiveStyles = getResponsiveStyles();
+  const mergedStyles = { ...s, ...responsiveStyles };
+
   return (
     <div style={s.container}>
       <div style={s.bgContainer}>

@@ -6,6 +6,7 @@ const Product = require("../models/Product");
 const Notification = require("../models/Notification");
 const { applyDiscountToOrder } = require("./newsletterController");
 const { createNotification } = require("./notificationController");
+const { sendDeliveryOtpEmail, sendOrderStatusEmail } = require("../Utils/emailService");
 
 
 
@@ -457,8 +458,19 @@ exports.markDelivered = async (req, res) => {
     if (!order)
       return res.status(404).json({ message: "Order not found" });
  
+    if (order.status !== "Out Of Delivery") {
+      return res.status(400).json({ message: "Order is not out for delivery" });
+    }
+
+    if (!order.otp?.verified) {
+      return res.status(400).json({ 
+        message: "OTP not verified. Customer must verify OTP first." 
+      });
+    }
+ 
     order.status = "Delivered";
     order.deliveredAt = new Date();
+    order.otp = undefined;
   
     await order.save();
    
@@ -500,7 +512,7 @@ exports.markDelivered = async (req, res) => {
     } catch (error) {
       // Don't fail if notification fails
     }
-  
+   
     res.json({
       status: "success",
       message: "Order marked as delivered",
@@ -509,6 +521,126 @@ exports.markDelivered = async (req, res) => {
  
   } catch (error) {
     res.status(500).json({ message: "Failed to update status" });
+  }
+};
+
+/**
+ * @desc    User - Request OTP for delivery
+ * @route   POST /api/orders/:id/request-otp
+ * @access  Private
+ */
+exports.requestDeliveryOtp = async (req, res) => {
+  try {
+    const order = await Order.findOne({
+      _id: req.params.id,
+      user: req.user._id
+    }).populate("user", "username email");
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (order.status !== "Out Of Delivery") {
+      return res.status(400).json({ 
+        message: "OTP can only be requested when order is out for delivery" 
+      });
+    }
+
+    if (order.otp?.verified) {
+      return res.status(400).json({ 
+        message: "OTP already verified for this delivery" 
+      });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    order.otp = {
+      code: otp,
+      expiresAt: expiresAt,
+      verified: false,
+      requestedAt: new Date()
+    };
+
+    await order.save();
+
+    setImmediate(async () => {
+      try {
+        await sendDeliveryOtpEmail(
+          order.user.email,
+          otp,
+          order._id.toString().slice(-6),
+          order.user.username
+        );
+      } catch (error) {
+        console.error("OTP email error:", error.message);
+      }
+    });
+
+    res.json({
+      success: true,
+      message: "OTP sent to your email",
+      expiresIn: "10 minutes"
+    });
+
+  } catch (error) {
+    console.error("Request OTP error:", error);
+    res.status(500).json({ message: "Failed to send OTP" });
+  }
+};
+
+/**
+ * @desc    Delivery Boy - Verify OTP
+ * @route   POST /api/orders/:id/verify-otp
+ * @access  Delivery
+ */
+exports.verifyDeliveryOtp = async (req, res) => {
+  try {
+    const { otp } = req.body;
+
+    if (!otp) {
+      return res.status(400).json({ message: "OTP is required" });
+    }
+
+    const order = await Order.findOne({
+      _id: req.params.id,
+      deliveryBoy: req.user._id
+    });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (order.status !== "Out Of Delivery") {
+      return res.status(400).json({ message: "Order is not out for delivery" });
+    }
+
+    if (order.otp?.verified) {
+      return res.json({
+        success: true,
+        message: "OTP already verified"
+      });
+    }
+
+    if (!order.otp || order.otp.code !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    if (order.otp.expiresAt < new Date()) {
+      return res.status(400).json({ message: "OTP has expired. Please request a new OTP." });
+    }
+
+    order.otp.verified = true;
+    await order.save();
+
+    res.json({
+      success: true,
+      message: "OTP verified successfully. You can now complete the delivery."
+    });
+
+  } catch (error) {
+    console.error("Verify OTP error:", error);
+    res.status(500).json({ message: "Failed to verify OTP" });
   }
 };
  

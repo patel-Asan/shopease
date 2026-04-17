@@ -400,7 +400,7 @@ const ManageUsers = () => {
     },
     pageButton: (active) => ({
       padding: isMobile ? "8px 14px" : "10px 18px",
-      border: "none",
+      border: `1px solid ${isDarkMode ? "rgba(201, 169, 98, 0.2)" : "#e2e8f0"}`,
       borderRadius: "10px",
       background: active 
         ? (isDarkMode ? "linear-gradient(135deg, #c9a962 0%, #d4b87a 100%)" : "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)")
@@ -410,7 +410,6 @@ const ManageUsers = () => {
       fontWeight: 600,
       fontSize: "0.9rem",
       transition: "all 0.3s ease",
-      border: `1px solid ${isDarkMode ? "rgba(201, 169, 98, 0.2)" : "#e2e8f0"}`,
     }),
     loadingContainer: {
       textAlign: "center",

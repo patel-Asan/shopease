@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import API from "../api/api";
+import API, { getImageUrl } from "../api/api";
 import { 
   FaEye, FaEyeSlash, FaSave, FaTimes, FaCamera, 
   FaUser, FaLock, FaEnvelope, FaCalendarAlt, FaShieldAlt 
@@ -65,11 +65,7 @@ export default function ProfileDropdown() {
         ...prev,
         username: user.username || "",
       }));
-      setPreviewImage(
-        user.profileImage
-          ? `http://localhost:5000/uploads/profile/${user.profileImage}?t=${Date.now()}`
-          : null
-      );
+      setPreviewImage(user.profileImage || null);
     }
   }, [user]);
  
@@ -241,20 +237,16 @@ export default function ProfileDropdown() {
       });
  
       console.log("✅ Update response:", res.data);
- 
+  
       // Check response structure
       if (res.data?.status === "success" && res.data?.user) {
         // Update context
         updateUsername(res.data.user.username);
         updateProfileImage(res.data.user.profileImage);
- 
+  
         // Update preview
-        setPreviewImage(
-          res.data.user.profileImage
-            ? `http://localhost:5000/uploads/profile/${res.data.user.profileImage}?t=${Date.now()}`
-            : previewImage
-        );
- 
+        setPreviewImage(res.data.user.profileImage || null);
+  
         toast.success("Profile updated successfully!");
  
         // Reset form
@@ -553,7 +545,7 @@ export default function ProfileDropdown() {
     <div style={styles.container} ref={dropdownRef}>
       <img
         onClick={() => setOpen(!open)}
-        src={previewImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.username || "User")}&background=random&size=128`}
+        src={getImageUrl(previewImage) || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.username || "User")}&background=random&size=128`}
         alt="Profile"
         onError={(e) => {
           e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.username || "User")}&background=random&size=128`;
@@ -562,7 +554,7 @@ export default function ProfileDropdown() {
         onMouseEnter={(e) => !isMobile && (e.currentTarget.style.transform = "scale(1.05)", e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)")}
         onMouseLeave={(e) => !isMobile && (e.currentTarget.style.transform = "scale(1)", e.currentTarget.style.boxShadow = "none")}
       />
- 
+
       {open && (
         <div style={styles.dropdown}>
           <div style={styles.profileHeader}>
@@ -581,7 +573,7 @@ export default function ProfileDropdown() {
               }}
             >
               <img
-                src={previewImage || `https://ui-avatars.com/api/?name=${user.username}&size=128`}
+                src={getImageUrl(previewImage) || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.username || "User")}&background=random&size=128`}
                 alt="Profile"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />

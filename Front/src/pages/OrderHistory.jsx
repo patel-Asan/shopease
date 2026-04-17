@@ -3,7 +3,7 @@ import { apiFetch } from "../api/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
-import { FaGift, FaTicketAlt, FaBox, FaArrowRight } from "react-icons/fa";
+import { FaGift, FaTicketAlt, FaBox, FaArrowRight, FaKey } from "react-icons/fa";
  
 export default function OrderHistory() {
   const { isDarkMode } = useTheme();
@@ -12,6 +12,8 @@ export default function OrderHistory() {
   const [hovered, setHovered] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
+  const [requestingOtp, setRequestingOtp] = useState(null);
+  const [otpSent, setOtpSent] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -64,6 +66,23 @@ export default function OrderHistory() {
       loadOrders();
     } catch (err) {
       toast.error("Failed to cancel order");
+    }
+  };
+
+  const requestDeliveryOtp = async (orderId) => {
+    setRequestingOtp(orderId);
+    try {
+      const data = await apiFetch(`/orders/${orderId}/request-otp`, {
+        method: "POST"
+      });
+      if (data.success) {
+        setOtpSent(prev => ({ ...prev, [orderId]: true }));
+        toast.success("OTP sent to your email!");
+      }
+    } catch (err) {
+      toast.error(err.message || "Failed to send OTP");
+    } finally {
+      setRequestingOtp(null);
     }
   };
  
@@ -540,6 +559,51 @@ export default function OrderHistory() {
               >
                 Cancel Order
               </button>
+            )}
+
+            {order.status === "Out Of Delivery" && (
+              <div style={{ marginTop: "1.5rem" }}>
+                {otpSent[order._id] ? (
+                  <div style={{ 
+                    padding: "1rem", 
+                    background: "rgba(16, 185, 129, 0.1)", 
+                    borderRadius: "12px", 
+                    border: "1px solid rgba(16, 185, 129, 0.3)",
+                    textAlign: "center"
+                  }}>
+                    <p style={{ color: "#10b981", fontWeight: "600", margin: 0 }}>
+                      ✓ OTP sent to your email!
+                    </p>
+                    <p style={{ color: isDarkMode ? "#a0a0a0" : "#64748b", fontSize: "0.85rem", margin: "8px 0 0 0" }}>
+                      Share this OTP with the delivery person
+                    </p>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => requestDeliveryOtp(order._id)}
+                    style={{
+                      ...styles.cancelBtn,
+                      background: "rgba(102, 126, 234, 0.1)",
+                      color: "#6366f1",
+                      border: "1px solid rgba(102, 126, 234, 0.2)",
+                    }}
+                    disabled={requestingOtp === order._id}
+                    onMouseEnter={(e) => {
+                      if (!isMobile && requestingOtp !== order._id) {
+                        e.currentTarget.style.background = "rgba(102, 126, 234, 0.2)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isMobile && requestingOtp !== order._id) {
+                        e.currentTarget.style.background = "rgba(102, 126, 234, 0.1)";
+                      }
+                    }}
+                  >
+                    <FaKey style={{ marginRight: "8px" }} />
+                    {requestingOtp === order._id ? "Sending OTP..." : "Request OTP for Delivery"}
+                  </button>
+                )}
+              </div>
             )}
           </div>
         );

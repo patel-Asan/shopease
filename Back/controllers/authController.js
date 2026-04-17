@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const Session = require("../models/Session");
 const crypto = require("crypto");
 const { sendResetPasswordEmail, sendWelcomeEmail } = require("../Utils/emailService");
+const { createNotification } = require("./notificationController");
  
 // Helper: generate access & refresh tokens
 const generateTokens = (userId) => {
@@ -40,9 +41,34 @@ exports.register = async (req, res) => {
       role: role || "user",
     });
 
-    console.log("📧 Sending welcome email to:", user.email);
-    const emailResult = await sendWelcomeEmail(user.email, user.username);
-    console.log("📧 Email result:", emailResult);
+    setImmediate(async () => {
+      try {
+        await createNotification({
+          role: "admin",
+          type: "NEW_REGISTRATION",
+          title: "New Registration",
+          message: `${username} (${role || "user"}) has registered with email ${email}`,
+          link: `/admin?page=users`,
+          metadata: { userId: user._id.toString(), role: role || "user" },
+        });
+      } catch (notifErr) {
+        console.error("Registration notification failed:", notifErr.message);
+      }
+    });
+
+    setImmediate(async () => {
+      try {
+        console.log("📧 Sending welcome email...");
+        const emailResult = await sendWelcomeEmail(user.email, user.username);
+        if (emailResult.success) {
+          console.log("✅ Welcome email sent!");
+        } else {
+          console.log("⚠️ Welcome email failed:", emailResult.message);
+        }
+      } catch (emailErr) {
+        console.error("❌ Welcome email failed:", emailErr.message);
+      }
+    });
 
     const { accessToken, refreshToken } = generateTokens(user._id);
  
@@ -352,9 +378,9 @@ exports.resetPassword = async (req, res) => {
     // Clear reset token fields
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
- 
+  
     await user.save();
- 
+  
     res.json({ 
       success: true, 
       message: "Password reset successful" 
@@ -364,6 +390,45 @@ exports.resetPassword = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
- 
- 
+
+// ================= TEST EMAIL =================
+exports.testEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+    
+    console.log("\n" + "=".repeat(50));
+    console.log("🧪 TEST EMAIL");
+    console.log("=".repeat(50));
+    console.log("📧 To:", email);
+    console.log("📋 Env Check:");
+    console.log("   EMAIL_USER:", process.env.EMAIL_USER ? "✓ Set" : "✗ Missing");
+    console.log("   EMAIL_PASS:", process.env.EMAIL_PASS ? "✓ Set" : "✗ Missing");
+    console.log("   SMTP_SERVICE:", process.env.SMTP_SERVICE || "Not set (using default)");
+    console.log("=".repeat(50) + "\n");
+    
+    const result = await sendWelcomeEmail(email, "Test User");
+    
+    if (result.success) {
+      res.json({ success: true, message: "Test email sent successfully!", messageId: result.messageId });
+    } else {
+      res.status(500).json({ 
+        success: false, 
+        error: "Failed to send email",
+        details: result.message,
+        hint: result.code === 'EAUTH' 
+          ? "Check EMAIL_USER and EMAIL_PASS in .env file. For Gmail, use App Password if 2FA is enabled."
+          : "Check your SMTP configuration in .env file."
+      });
+    }
+  } catch (error) {
+    console.error("Test email error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+  
+
  

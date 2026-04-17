@@ -4,38 +4,48 @@ const orderItemSchema = new mongoose.Schema({
   product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
   quantity: Number,
   price: Number,
+  name: String,
+  image: String
 });
  
-// Add discount schema
 const discountAppliedSchema = new mongoose.Schema({
   code: String,
   percentage: Number,
   amount: Number
-}, { _id: false }); // _id: false because we don't need separate ID for this subdocument
+}, { _id: false });
+ 
+const trackingHistorySchema = new mongoose.Schema({
+  status: {
+    type: String,
+    required: true
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now
+  },
+  note: String,
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  }
+}, { _id: true });
  
 const orderSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   items: [orderItemSchema],
-  
-  // Original total before discount
   subtotal: {
     type: Number,
     required: true,
     default: 0
   },
-  
-  // Final total after discount
   totalAmount: {
     type: Number,
     required: true
   },
-  
-  // Discount information
   discountApplied: {
     type: discountAppliedSchema,
     default: null
   },
- 
   status: {
     type: String,
     enum: [
@@ -49,23 +59,43 @@ const orderSchema = new mongoose.Schema({
     ],
     default: "Pending"
   },
- 
   deliveryBoy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     default: null
   },
- 
+  deliveryBoyName: String,
+  deliveryBoyPhone: String,
   assignedAt: Date,
   deliveredAt: Date,
- 
+  estimatedDelivery: Date,
   paymentMethod: {
     type: String,
     enum: ["COD", "UPI", "Card"],
     default: "COD"
   },
- 
-  shippingAddress: Object
+  paymentStatus: {
+    type: String,
+    enum: ["Pending", "Paid", "Failed"],
+    default: "Pending"
+  },
+  shippingAddress: {
+    name: String,
+    phone: String,
+    email: String,
+    street: String,
+    city: String,
+    state: String,
+    postalCode: String,
+    country: String
+  },
+  otp: {
+    code: String,
+    expiresAt: Date,
+    verified: { type: Boolean, default: false },
+    requestedAt: Date
+  },
+  trackingHistory: [trackingHistorySchema]
 }, { timestamps: true });
  
 module.exports = mongoose.model("Order", orderSchema);

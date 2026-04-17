@@ -33,6 +33,7 @@ const NotificationBell = ({ size = 40, fontSize = 18 }) => {
     markAllAsRead, 
     deleteNotification,
     clearAll,
+    fetchNotifications,
   } = useNotifications();
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ const NotificationBell = ({ size = 40, fontSize = 18 }) => {
       case "PAYMENT_RECEIVED":
         return <FaDollarSign />;
       case "NEW_USER":
+      case "NEW_REGISTRATION":
         return <FaUser />;
       case "DELIVERY_ASSIGNED":
         return <FaMotorcycle />;
@@ -114,6 +116,7 @@ const NotificationBell = ({ size = 40, fontSize = 18 }) => {
       case "PAYMENT_RECEIVED":
         return "#22c55e";
       case "NEW_USER":
+      case "NEW_REGISTRATION":
         return "#f59e0b";
       case "DELIVERY_ASSIGNED":
         return "#ec4899";
@@ -353,7 +356,12 @@ const NotificationBell = ({ size = 40, fontSize = 18 }) => {
     <div style={styles.container} ref={dropdownRef}>
       <button
         style={styles.bellButton}
-        onClick={() => setShowDropdown(!showDropdown)}
+        onClick={() => {
+          setShowDropdown(!showDropdown);
+          if (!showDropdown) {
+            fetchNotifications(true);
+          }
+        }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = "scale(1.05)";
           e.currentTarget.style.boxShadow = `${accentColor}30`;

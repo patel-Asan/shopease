@@ -556,12 +556,6 @@ const s = {
     fontWeight: "700",
     margin: 0,
   },
-  mapWrapper: {
-    borderRadius: "16px",
-    overflow: "hidden",
-    height: "400px",
-    border: "1px solid rgba(255,255,255,0.08)",
-  },
   mapIframe: {
     width: "100%",
     height: "100%",

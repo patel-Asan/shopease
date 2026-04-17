@@ -1,4 +1,4 @@
 
-const { uploadProfile, uploadProduct } = require('../config/cloudinary');
+const { uploadProfile, uploadProduct, uploadContact } = require('../config/cloudinary');
 
-module.exports = { uploadProfile, uploadProduct };
+module.exports = { uploadProfile, uploadProduct, uploadContact };

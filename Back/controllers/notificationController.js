@@ -33,8 +33,10 @@ exports.createNotification = async ({
     });
     
     const saved = await notification.save();
+    console.log(`✅ Notification created: [${role}] ${type} - ${title}`);
     return saved;
   } catch (error) {
+    console.error(`❌ Failed to create notification [${type}]:`, error.message);
     return null;
   }
 };

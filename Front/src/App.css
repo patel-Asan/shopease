@@ -721,6 +721,26 @@ p {
 }
 
 /* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .admin-stats {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  
+  .stats-card {
+    padding: 20px;
+  }
+  
+  .stats-number {
+    font-size: 2.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .card, .glass-card, .product-card {
     border-radius: var(--radius-lg);
@@ -733,6 +753,114 @@ p {
   
   input, textarea, select {
     padding: 12px 14px;
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+  
+  .btn-premium, .btn-modern, button[type="submit"] {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+  
+  .stats-card {
+    padding: 16px;
+  }
+  
+  .stats-number {
+    font-size: 2rem;
+  }
+  
+  .badge-premium {
+    padding: 4px 12px;
+    font-size: 0.7rem;
+  }
+  
+  .price-tag {
+    font-size: 1.4rem;
+  }
+  
+  .checkout-section {
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .order-card {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .cart-item {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .newsletter-section {
+    padding: 32px 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    padding: 24px;
+  }
+}
+
+/* Extra small devices */
+@media (hover: none) and (pointer: coarse) {
+  .btn-premium:hover, .btn-modern:hover {
+    transform: none;
+  }
+  
+  .card:hover, .product-card:hover, .glass-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .cart-item:hover {
+    transform: translateX(4px);
+  }
+  
+  .order-card:hover {
+    transform: translateX(4px);
   }
 }
 
