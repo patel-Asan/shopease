@@ -20,10 +20,15 @@ const app = express();
 connectDB();
  
 const PORT = process.env.PORT || 5000;
-const FRONTEND_URL = process.env.FRONTEND_URL || "https://shopease-3tglmrhgr-asans-projects-69ce1902.vercel.app";
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://shopease-vcx6hnxei-asans-projects-69ce1902.vercel.app";
 
 app.use(cors({ 
-  origin: ["https://shopease-3tglmrhgr-asans-projects-69ce1902.vercel.app", "http://localhost:5173", "http://localhost:3000"], 
+  origin: [
+    "https://shopease-vcx6hnxei-asans-projects-69ce1902.vercel.app",
+    "https://shopease-3tglmrhgr-asans-projects-69ce1902.vercel.app", 
+    "http://localhost:5173", 
+    "http://localhost:3000"
+  ], 
   credentials: true 
 }));
 app.use(express.json());
