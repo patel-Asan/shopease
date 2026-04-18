@@ -1,8 +1,12 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// Base API URL
-const BASE = import.meta.env.VITE_API_BASE || "https://shopease-511p.onrender.com/api";
+// Base API URL - Make sure to include /api
+const BASE = import.meta.env.VITE_API_BASE 
+  ? import.meta.env.VITE_API_BASE.includes('/api') 
+    ? import.meta.env.VITE_API_BASE 
+    : import.meta.env.VITE_API_BASE + '/api'
+  : "https://shopease-511p.onrender.com/api";
 
 // Cloudinary Config
 const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || "your_cloud_name";
