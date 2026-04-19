@@ -134,9 +134,7 @@ const ManageUsers = () => {
     try {
       setLoading(true);
       setError("");
-      const res = await API.get("/admin/users", {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
+      const res = await API.get("/admin/users");
       setUsers(res.data || []);
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -152,9 +150,7 @@ const ManageUsers = () => {
   const deleteUser = async (id) => {
     try {
       setActionLoading(id);
-      await API.delete(`/admin/users/${id}`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
+      await API.delete(`/admin/users/${id}`);
       setUsers((prev) => {
         const updated = prev.filter((user) => user._id !== id);
         if ((currentPage - 1) * usersPerPage >= updated.length && currentPage > 1) {
@@ -173,11 +169,7 @@ const ManageUsers = () => {
   const toggleBlock = async (id) => {
     try {
       setActionLoading(id);
-      await axios.patch(
-        `/admin/users/block/${id}`,
-        {},
-        { headers: { Authorization: `Bearer ${getToken()}` } }
-      );
+      await API.patch(`/admin/users/block/${id}`, {});
       setUsers((prev) =>
         prev.map((user) =>
           user._id === id ? { ...user, isBlocked: !user.isBlocked } : user

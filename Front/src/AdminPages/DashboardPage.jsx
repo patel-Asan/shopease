@@ -32,19 +32,17 @@ const DashboardPage = () => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("authToken");
         if (!token) return console.error("No auth token found.");
 
         const response = await API.get("/admin/dashboard", { _skipRefresh: true });
-          headers: { Authorization: `Bearer ${token}` },
-        });
 
         if (response.status === 401) return console.error("Unauthorized");
 
-        const data = await response.json();
+        const data = response.data;
 
         const icons = [
           <FaUsers />,
