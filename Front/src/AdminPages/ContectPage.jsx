@@ -2,6 +2,7 @@
 // src/AdminPages/ContectPage.jsx
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import API, { getImageUrl } from "../api/api";
 import { useTheme } from "../context/ThemeContext";
  
 function AdminContact() {
@@ -18,7 +19,7 @@ function AdminContact() {
   }, []);
  
   const fetchMessages = () => {
-    fetch("http://localhost:5000/api/contact")
+    API.get("/contact")
       .then((res) => res.json())
       .then((data) => setMessages(data))
       .catch((err) => console.error(err));
@@ -42,7 +43,7 @@ function AdminContact() {
     if (!result.isConfirmed) return;
  
     try {
-      const res = await fetch(`http://localhost:5000/api/contact/${id}`, {
+      const res = await API.get(`/contact/${id}`, {
         method: "DELETE",
       });
  
@@ -200,14 +201,14 @@ function AdminContact() {
                     <div key={i} style={styles.attachmentItem}>
                       {file.mimetype?.startsWith("image/") && (
                         <img
-                          src={`http://localhost:5000/${file.path}`}
+                          src={getImageUrl(file.path)}
                           alt={file.filename}
                           style={styles.attachmentImg}
                         />
                       )}
                       {file.mimetype?.startsWith("video/") && (
                         <video
-                          src={`http://localhost:5000/${file.path}`}
+                          src={getImageUrl(file.path)}
                           controls
                           style={styles.attachmentVideo}
                         />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
+import { getImageUrl } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CartContext } from "../context/CartContext";
@@ -382,7 +383,7 @@ export default function Cart() {
           >
             <div style={styles.imageContainer}>
               <img
-                src={item.product?.img ? `http://localhost:5000/uploads/products/${item.product.img}` : "/default-image.jpg"}
+                src={item.product?.img ? getImageUrl(item.product.img) : "/default-image.jpg"}
                 alt={item.product?.name || "Product"}
                 style={styles.image}
               />

@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { apiFetch, validateCoupon } from "../api/api";
+import { apiFetch, validateCoupon, getImageUrl } from "../api/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaGift, FaTicketAlt, FaCopy, FaCheck, FaShoppingBag, FaMapMarkerAlt, FaCreditCard } from "react-icons/fa";
@@ -564,7 +564,7 @@ export default function Checkout() {
               <img
                 src={
                   item.product?.img
-                    ? `http://localhost:5000/uploads/products/${item.product.img}`
+                    ? getImageUrl(item.product.img)
                     : "/default-image.jpg"
                 }
                 alt={item.product?.name}

@@ -1,5 +1,6 @@
 // src/AdminPages/DashboardPage.jsx
 import React, { useEffect, useState } from "react";
+import API from "../api/api";
 import { useTheme } from "../context/ThemeContext";
 import {
   FaUsers,
@@ -37,7 +38,7 @@ const DashboardPage = () => {
         const token = localStorage.getItem("authToken");
         if (!token) return console.error("No auth token found.");
 
-        const response = await fetch("http://localhost:5000/api/admin/dashboard", {
+        const response = await API.get("/admin/dashboard", { _skipRefresh: true });
           headers: { Authorization: `Bearer ${token}` },
         });
 

@@ -1,7 +1,7 @@
 // components/RelatedProducts.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getRelatedProducts } from '../api/api';
+import { getRelatedProducts, getImageUrl } from '../api/api';
 
 const RelatedProducts = ({ category, currentProductId }) => {
   const [products, setProducts] = useState([]);
@@ -344,7 +344,7 @@ const RelatedProducts = ({ category, currentProductId }) => {
           const isHovered = hoveredCard === index;
           const discount = getDiscount(product);
           const imageUrl = !imageErrors[product._id] && product.img
-            ? `http://localhost:5000/uploads/products/${product.img}`
+            ? getImageUrl(product.img)
             : `https://ui-avatars.com/api/?name=${encodeURIComponent(product.name)}&background=ff6b6b&color=fff&size=200`;
 
           return (

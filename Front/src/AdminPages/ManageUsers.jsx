@@ -1,7 +1,7 @@
 
 // src/AdminPages/ManageUsers.jsx
 import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import API from "../api/api";
 import { FaUsers, FaSearch, FaUserCheck, FaUserTimes, FaTrash, FaUserShield, FaEnvelope, FaTruck } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
 
@@ -134,7 +134,7 @@ const ManageUsers = () => {
     try {
       setLoading(true);
       setError("");
-      const res = await axios.get("http://localhost:5000/api/admin/users", {
+      const res = await API.get("/admin/users", {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       setUsers(res.data || []);
@@ -152,7 +152,7 @@ const ManageUsers = () => {
   const deleteUser = async (id) => {
     try {
       setActionLoading(id);
-      await axios.delete(`http://localhost:5000/api/admin/users/${id}`, {
+      await API.delete(`/admin/users/${id}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       setUsers((prev) => {
@@ -174,7 +174,7 @@ const ManageUsers = () => {
     try {
       setActionLoading(id);
       await axios.patch(
-        `http://localhost:5000/api/admin/users/block/${id}`,
+        `/admin/users/block/${id}`,
         {},
         { headers: { Authorization: `Bearer ${getToken()}` } }
       );

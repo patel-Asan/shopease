@@ -626,7 +626,7 @@ const ProductDetail = () => {
           >
             <img
               src={!imageErrors['main'] && productImages[selectedImage]
-                ? `http://localhost:5000/uploads/products/${productImages[selectedImage]}` 
+                ? getImageUrl(productImages[selectedImage])
                 : `https://ui-avatars.com/api/?name=${product.name}&background=ff6b6b&color=fff`
               }
               alt={product.name}

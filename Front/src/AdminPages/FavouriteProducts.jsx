@@ -1,7 +1,7 @@
 
 // src/AdminPages/FavouriteProducts.jsx
 import React, { useEffect, useState } from "react";
-import API from "../api/api";
+import API, { getImageUrl } from "../api/api";
 import { useTheme } from "../context/ThemeContext";
 
 const FavouriteProducts = () => {
@@ -193,7 +193,7 @@ const FavouriteProducts = () => {
               <img
                 src={
                   p.img
-                    ? `http://localhost:5000/uploads/products/${p.img}`
+                    ? getImageUrl(p.img)
                     : "/default-image.jpg"
                 }
                 alt={p.name}

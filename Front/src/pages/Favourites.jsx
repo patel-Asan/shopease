@@ -1,4 +1,5 @@
 import { useEffect, useContext, useState, useCallback } from "react";
+import { getImageUrl } from "../api/api";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
 import { FavouritesContext } from "../context/FavouritesContext";
 import { useTheme } from "../context/ThemeContext";
@@ -452,7 +453,7 @@ export default function Favourites() {
                     {productImage && !hasImageError ? (
                       <Card.Img
                         variant="top"
-                        src={`http://localhost:5000/uploads/products/${productImage}`}
+                        src={getImageUrl(productImage)}
                         alt={productName}
                         style={styles.cardImage}
                         onError={() => handleImageError(uniqueId)}

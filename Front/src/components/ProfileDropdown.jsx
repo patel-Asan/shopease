@@ -285,7 +285,7 @@ export default function ProfileDropdown() {
     setIsChangingPassword(false);
     setPreviewImage(
       user?.profileImage
-        ? `http://localhost:5000/uploads/profile/${user.profileImage}`
+        ? getImageUrl(user.profileImage)
         : null
     );
     setErrors({});

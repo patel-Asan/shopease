@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Container, Spinner, Modal, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FaSearch, FaEdit, FaTrash, FaImage, FaPlus, FaBox } from "react-icons/fa";
-import API from "../api/api";
+import API, { getImageUrl } from "../api/api";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import AddProduct from "../components/AddProduct";
@@ -110,7 +110,7 @@ const ProductPage = () => {
     });
     setPreview(
       product.img
-        ? `http://localhost:5000/uploads/products/${product.img}`
+        ? getImageUrl(product.img)
         : null
     );
     setShowModal(true);
