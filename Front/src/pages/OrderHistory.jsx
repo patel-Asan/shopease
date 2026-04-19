@@ -459,12 +459,17 @@ export default function OrderHistory() {
         const discountAmount = discountApplied?.amount || 0;
         const finalTotal = order.totalAmount;
         
+        const handleOrderClick = () => {
+          navigate(`/order/${order._id}`);
+        };
+
         return (
           <div
             key={order._id}
+            onClick={handleOrderClick}
             onMouseEnter={() => !isMobile && setHovered(order._id)}
             onMouseLeave={() => !isMobile && setHovered(null)}
-            style={styles.orderCard(order._id, hovered)}
+            style={{ ...styles.orderCard(order._id, hovered), cursor: "pointer" }}
           >
             <div style={styles.dateRow}>
               <span>{formatDate(order.createdAt)}</span>

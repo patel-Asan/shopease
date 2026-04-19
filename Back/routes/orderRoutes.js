@@ -4,6 +4,7 @@ const { auth, adminAuth, deliveryAuth } = require("../middleware/auth");
 const {
   createOrder,
   getOrders,
+  getOrderById,
   cancelOrder,
   getAllOrders,
   updateOrderStatus,
@@ -18,6 +19,7 @@ const { createNotification } = require("../controllers/notificationController");
 // User routes
 router.post("/create", auth, createOrder);
 router.get("/", auth, getOrders);
+router.get("/:id", auth, getOrderById);
 router.patch("/cancel/:id", auth, cancelOrder);
 router.post("/:id/request-otp", auth, requestDeliveryOtp);
  

@@ -176,6 +176,31 @@ exports.getOrders = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch orders" });
   }
 };
+
+/**
+ * @desc    Get single order by ID
+ * @route   GET /api/orders/:id
+ * @access  Private
+ */
+exports.getOrderById = async (req, res) => {
+  try {
+    const order = await Order.findOne({
+      _id: req.params.id,
+      user: req.user._id
+    })
+      .populate("items.product")
+      .populate("deliveryBoy", "username name phone");
+ 
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+ 
+    res.json({ status: "success", data: order });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch order" });
+  }
+};
  
 /**
  * @desc    Cancel an order (user)

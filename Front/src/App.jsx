@@ -13,6 +13,7 @@ import ProductDetail from "./pages/ProductDetail.jsx";
 
 import Success from "./pages/Success.jsx";
 import OrderHistory from "./pages/OrderHistory.jsx";
+import OrderDetail from "./pages/OrderDetail.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
@@ -117,6 +118,7 @@ function AppContent() {
               <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
               <Route path="/favourites" element={<ProtectedRoute><Favourites /></ProtectedRoute>} />
               <Route path="/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
+              <Route path="/order/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
               <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
               <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><ProfileAddresses /></ProtectedRoute>} />
