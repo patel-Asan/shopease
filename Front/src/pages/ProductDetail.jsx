@@ -241,15 +241,19 @@ breadcrumbLink: {
       justifyContent: isMobile ? 'center' : (isTablet ? 'center' : 'flex-start'),
       flexWrap: 'wrap',
     },
-    thumbnail: (index) => ({
+thumbnail: (index) => ({
       width: getSpacing('60px', '70px', '100px'),
       height: getSpacing('60px', '70px', '100px'),
       borderRadius: getSpacing('10px', '12px', '16px'),
       cursor: 'pointer',
-      border: selectedImage === index ? (isDarkMode ? '3px solid #c9a962' : '3px solid #ff6b6b') : '2px solid transparent',
+      border: selectedImage === index 
+        ? (isDarkMode ? '3px solid #c9a962' : '3px solid #ff6b6b') 
+        : (isDarkMode ? '2px solid rgba(201,169,98,0.3)' : '2px solid transparent'),
       transition: 'all 0.3s ease',
       objectFit: 'cover',
-      boxShadow: hoveredThumbnail === index ? '0 10px 20px rgba(201,169,98,0.3)' : '0 4px 10px rgba(0,0,0,0.05)',
+      boxShadow: hoveredThumbnail === index 
+        ? '0 10px 20px rgba(201,169,98,0.3)' 
+        : '0 4px 10px rgba(0,0,0,0.05)',
       transform: hoveredThumbnail === index ? 'scale(1.05)' : 'scale(1)',
       opacity: selectedImage === index ? 1 : 0.8,
     }),
@@ -416,28 +420,32 @@ breadcrumbLink: {
       fontWeight: '600',
     },
     inStock: {
-      backgroundColor: '#e8f5e9',
-      color: '#2e7d32',
+      backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.15)' : '#e8f5e9',
+      color: isDarkMode ? '#10b981' : '#2e7d32',
+      border: isDarkMode ? '1px solid rgba(16, 185, 129, 0.3)' : 'none',
     },
     lowStock: {
-      backgroundColor: '#fff3e0',
-      color: '#f57c00',
+      backgroundColor: isDarkMode ? 'rgba(245, 158, 11, 0.15)' : '#fff3e0',
+      color: isDarkMode ? '#f59e0b' : '#f57c00',
+      border: isDarkMode ? '1px solid rgba(245, 158, 11, 0.3)' : 'none',
     },
     outOfStock: {
-      backgroundColor: '#ffebee',
-      color: '#c62828',
+      backgroundColor: isDarkMode ? 'rgba(239, 68, 68, 0.15)' : '#ffebee',
+      color: isDarkMode ? '#ef4444' : '#c62828',
+      border: isDarkMode ? '1px solid rgba(239, 68, 68, 0.3)' : 'none',
     },
     cartStatus: {
       display: 'flex',
       alignItems: 'center',
       gap: getSpacing('10px', '12px', '15px'),
       padding: getSpacing('12px 15px', '14px 20px', '15px 25px'),
-      backgroundColor: '#e8f5e9',
+      backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.15)' : '#e8f5e9',
       borderRadius: getSpacing('10px', '12px', '16px'),
-      color: '#2e7d32',
+      color: isDarkMode ? '#10b981' : '#2e7d32',
       fontSize: getFontSize('13px', '14px', '16px'),
       marginTop: getSpacing('10px', '15px', '20px'),
       flexWrap: 'wrap',
+      border: isDarkMode ? '1px solid rgba(16, 185, 129, 0.3)' : 'none',
     },
     tabs: {
       display: 'flex',
@@ -473,31 +481,32 @@ breadcrumbLink: {
       fontSize: getFontSize('13px', '14px', '16px'),
     },
     specRow: {
-      borderBottom: '1px solid #f0f0f0',
+      borderBottom: isDarkMode ? '1px solid rgba(201, 169, 98, 0.1)' : '1px solid #f0f0f0',
     },
     specLabel: {
       padding: getSpacing('12px 15px', '14px 20px', '18px 25px'),
-      color: '#64748b',
+      color: isDarkMode ? 'rgba(255,255,255,0.5)' : '#64748b',
       width: isMobile ? '40%' : '35%',
       fontWeight: '600',
-      backgroundColor: '#f8fafc',
+      backgroundColor: isDarkMode ? 'rgba(0,0,0,0.2)' : '#f8fafc',
     },
     specValue: {
       padding: getSpacing('12px 15px', '14px 20px', '18px 25px'),
-      color: '#1e293b',
+      color: isDarkMode ? '#e8d5a3' : '#1e293b',
       fontWeight: '600',
     },
     deliveryInfo: {
       marginTop: getSpacing('20px', '25px', '30px'),
       padding: getSpacing('15px', '20px', '30px'),
-      background: '#f8fafc',
+      background: isDarkMode ? 'rgba(201, 169, 98, 0.08)' : '#f8fafc',
       borderRadius: getSpacing('12px', '16px', '20px'),
+      border: isDarkMode ? '1px solid rgba(201, 169, 98, 0.2)' : 'none',
     },
     deliveryItem: {
       display: 'flex',
       alignItems: 'center',
       gap: getSpacing('10px', '12px', '15px'),
-      color: '#475569',
+      color: isDarkMode ? 'rgba(255,255,255,0.7)' : '#475569',
       fontSize: getFontSize('13px', '14px', '16px'),
       marginBottom: getSpacing('8px', '10px', '12px'),
     },
@@ -524,14 +533,15 @@ breadcrumbLink: {
             <h4 style={{ 
               fontSize: getFontSize('18px', '20px', '24px'),
               marginBottom: getSpacing('15px', '20px', '25px'),
-              color: '#1e293b',
+              color: isDarkMode ? '#e8d5a3' : '#1e293b',
+              fontWeight: '700',
             }}>
               Product Description
             </h4>
             <p style={{ 
               fontSize: getFontSize('14px', '15px', '16px'),
               lineHeight: '1.8',
-              color: '#475569',
+              color: isDarkMode ? 'rgba(255,255,255,0.7)' : '#475569',
             }}>
               {product.description || 'No description available.'}
             </p>
@@ -543,7 +553,8 @@ breadcrumbLink: {
             <h4 style={{ 
               fontSize: getFontSize('18px', '20px', '24px'),
               marginBottom: getSpacing('15px', '20px', '25px'),
-              color: '#1e293b',
+              color: isDarkMode ? '#e8d5a3' : '#1e293b',
+              fontWeight: '700',
             }}>
               Specifications
             </h4>
@@ -574,6 +585,8 @@ breadcrumbLink: {
               <h5 style={{ 
                 fontSize: getFontSize('16px', '18px', '20px'),
                 marginBottom: getSpacing('10px', '12px', '15px'),
+                color: isDarkMode ? '#c9a962' : '#1e293b',
+                fontWeight: '700',
               }}>
                 📦 Delivery Info
               </h5>
