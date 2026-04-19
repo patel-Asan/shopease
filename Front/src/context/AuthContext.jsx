@@ -1,18 +1,33 @@
 
 import { createContext, useState, useEffect } from "react";
 import API from "../api/api";
- 
+  
 export const AuthContext = createContext();
- 
+  
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
- 
+  
+  const refreshUser = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return;
+    try {
+      const { data } = await API.get("/user/", { _skipRefresh: true });
+      if (data.user) {
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+    } catch (err) {
+      console.error("Profile refresh failed:", err);
+    }
+  };
+  
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
+      refreshUser();
     } else {
       localStorage.removeItem("user");
     }
