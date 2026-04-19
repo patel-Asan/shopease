@@ -158,13 +158,13 @@ export default function LandingPage() {
     logoSubtext: { fontSize: "9px", fontWeight: "500", letterSpacing: "4px", opacity: 0.5, marginTop: "3px" },
     navLink: { fontSize: "14px", fontWeight: "500", background: "none", border: "none", cursor: "pointer", color: textColor, padding: "8px 0" },
     navButtons: { display: "flex", gap: "12px", alignItems: "center" },
-    themeToggle: { width: "40px", height: "40px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", background: cardBg, border: `1px solid ${borderColor}`, color: accentColor, transition: "all 0.3s ease" },
+    themeToggle: { width: "40px", height: "40px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", background: cardBg, border: `1px solid ${borderColor}`, color: accentColor, transition: "all 0.3s ease", boxShadow: "0 4px 15px rgba(0,0,0,0.1)" },
     themeIcon: { fontSize: "16px" },
-    navLoginBtn: { padding: "10px 24px", background: cardBg, border: `1px solid ${borderColor}`, borderRadius: "50px", fontSize: "14px", fontWeight: "500", cursor: "pointer", color: textColor, transition: "all 0.3s ease" },
-    navRegisterBtn: { padding: "10px 24px", background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColorLight} 100%)`, border: "none", borderRadius: "50px", fontSize: "14px", fontWeight: "600", cursor: "pointer", color: isDarkMode ? "#050507" : "white", transition: "all 0.3s ease" },
+    navLoginBtn: { padding: "10px 24px", background: cardBg, border: `1px solid ${borderColor}`, borderRadius: "50px", fontSize: "14px", fontWeight: "500", cursor: "pointer", color: textColor, transition: "all 0.3s ease", boxShadow: "0 2px 10px rgba(0,0,0,0.05)" },
+    navRegisterBtn: { padding: "10px 24px", background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColorLight} 100%)`, border: "none", borderRadius: "50px", fontSize: "14px", fontWeight: "600", cursor: "pointer", color: isDarkMode ? "#050507" : "white", transition: "all 0.3s ease", boxShadow: "0 4px 20px rgba(0,0,0,0.2)" },
     hero: { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "140px 40px 80px", maxWidth: "1400px", margin: "0 auto", position: "relative", zIndex: 2 },
     heroContent: { maxWidth: "580px", opacity: isLoaded ? 1 : 0, transform: isLoaded ? 'translateY(0)' : 'translateY(40px)', transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)" },
-    heroBadge: { display: "inline-flex", alignItems: "center", gap: "10px", padding: "8px 16px", border: "1px solid", borderRadius: "50px", marginBottom: "24px", backgroundColor: `${accentColor}15`, borderColor: `${accentColor}40` },
+    heroBadge: { display: "inline-flex", alignItems: "center", gap: "10px", padding: "8px 16px", border: "1px solid", borderRadius: "50px", marginBottom: "24px", backgroundColor: `${accentColor}15`, borderColor: `${accentColor}40`, boxShadow: `0 0 20px ${accentColor}20` },
     badgeDot: { width: "6px", height: "6px", borderRadius: "50%", backgroundColor: accentColor, boxShadow: `0 0 10px ${accentColor}`, animation: "pulse 2s infinite" },
     heroTitle: { marginBottom: "24px" },
     heroTitleLine1: { display: "block", fontSize: "clamp(36px, 5vw, 52px)", fontWeight: "400", lineHeight: "1.2", marginBottom: "8px", color: textSecondary },
@@ -172,9 +172,9 @@ export default function LandingPage() {
     cursor: { display: "inline-block", width: "3px", height: "1em", marginLeft: "4px", backgroundColor: accentColor, animation: "pulse 1s infinite", verticalAlign: "text-bottom" },
     heroSubtitle: { fontSize: "17px", lineHeight: "1.8", marginBottom: "32px", maxWidth: "480px", color: textSecondary },
     heroButtons: { display: "flex", gap: "16px", marginBottom: "40px" },
-    heroPrimaryBtn: { display: "flex", alignItems: "center", gap: "10px", padding: "16px 32px", background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColorLight} 100%)`, border: "none", borderRadius: "60px", fontSize: "15px", fontWeight: "600", cursor: "pointer", color: isDarkMode ? "#050507" : "white", boxShadow: `0 10px 40px ${accentColor}40`, transition: "all 0.3s ease" },
+    heroPrimaryBtn: { display: "flex", alignItems: "center", gap: "10px", padding: "16px 32px", background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColorLight} 100%)`, border: "none", borderRadius: "60px", fontSize: "15px", fontWeight: "600", cursor: "pointer", color: isDarkMode ? "#050507" : "white", boxShadow: `0 10px 40px ${accentColor}40`, transition: "all 0.3s ease", transform: "translateY(0)" },
     btnIcon: { fontSize: "14px" },
-    heroSecondaryBtn: { display: "flex", alignItems: "center", gap: "10px", padding: "16px 32px", background: "transparent", border: "1px solid", borderRadius: "60px", fontSize: "15px", fontWeight: "500", cursor: "pointer", color: textColor, borderColor: borderColor, transition: "all 0.3s ease" },
+    heroSecondaryBtn: { display: "flex", alignItems: "center", gap: "10px", padding: "16px 32px", background: "transparent", border: "1px solid", borderRadius: "60px", fontSize: "15px", fontWeight: "500", cursor: "pointer", color: textColor, borderColor: borderColor, transition: "all 0.3s ease", backdropFilter: "blur(10px)" },
     playIcon: { fontSize: "12px", color: accentColor },
     heroTrust: { display: "flex", gap: "32px" },
     trustItem: { display: "flex", alignItems: "center", gap: "8px" },
@@ -194,10 +194,10 @@ export default function LandingPage() {
     scrollIndicator: { position: "absolute", bottom: "30px", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", color: textSecondary },
     scrollIcon: { animation: "scrollBounce 2s infinite" },
     statsSection: { padding: "50px 40px", display: "flex", justifyContent: "center", gap: "30px", flexWrap: "wrap", backgroundColor: cardBg, borderTop: "1px solid", borderBottom: "1px solid", borderColor: borderColor, maxWidth: "1400px", margin: "0 auto" },
-    statCard: { display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "24px 40px", border: "1px solid", borderColor: borderColor, borderRadius: "20px", minWidth: "180px", transition: "all 0.3s ease" },
-    statIconWrapper: { width: "48px", height: "48px", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", background: `linear-gradient(135deg, ${accentColor}15 0%, ${accentColor}05 100%)` },
+    statCard: { display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "24px 40px", border: "1px solid", borderColor: borderColor, borderRadius: "20px", minWidth: "180px", transition: "all 0.3s ease", backdropFilter: "blur(10px)", boxShadow: "0 4px 20px rgba(0,0,0,0.05)" },
+    statIconWrapper: { width: "48px", height: "48px", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", background: `linear-gradient(135deg, ${accentColor}20 0%, ${accentColor}10 100%)`, boxShadow: `0 4px 15px ${accentColor}20` },
     statIcon: { fontSize: "20px", color: accentColor },
-    statValue: { fontSize: "28px", fontWeight: "700", color: textColor },
+    statValue: { fontSize: "28px", fontWeight: "700", color: textColor, textShadow: "0 2px 10px rgba(0,0,0,0.1)" },
     statLabel: { fontSize: "12px", fontWeight: "500", letterSpacing: "1px", textTransform: "uppercase", color: textSecondary },
     showcaseTeaser: { padding: "80px 40px", backgroundColor: cardBg, maxWidth: "1400px", margin: "0 auto" },
     showcaseHeader: { textAlign: "center", marginBottom: "50px" },
@@ -205,8 +205,8 @@ export default function LandingPage() {
     sectionTitle: { fontSize: "clamp(28px, 4vw, 40px)", fontWeight: "700", marginBottom: "12px", color: textColor },
     sectionSubtitle: { fontSize: "16px", maxWidth: "500px", margin: "0 auto", color: textSecondary },
     showcaseGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px" },
-    showcaseCard: { padding: "30px 24px", border: "1px solid", borderRadius: "20px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", backgroundColor: cardBg, borderColor: borderColor },
-    showcaseCardIcon: { width: "56px", height: "56px", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: "24px", color: "white", background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColorLight} 100%)` },
+    showcaseCard: { padding: "30px 24px", border: "1px solid", borderRadius: "20px", textAlign: "center", cursor: "pointer", transition: "all 0.3s ease", backgroundColor: cardBg, borderColor: borderColor, boxShadow: "0 4px 20px rgba(0,0,0,0.05)" },
+    showcaseCardIcon: { width: "56px", height: "56px", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: "24px", color: "white", background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColorLight} 100%)`, boxShadow: `0 8px 25px ${accentColor}40` },
     showcaseCardTitle: { fontSize: "16px", fontWeight: "600", marginBottom: "6px", color: textColor },
     showcaseCardDesc: { fontSize: "13px", color: textSecondary },
     howItWorks: { padding: "100px 40px", maxWidth: "1200px", margin: "0 auto" },
@@ -217,7 +217,7 @@ export default function LandingPage() {
     stepDesc: { fontSize: "14px", color: textSecondary },
     features: { padding: "100px 40px", backgroundColor: cardBg, maxWidth: "1400px", margin: "0 auto" },
     featuresGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px", marginTop: "60px" },
-    featureCard: { padding: "36px", border: "1px solid", borderColor: borderColor, borderRadius: "24px", position: "relative", overflow: "hidden", transition: "all 0.3s ease", background: cardBg },
+    featureCard: { padding: "36px", border: "1px solid", borderColor: borderColor, borderRadius: "24px", position: "relative", overflow: "hidden", transition: "all 0.3s ease", background: cardBg, boxShadow: "0 4px 30px rgba(0,0,0,0.05)" },
     featureIcon: { width: "56px", height: "56px", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px", background: "transparent" },
     featureTitle: { fontSize: "18px", fontWeight: "600", marginBottom: "10px", color: textColor },
     featureDesc: { fontSize: "14px", lineHeight: "1.7", color: textSecondary },
@@ -227,7 +227,7 @@ export default function LandingPage() {
     testimonialNav: { width: "48px", height: "48px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.3s ease", background: cardBg, border: `1px solid ${borderColor}`, color: textColor, flexShrink: 0 },
     testimonialContainer: { flex: 1, textAlign: "center" },
     quoteIcon: { fontSize: "48px", opacity: 0.3, marginBottom: "20px", color: accentColor },
-    testimonialCard: { border: "1px solid", borderColor: borderColor, borderRadius: "28px", padding: "48px", background: cardBg },
+    testimonialCard: { border: "1px solid", borderColor: borderColor, borderRadius: "28px", padding: "48px", background: cardBg, boxShadow: "0 10px 50px rgba(0,0,0,0.08)" },
     testimonialStars: { display: "flex", justifyContent: "center", gap: "4px", marginBottom: "24px" },
     starIcon: { fontSize: "18px", color: accentColor },
     testimonialText: { fontSize: "20px", lineHeight: "1.8", fontStyle: "italic", fontFamily: "'Playfair Display', serif", marginBottom: "32px", color: textColor },
@@ -242,7 +242,7 @@ export default function LandingPage() {
     mapWrapper: { flex: 2, borderRadius: "24px", overflow: "hidden", border: `1px solid ${borderColor}`, minHeight: "400px" },
     mapIframe: { width: "100%", height: "100%", minHeight: "400px", border: "none" },
     mapInfo: { flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" },
-    mapInfoCard: { padding: "32px", background: cardBg, border: `1px solid ${borderColor}`, borderRadius: "24px" },
+    mapInfoCard: { padding: "32px", background: cardBg, border: `1px solid ${borderColor}`, borderRadius: "24px", boxShadow: "0 10px 40px rgba(0,0,0,0.08)" },
     mapInfoTitle: { fontSize: "22px", fontWeight: "700", color: textColor, marginBottom: "16px" },
     mapInfoText: { fontSize: "15px", color: textSecondary, marginBottom: "8px", lineHeight: "1.6" },
     mapInfoHours: { marginTop: "20px", paddingTop: "20px", borderTop: `1px solid ${borderColor}` },
@@ -255,7 +255,7 @@ export default function LandingPage() {
     ctaTitle: { fontSize: "clamp(28px, 4vw, 44px)", fontWeight: "700", marginBottom: "16px", color: textColor },
     ctaSubtitle: { fontSize: "18px", marginBottom: "32px", color: textSecondary },
     ctaButtons: { display: "flex", justifyContent: "center", gap: "16px", marginBottom: "20px" },
-    ctaButton: { display: "inline-flex", alignItems: "center", gap: "10px", padding: "18px 40px", background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColorLight} 100%)`, border: "none", borderRadius: "60px", fontSize: "16px", fontWeight: "600", cursor: "pointer", color: isDarkMode ? "#050507" : "white", boxShadow: "0 10px 40px rgba(0,0,0,0.2)", transition: "all 0.3s ease" },
+    ctaButton: { display: "inline-flex", alignItems: "center", gap: "10px", padding: "18px 40px", background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColorLight} 100%)`, border: "none", borderRadius: "60px", fontSize: "16px", fontWeight: "600", cursor: "pointer", color: isDarkMode ? "#050507" : "white", boxShadow: "0 10px 40px rgba(0,0,0,0.2), 0 0 30px ${accentColor}30", transition: "all 0.3s ease" },
     ctaNote: { fontSize: "13px", color: textSecondary },
     footer: { padding: "80px 40px 40px", backgroundColor: isDarkMode ? "rgba(3, 3, 5, 1)" : "rgba(248, 250, 252, 1)", borderTop: `1px solid ${borderColor}` },
     footerContent: { maxWidth: "1200px", margin: "0 auto", display: "flex", justifyContent: "space-between", gap: "80px", marginBottom: "60px" },
@@ -655,6 +655,17 @@ src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59545.2337809546!2d72
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
         @keyframes rotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+        
+        /* Enhanced Hover Effects */
+        .hero-primary-btn:hover { transform: translateY(-2px) !important; box-shadow: 0 15px 50px rgba(0,0,0,0.25) !important; }
+        .hero-secondary-btn:hover { background: rgba(255,255,255,0.05) !important; transform: translateY(-2px) !important; }
+        .nav-register-btn:hover { transform: scale(1.05) !important; box-shadow: 0 6px 25px rgba(0,0,0,0.25) !important; }
+        .stat-card:hover { transform: translateY(-5px) !important; box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important; border-color: #c9a962 !important; }
+        .showcase-card:hover { transform: translateY(-5px) !important; box-shadow: 0 20px 50px rgba(0,0,0,0.15) !important; }
+        .step-card:hover { transform: translateY(-5px) !important; box-shadow: 0 15px 40px rgba(0,0,0,0.1) !important; }
+        .feature-card:hover { transform: translateY(-5px) !important; box-shadow: 0 20px 50px rgba(0,0,0,0.15) !important; }
+        .cta-button:hover { transform: translateY(-3px) !important; box-shadow: 0 15px 50px rgba(0,0,0,0.3) !important; }
+        .footer-link:hover { color: #c9a962 !important; transform: translateX(5px) !important; }
         
         /* ============================================ DESKTOP (> 1024px) ============================================ */
         @media (min-width: 1025px) {
