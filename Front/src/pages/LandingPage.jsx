@@ -629,7 +629,7 @@ src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59545.2337809546!2d72
         </div>
         <div style={s.ctaContent}>
           <span style={s.sectionTag}>LIMITED OFFER</span>
-          <h2 style={s.ctaTitle}>Get 20% Off Your First Order</h2>
+          <h2 style={s.ctaTitle}>Get 10% Off Your First Order</h2>
           <p style={s.ctaSubtitle}>Join our community today and unlock exclusive benefits</p>
           <div style={s.ctaButtons}>
             <button style={s.ctaButton} onClick={() => navigate("/register")}>
