@@ -341,7 +341,7 @@ export default function LandingPage() {
           </div>
 
 
-          <div style={s.navButtons}>
+          <div style={s.navButtons} className="nav-buttons">
             <button
               onClick={toggleTheme}
               style={{
@@ -368,7 +368,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      <section style={s.hero}>
+      <section style={isMobile ? { ...s.hero, flexDirection: "column", padding: "120px 20px 60px", textAlign: "center" } : s.hero} className="hero">
         <div style={s.heroContent}>
           <div style={s.heroBadge}>
             <span style={s.badgeDot} />
@@ -642,7 +642,7 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      <style>{`
+<style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; }
@@ -652,16 +652,49 @@ export default function LandingPage() {
         @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
         @keyframes rotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
         @media (max-width: 768px) {
-          .nav-center { display: none !important; }
-          .hero { flex-direction: column !important; text-align: center !important; padding: 120px 20px 60px !important; }
-          .hero-buttons { justify-content: center !important; flex-wrap: wrap; }
-          .hero-trust { justify-content: center !important; flex-wrap: wrap; gap: 20px !important; }
-          .hero-visual { margin-top: 60px !important; transform: none !important; }
-          .steps-grid { grid-template-columns: 1fr !important; }
+          .nav-content { padding: 0 20px !important; }
+          .nav-buttons { gap: 8px !important; }
+          .nav-login-btn, .nav-register-btn { padding: 8px 16px !important; font-size: 12px !important; }
+          .hero { flex-direction: column !important; text-align: center !important; padding: 120px 20px 60px !important; min-height: auto !important; }
+          .hero-content { max-width: 100% !important; }
+          .hero-title h1 { font-size: 28px !important; line-height: 1.2 !important; }
+          .hero-subtitle { font-size: 15px !important; margin-bottom: 24px !important; }
+          .hero-buttons { justify-content: center !important; flex-wrap: wrap !important; gap: 12px !important; margin-bottom: 30px !important; }
+          .hero-primary-btn, .hero-secondary-btn { padding: 14px 24px !important; font-size: 14px !important; }
+          .hero-trust { justify-content: center !important; flex-wrap: wrap !important; gap: 16px !important; }
+          .hero-visual { display: none !important; }
+          .scroll-indicator { display: none !important; }
+          .stats-section { padding: 30px 20px !important; gap: 16px !important; }
+          .stat-card { min-width: 140px !important; padding: 16px 20px !important; }
+          .stat-value { font-size: 22px !important; }
+          .showcase-teaser { padding: 60px 20px !important; }
+          .showcase-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+          .showcase-card { padding: 20px 16px !important; }
+          .showcase-card-icon { width: 44px !important; height: 44px !important; font-size: 20px !important; }
+          .showcase-card-title { font-size: 14px !important; }
+          .showcase-card-desc { font-size: 12px !important; }
+          .how-it-works { padding: 60px 20px !important; }
+          .steps-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+          .step-card { padding: 24px !important; }
+          .features { padding: 60px 20px !important; }
+          .features-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+          .feature-card { padding: 24px !important; }
+          .testimonials { padding: 60px 20px !important; }
+          .testimonial-card { padding: 24px !important; }
+          .testimonial-text { font-size: 16px !important; }
           .testimonial-wrapper { flex-direction: column !important; gap: 20px !important; }
-          .map-container { flex-direction: column !important; }
+          .testimonial-nav { display: none !important; }
+          .map-section { padding: 60px 20px !important; }
+          .map-container { flex-direction: column !important; gap: 24px !important; }
           .map-wrapper { min-height: 300px !important; }
           .map-iframe { min-height: 300px !important; }
+          .cta { padding: 80px 20px !important; }
+          .cta-buttons { flex-wrap: wrap !important; justify-content: center !important; }
+          .cta-button { padding: 16px 32px !important; font-size: 15px !important; }
+          .footer { padding: 60px 20px 30px !important; }
+          .footer-content { flex-direction: column !important; gap: 40px !important; }
+          .footer-brand { max-width: 100% !important; }
+          .footer-links { flex-wrap: wrap !important; gap: 30px !important; }
         }
       `}</style>
     </div>
