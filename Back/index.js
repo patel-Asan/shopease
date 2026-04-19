@@ -26,6 +26,7 @@ app.use(cors({
   origin: [
     "https://shopease-vcx6hnxei-asans-projects-69ce1902.vercel.app",
     "https://shopease-3tglmrhgr-asans-projects-69ce1902.vercel.app", 
+    "https://shopease-seven-psi.vercel.app",
     "http://localhost:5173", 
     "http://localhost:3000"
   ], 
