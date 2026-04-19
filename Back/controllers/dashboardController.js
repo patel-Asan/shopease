@@ -1,7 +1,47 @@
- 
 const User = require("../models/User");
 const Session = require("../models/Session");
-const Order = require("../models/Order"); // ✅ Order model
+const Order = require("../models/Order");
+const Product = require("../models/Product");
+
+const getPublicStats = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalProducts = await Product.countDocuments();
+    const totalOrders = await Order.countDocuments();
+    
+    const completedOrders = await Order.countDocuments({ status: "delivered" });
+    
+    const revenueAggregation = await Order.aggregate([
+      { $match: { status: "delivered" } },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$totalAmount" },
+        },
+      },
+    ]);
+    
+    const totalRevenue = revenueAggregation[0]?.totalRevenue || 0;
+    
+    const ordersWithRating = await Order.find({ rating: { $exists: true, $ne: null } });
+    let avgRating = 0;
+    if (ordersWithRating.length > 0) {
+      const totalRating = ordersWithRating.reduce((sum, order) => sum + order.rating, 0);
+      avgRating = (totalRating / ordersWithRating.length).toFixed(1);
+    }
+    
+    res.json({
+      totalUsers,
+      totalProducts,
+      totalOrders,
+      totalRevenue,
+      avgRating: avgRating > 0 ? avgRating : "4.9"
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch public stats" });
+  }
+};
  
 const getDashboardStats = async (req, res) => {
   try {
@@ -40,5 +80,5 @@ const getDashboardStats = async (req, res) => {
   }
 };
  
-module.exports = { getDashboardStats };
+module.exports = { getDashboardStats, getPublicStats };
  

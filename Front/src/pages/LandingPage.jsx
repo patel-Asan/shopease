@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import axios from "axios";
 import { 
   FaShoppingBag, FaShieldAlt, FaTruck, FaHeadset, 
   FaArrowRight, FaStar, FaCheck, FaAward,
@@ -10,6 +11,8 @@ import {
   FaChevronLeft, FaChevronRight, FaUsers, FaStore
 } from "react-icons/fa";
 
+const API_URL = "https://shopease-511p.onrender.com";
+
 export default function LandingPage() {
   const navigate = useNavigate();
   const { isDarkMode, toggleTheme } = useTheme();
@@ -18,12 +21,33 @@ export default function LandingPage() {
   const [scrollY, setScrollY] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [typedText, setTypedText] = useState("");
   const [currentShowcase, setCurrentShowcase] = useState(0);
   const [countersAnimated, setCountersAnimated] = useState(false);
+  const [statsData, setStatsData] = useState({
+    totalUsers: "2000000",
+    totalProducts: "50000",
+    avgRating: "4.9"
+  });
   const statsRef = useRef(null);
 
-  const fullText = "Elevate Your Shopping Experience";
+  useEffect(() => {
+    const fetchPublicStats = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/admin/dashboard/public`);
+        if (response.data) {
+          setStatsData({
+            totalUsers: response.data.totalUsers?.toString() || "2000000",
+            totalProducts: response.data.totalProducts?.toString() || "50000",
+            avgRating: response.data.avgRating || "4.9"
+          });
+        }
+      } catch (error) {
+        console.log("Using default stats");
+      }
+    };
+    fetchPublicStats();
+  }, []);
+
 
   useEffect(() => {
     const checkScreen = () => {
@@ -377,7 +401,7 @@ export default function LandingPage() {
         <div style={isMobile ? { ...s.heroContent, maxWidth: "100%", textAlign: "center" } : s.heroContent} className="hero-content">
           <div style={s.heroBadge}>
             <span style={s.badgeDot} />
-            <span style={{color: accentColor, fontSize: "12px", fontWeight: "600", letterSpacing: "2px"}}>NEW COLLECTION 2024</span>
+            <span style={{color: accentColor, fontSize: "12px", fontWeight: "600", letterSpacing: "2px"}}>NEW COLLECTION 2026</span>
           </div>
           
           <h1 style={s.heroTitle} className="hero-title">
@@ -455,14 +479,14 @@ export default function LandingPage() {
 
       <section ref={statsRef} style={s.statsSection} className="stats-section">
         {[
-          { value: "2000000", label: "Happy Customers", icon: <FaUsers /> },
+          { value: statsData.totalUsers, label: "Happy Customers", icon: <FaUsers /> },
           { value: "99", label: "Uptime %", icon: <FaRocket /> },
-          { value: "50000", label: "Products", icon: <FaStore /> },
-          { value: "4.9", label: "Rating", icon: <FaStar /> },
+          { value: statsData.totalProducts, label: "Products", icon: <FaStore /> },
+          { value: statsData.avgRating, label: "Rating", icon: <FaStar /> },
         ].map((stat, i) => (
-          <div key={i} style={s.statCard} className="stat-card">
-            <div style={s.statIconWrapper}><span style={s.statIcon}>{stat.icon}</span></div>
-            <span style={s.statValue}><AnimatedCounter value={stat.value} duration={2000} /></span>
+          <div key={i} style={s.statCard} className="stat-card stagger-{i + 1}">
+            <div style={s.statIconWrapper} className="stat-icon-wrapper"><span style={s.statIcon}>{stat.icon}</span></div>
+            <span style={s.statValue} className="stat-value"><AnimatedCounter value={stat.value} duration={2000 + i * 500} /></span>
             <span style={s.statLabel}>{stat.label}</span>
           </div>
         ))}
@@ -576,9 +600,9 @@ src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59545.2337809546!2d72
           </div>
           <div style={isMobile ? { ...s.mapInfo, flex: 1, width: "100%" } : s.mapInfo} className="map-info">
             <div style={isMobile ? { ...s.mapInfoCard, padding: "16px", borderRadius: "16px" } : s.mapInfoCard}>
-              <h3 style={s.mapInfoTitle}>Flagship Store</h3>
+              <h3 style={s.mapInfoTitle}>ShopEase Store</h3>
               <p style={s.mapInfoText}>123 ShopEase Avenue, Manhattan</p>
-              <p style={s.mapInfoText}>New York, NY 10001</p>
+              <p style={s.mapInfoText}>Surat, NY 10001</p>
               <div style={s.mapInfoHours}>
                 <span style={s.mapInfoLabel}>Opening Hours:</span>
                 <span style={s.mapInfoText}>Mon - Sat: 10AM - 9PM</span>
@@ -737,10 +761,23 @@ src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59545.2337809546!2d72
         .theme-toggle { transition: all 0.3s ease; }
         .theme-toggle:hover { transform: rotate(15deg) scale(1.1); box-shadow: 0 0 20px rgba(201, 169, 98, 0.4) !important; }
         
-        .stat-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .stat-card:hover { transform: translateY(-8px) !important; box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important; border-color: #c9a962 !important; }
-        .stat-card:hover .stat-icon { transform: scale(1.2); }
+        .stat-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; animation: fadeInUp 0.6s ease-out forwards; cursor: pointer; position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(201, 169, 98, 0.15), transparent); transition: left 0.6s ease; }
+        .stat-card:hover::before { left: 100%; }
+        .stat-card:hover { transform: translateY(-8px) scale(1.02) !important; box-shadow: 0 25px 60px rgba(0,0,0,0.25), 0 0 30px rgba(201, 169, 98, 0.3) !important; border-color: #c9a962 !important; }
+        .stat-card:hover .stat-icon { transform: scale(1.3); animation: iconBounce 0.5s ease; }
+        .stat-card:hover .stat-value { color: #c9a962 !important; text-shadow: 0 0 20px rgba(201, 169, 98, 0.6); transform: scale(1.15); }
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+        .stat-icon-wrapper { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; z-index: 1; }
+        .stat-icon-wrapper::before { content: ''; position: absolute; inset: -4px; border-radius: 16px; background: linear-gradient(135deg, #c9a962, #e8d5a3); opacity: 0; transition: opacity 0.3s ease; z-index: -1; }
+        .stat-card:hover .stat-icon-wrapper::before { opacity: 0.6; animation: borderGlow 1s ease-in-out infinite; }
+        .stat-value { transition: all 0.4s ease; display: inline-block; }
         .stat-icon { transition: transform 0.3s ease; }
+        
+        .stat-card:active { transform: scale(0.95); }
         
         .showcase-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .showcase-card:hover { transform: translateY(-8px) scale(1.02) !important; box-shadow: 0 25px 60px rgba(0,0,0,0.2) !important; border-color: #c9a962 !important; }
