@@ -14,6 +14,7 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const { isDarkMode, toggleTheme } = useTheme();
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -25,14 +26,18 @@ export default function LandingPage() {
   const fullText = "Elevate Your Shopping Experience";
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+    const checkScreen = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 768);
+      setIsTablet(width >= 768 && width < 1024);
+    };
+    checkScreen();
+    window.addEventListener('resize', checkScreen);
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
     setTimeout(() => setIsLoaded(true), 100);
     return () => {
-      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('resize', checkScreen);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
@@ -644,183 +649,165 @@ src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59545.2337809546!2d72
 <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; }
         html { scroll-behavior: smooth; }
-        
-        /* Base Styles Override */
-        nav.navbar { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; }
-        nav.navbar + div { margin-top: 0 !important; }
-        div[class*="hero"] { min-height: auto !important; }
-        section[class*="hero"] { min-height: auto !important; }
-        
-        /* Hide elements on mobile */
-        .mobile-hidden { display: none !important; }
-        .desktop-only { display: none !important; }
-        
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
         @keyframes rotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
         
-        /* ============================================ LARGE DESKTOP (1400px+) ============================================ */
-        @media (min-width: 1400px) {
-          .hero { max-width: 1600px !important; }
-          .stats-section, .features { max-width: 1600px !important; }
+        /* ============================================ DESKTOP (> 1024px) ============================================ */
+        @media (min-width: 1025px) {
+          .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 16px 0; height: auto; background: transparent; backdrop-filter: none; }
+          .nav-content { max-width: 1400px; margin: 0 auto; padding: 0 40px; }
+          .hero { min-height: 100vh; padding: 140px 40px 80px; }
+          .hero-visual { display: block !important; }
+          .scroll-indicator { display: flex !important; }
         }
         
-        /* ============================================ SMALL DESKTOP (1024px - 1399px) ============================================ */
-        @media (min-width: 1024px) and (max-width: 1399px) {
-          .navbar { padding: 14px 0 !important; height: 64px !important; }
-          .nav-content { padding: 0 24px !important; }
-          .hero { padding: 120px 24px 50px !important; }
-          .hero-title { font-size: 40px !important; }
-          .hero-visual { width: 360px !important; height: 360px !important; }
-          .hero-ring { width: 300px !important; height: 300px !important; }
-          .stats-section { padding: 36px 24px !important; gap: 16px !important; }
-          .stat-card { min-width: 150px !important; padding: 18px 24px !important; }
-          .showcase-grid, .steps-grid, .features-grid { gap: 14px !important; }
-          .testimonial-card { padding: 32px !important; }
-          .map-wrapper { min-height: 320px !important; }
-        }
-        
-        /* ============================================ TABLET (768px - 1023px) ============================================ */
-        @media (min-width: 768px) and (max-width: 1023px) {
-          .navbar { padding: 10px 0 !important; height: 56px !important; backdrop-filter: blur(10px); background: rgba(0,0,0,0.85); }
-          .nav-content { padding: 0 16px !important; }
-          .nav-logo { font-size: 18px !important; }
-          .nav-register-btn { padding: 8px 14px !important; font-size: 12px !important; }
+        /* ============================================ TABLET (768px - 1024px) ============================================ */
+        @media (min-width: 768px) and (max-width: 1024px) {
+          .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 12px 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); height: auto; }
+          .nav-content { padding: 0 20px; max-width: 100%; }
+          .nav-buttons { gap: 8px; }
+          .nav-logo { font-size: 18px; }
+          .nav-register-btn { padding: 8px 16px; font-size: 12px; }
+          .nav-login-btn { display: none; }
           
-          .hero { flex-direction: column !important; padding: 90px 16px 40px !important; min-height: auto !important; text-align: center !important; }
-          .hero-content { max-width: 100% !important; text-align: center !important; }
-          .hero-title { font-size: 28px !important; }
-          .hero-subtitle { font-size: 14px !important; margin-bottom: 18px !important; }
-          .hero-buttons { display: flex !important; flex-direction: row !important; gap: 10px !important; justify-content: center !important; width: 100% !important; margin-bottom: 20px !important; }
-          .hero-primary-btn, .hero-secondary-btn { width: auto !important; padding: 12px 20px !important; font-size: 13px !important; flex: 1 !important; max-width: 180px !important; justify-content: center !important; }
-          .hero-trust { display: flex !important; justify-content: center !important; flex-wrap: wrap !important; gap: 12px !important; }
+          .hero { min-height: auto; padding: 100px 20px 50px; flex-direction: column; text-align: center; }
+          .hero-content { max-width: 100%; text-align: center; }
+          .hero-title { font-size: 32px; }
+          .hero-subtitle { font-size: 15px; margin-bottom: 24px; max-width: 100%; }
+          .hero-buttons { flex-direction: row; justify-content: center; gap: 12px; width: 100%; margin-bottom: 24px; }
+          .hero-primary-btn, .hero-secondary-btn { flex: 1; max-width: 200px; padding: 14px 20px; font-size: 13px; justify-content: center; }
+          .hero-trust { justify-content: center; flex-wrap: wrap; gap: 16px; }
           .hero-visual { display: none !important; }
           .scroll-indicator { display: none !important; }
           
-          .stats-section { padding: 28px 14px !important; gap: 10px !important; flex-wrap: wrap !important; justify-content: center !important; }
-          .stat-card { min-width: 130px !important; padding: 12px 18px !important; border-radius: 12px !important; }
-          .stat-value { font-size: 20px !important; }
+          .stats-section { padding: 36px 20px; gap: 16px; }
+          .stat-card { min-width: 140px; padding: 16px 20px; }
+          .stat-value { font-size: 22px; }
           
-          .showcase-teaser { padding: 40px 16px !important; }
-          .showcase-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
-          .showcase-card { padding: 16px 12px !important; border-radius: 12px !important; }
+          .showcase-teaser { padding: 50px 20px; }
+          .showcase-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+          .showcase-card { padding: 20px 14px; }
           
-          .how-it-works { padding: 40px 16px !important; }
-          .steps-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
-          .step-card { padding: 18px !important; border-radius: 14px !important; }
+          .how-it-works { padding: 50px 20px; }
+          .steps-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+          .step-card { padding: 20px; }
           
-          .features { padding: 40px 16px !important; }
-          .features-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
-          .feature-card { padding: 18px !important; border-radius: 14px !important; }
+          .features { padding: 50px 20px; }
+          .features-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+          .feature-card { padding: 20px; }
           
-          .testimonials { padding: 40px 16px !important; }
-          .testimonial-card { padding: 20px !important; border-radius: 16px !important; }
-          .testimonial-text { font-size: 15px !important; }
+          .testimonials { padding: 50px 20px; }
+          .testimonial-card { padding: 24px; }
+          .map-section { padding: 50px 20px; }
+          .map-container { flex-direction: column; }
+          .map-wrapper { min-height: 280px; width: 100%; }
+          .map-iframe { min-height: 280px; }
           
-          .map-section { padding: 40px 16px !important; }
-          .map-container { flex-direction: column !important; gap: 14px !important; }
-          .map-wrapper { min-height: 240px !important; border-radius: 14px !important; width: 100% !important; flex: none !important; }
-          .map-iframe { min-height: 240px !important; }
-          .map-info { width: 100% !important; flex: none !important; }
-          .map-info-card { padding: 18px !important; }
+          .cta { padding: 80px 20px; }
+          .cta-title { font-size: 28px; }
           
-          .cta { padding: 70px 16px !important; }
-          .cta-title { font-size: 26px !important; }
-          .cta-button { padding: 14px 28px !important; font-size: 14px !important; }
-          
-          .footer { padding: 40px 16px 24px !important; }
-          .footer-content { gap: 24px !important; flex-wrap: wrap !important; }
-          .footer-brand { max-width: 280px !important; }
+          .footer { padding: 50px 20px 30px; }
+          .footer-content { flex-wrap: wrap; gap: 24px; }
         }
         
         /* ============================================ MOBILE (< 768px) ============================================ */
         @media (max-width: 767px) {
-          .navbar { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; padding: 8px 0 !important; height: 50px !important; backdrop-filter: blur(10px) !important; background: rgba(0,0,0,0.9) !important; }
-          .nav-content { padding: 0 10px !important; }
-          .nav-buttons { gap: 4px !important; }
-          .nav-logo { font-size: 14px !important; letter-spacing: 1px !important; }
-          .nav-register-btn { padding: 5px 10px !important; font-size: 10px !important; border-radius: 15px !important; }
-          .theme-toggle { width: 28px !important; height: 28px !important; font-size: 12px !important; }
+          .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 10px 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); height: auto; }
+          .nav-content { padding: 0 12px; }
+          .nav-buttons { gap: 6px; }
+          .nav-logo { font-size: 16px; letter-spacing: 1px; }
+          .nav-logo-sub { display: none; }
+          .nav-register-btn { padding: 6px 12px; font-size: 11px; }
+          .nav-login-btn { display: none; }
+          .nav-theme-toggle { width: 32px; height: 32px; font-size: 14px; }
           
-          .hero { padding: 70px 10px 24px !important; min-height: auto !important; }
-          .hero-badge { padding: 4px 8px !important; font-size: 8px !important; margin-bottom: 10px !important; }
-          .hero-title { font-size: 20px !important; line-height: 1.15 !important; margin-bottom: 10px !important; }
-          .hero-title-line1, .hero-title-line2 { font-size: 20px !important; }
-          .hero-subtitle { font-size: 12px !important; margin-bottom: 14px !important; line-height: 1.3 !important; }
-          .hero-buttons { flex-direction: column !important; gap: 6px !important; margin-bottom: 16px !important; }
-          .hero-primary-btn, .hero-secondary-btn { padding: 10px 14px !important; font-size: 12px !important; border-radius: 25px !important; }
-          .hero-trust { gap: 8px !important; font-size: 10px !important; }
-          .hero-visual, .scroll-indicator { display: none !important; }
+          .hero { min-height: auto; padding: 80px 12px 30px; flex-direction: column; }
+          .hero-content { max-width: 100%; text-align: center; }
+          .hero-badge { padding: 4px 10px; font-size: 9px; letter-spacing: 1px; }
+          .hero-title { font-size: 22px; line-height: 1.2; margin-bottom: 12px; }
+          .hero-title-line1, .hero-title-line2 { font-size: 22px; }
+          .hero-subtitle { font-size: 13px; line-height: 1.4; margin-bottom: 16px; }
+          .hero-buttons { flex-direction: column; gap: 8px; margin-bottom: 20px; }
+          .hero-primary-btn, .hero-secondary-btn { width: 100%; justify-content: center; padding: 12px 16px; font-size: 13px; }
+          .hero-trust { justify-content: center; flex-wrap: wrap; gap: 12px; font-size: 11px; }
+          .hero-visual { display: none !important; }
+          .scroll-indicator { display: none !important; }
           
-          .stats-section { padding: 16px 8px !important; gap: 6px !important; }
-          .stat-card { min-width: 80px !important; padding: 8px 10px !important; border-radius: 8px !important; }
-          .stat-icon-wrapper { width: 24px !important; height: 24px !important; }
-          .stat-icon { font-size: 10px !important; }
-          .stat-value { font-size: 14px !important; }
-          .stat-label { font-size: 7px !important; }
+          .stats-section { padding: 20px 12px; gap: 10px; flex-wrap: wrap; justify-content: center; }
+          .stat-card { min-width: 90px; padding: 10px 14px; border-radius: 10px; }
+          .stat-icon-wrapper { width: 28px; height: 28px; }
+          .stat-icon { font-size: 12px; }
+          .stat-value { font-size: 16px; }
+          .stat-label { font-size: 8px; }
           
-          .showcase-teaser { padding: 24px 10px !important; }
-          .showcase-header { margin-bottom: 14px !important; }
-          .section-tag { font-size: 8px !important; margin-bottom: 8px !important; }
-          .section-title { font-size: 16px !important; }
-          .showcase-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important; }
-          .showcase-card { padding: 10px 6px !important; border-radius: 8px !important; }
-          .showcase-card-icon { width: 24px !important; height: 24px !important; font-size: 10px !important; margin-bottom: 4px !important; }
-          .showcase-card-title { font-size: 9px !important; }
-          .showcase-card-desc { display: none !important; }
+          .showcase-teaser { padding: 30px 12px; }
+          .section-tag { font-size: 9px; margin-bottom: 10px; }
+          .section-title { font-size: 18px; margin-bottom: 8px; }
+          .showcase-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+          .showcase-card { padding: 12px 8px; border-radius: 10px; }
+          .showcase-card-icon { width: 28px; height: 28px; font-size: 12px; margin-bottom: 6px; }
+          .showcase-card-title { font-size: 10px; }
+          .showcase-card-desc { display: none; }
           
-          .how-it-works { padding: 24px 10px !important; }
-          .steps-grid { grid-template-columns: 1fr !important; gap: 8px !important; margin-top: 14px !important; }
-          .step-card { padding: 12px !important; border-radius: 10px !important; }
-          .step-num { font-size: 9px !important; padding: 2px 6px !important; }
-          .step-title { font-size: 13px !important; margin-bottom: 4px !important; }
-          .step-desc { font-size: 10px !important; }
+          .how-it-works { padding: 30px 12px; }
+          .section-subtitle { font-size: 13px; }
+          .steps-grid { grid-template-columns: 1fr; gap: 10px; }
+          .step-card { padding: 14px; border-radius: 12px; }
+          .step-num { font-size: 10px; padding: 3px 8px; }
+          .step-title { fontSize: 14px; margin-bottom: 4px; }
+          .step-desc { font-size: 11px; }
           
-          .features { padding: 24px 10px !important; }
-          .features-grid { grid-template-columns: 1fr !important; gap: 8px !important; margin-top: 14px !important; }
-          .feature-card { padding: 12px !important; border-radius: 10px !important; }
-          .feature-icon { width: 28px !important; height: 28px !important; }
-          .feature-title { font-size: 13px !important; margin-bottom: 4px !important; }
-          .feature-desc { font-size: 10px !important; line-height: 1.3 !important; }
+          .features { padding: 30px 12px; }
+          .features-grid { grid-template-columns: 1fr; gap: 10px; }
+          .feature-card { padding: 14px; border-radius: 12px; }
+          .feature-icon { width: 32px; height: 32px; }
+          .feature-title { fontSize: 14px; margin-bottom: 6px; }
+          .feature-desc { font-size: 11px; line-height: 1.4; }
           
-          .testimonials { padding: 24px 10px !important; }
-          .testimonial-wrapper { gap: 10px !important; }
-          .testimonial-card { padding: 14px 10px !important; border-radius: 12px !important; }
-          .quote-icon { font-size: 20px !important; margin-bottom: 6px !important; }
-          .testimonial-text { font-size: 12px !important; line-height: 1.4 !important; margin-bottom: 12px !important; }
-          .author-avatar { width: 28px !important; height: 28px !important; font-size: 10px !important; }
-          .author-name { font-size: 12px !important; }
-          .author-role { font-size: 9px !important; }
-          .testimonial-dot { height: 5px !important; }
+          .testimonials { padding: 30px 12px; }
+          .testimonial-wrapper { flex-direction: column; gap: 12px; }
+          .testimonial-nav { display: none; }
+          .testimonial-card { padding: 16px; border-radius: 14px; }
+          .quote-icon { fontSize: 22px; marginBottom: 8px; }
+          .testimonial-stars { margin-bottom: 14px; }
+          .testimonial-text { font-size: 13px; line-height: 1.5; margin-bottom: 14px; }
+          .testimonial-author { flex-direction: column; gap: 8px; }
+          .author-avatar { width: 32px; height: 32px; font-size: 12px; }
+          .author-name { font-size: 13px; }
+          .author-role { font-size: 10px; }
+          .testimonial-dots { margin-top: 14px; }
           
-          .map-section { padding: 24px 10px !important; }
-          .map-container { gap: 10px !important; }
-          .map-wrapper { min-height: 180px !important; border-radius: 10px !important; }
-          .map-iframe { min-height: 180px !important; }
-          .map-info-card { padding: 12px !important; border-radius: 10px !important; }
-          .map-info-title { font-size: 14px !important; margin-bottom: 8px !important; }
-          .map-info-text { font-size: 11px !important; }
-          .map-info-label { font-size: 8px !important; margin-bottom: 4px !important; }
+          .map-section { padding: 30px 12px; }
+          .map-container { flex-direction: column; gap: 12px; }
+          .map-wrapper { min-height: 200px; border-radius: 12px; width: 100%; }
+          .map-iframe { min-height: 200px; }
+          .map-info-card { padding: 14px; border-radius: 12px; }
+          .map-info-title { font-size: 16px; margin-bottom: 10px; }
+          .map-info-text { font-size: 12px; }
+          .map-info-label { fontSize: 9px; margin-bottom: 6px; }
           
-          .cta { padding: 40px 10px !important; }
-          .cta-title { font-size: 18px !important; margin-bottom: 8px !important; }
-          .cta-subtitle { font-size: 12px !important; margin-bottom: 14px !important; }
-          .cta-button { padding: 10px 16px !important; font-size: 12px !important; border-radius: 25px !important; }
-          .cta-note { font-size: 9px !important; }
+          .cta { padding: 50px 12px; }
+          .cta-title { font-size: 20px; margin-bottom: 10px; }
+          .cta-subtitle { font-size: 13px; margin-bottom: 16px; }
+          .cta-button { width: 100%; justify-content: center; padding: 12px 20px; font-size: 13px; }
+          .cta-note { font-size: 10px; }
           
-          .footer { padding: 24px 10px 16px !important; }
-          .footer-content { gap: 16px !important; margin-bottom: 16px !important; flex-direction: column !important; }
-          .footer-brand { max-width: 100% !important; }
-          .footer-desc { font-size: 11px !important; margin-bottom: 12px !important; }
-          .social-links { gap: 4px !important; flex-wrap: wrap !important; }
-          .social-link { padding: 4px 8px !important; font-size: 9px !important; }
-          .footer-links { gap: 12px !important; justify-content: space-between !important; }
-          .footer-column { min-width: 40% !important; }
-          .footer-column-title { font-size: 9px !important; margin-bottom: 4px !important; }
-          .footer-link, .footer-text { font-size: 11px !important; }
-          .copyright { font-size: 9px !important; }
+          .footer { padding: 30px 12px 20px; }
+          .footer-content { flex-direction: column; gap: 20px; }
+          .footer-brand { max-width: 100%; }
+          .footer-desc { font-size: 12px; margin-bottom: 14px; }
+          .social-links { gap: 6px; flex-wrap: wrap; }
+          .social-link { padding: 5px 10px; font-size: 10px; }
+          .footer-links { gap: 16px; justify-content: space-between; }
+          .footer-column { min-width: 45%; }
+          .footer-column-title { fontSize: 10px; margin-bottom: 6px; }
+          .footer-link, .footer-text { font-size: 12px; }
+          .footer-bottom { padding-top: 16px; }
+          .copyright { font-size: 10px; }
         }
       `}</style>
     </div>
