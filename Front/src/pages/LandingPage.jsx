@@ -330,8 +330,8 @@ export default function LandingPage() {
         <div style={s.gradientOrb3} />
       </div>
 
-      <nav style={s.navbar}>
-        <div style={s.navContent}>
+      <nav style={s.navbar} className="navbar">
+        <div style={s.navContent} className="nav-content">
           <div style={s.logo}>
             <div style={s.logoIcon}>
               <FaShoppingBag style={s.logoIconInner} />
@@ -362,8 +362,8 @@ export default function LandingPage() {
             >
               {isDarkMode ? <FaSun /> : <FaMoon />}
             </button>
-            <button style={s.navLoginBtn} onClick={() => navigate("/login")}>Sign In</button>
-            <button style={s.navRegisterBtn} onClick={() => navigate("/register")}>Join Now</button>
+            <button style={s.navLoginBtn} onClick={() => navigate("/login")} className="nav-login-btn desktop-only">Sign In</button>
+            <button style={s.navRegisterBtn} onClick={() => navigate("/register")} className="nav-register-btn">Join Now</button>
           </div>
         </div>
       </nav>
@@ -375,9 +375,9 @@ export default function LandingPage() {
             <span style={{color: accentColor, fontSize: "12px", fontWeight: "600", letterSpacing: "2px"}}>NEW COLLECTION 2024</span>
           </div>
           
-          <h1 style={s.heroTitle}>
-            <span style={s.heroTitleLine1}>Elevate Your</span>
-            <span style={s.heroTitleLine2}>{typedText}<span style={s.cursor} /></span>
+          <h1 style={s.heroTitle} className="hero-title">
+            <span style={s.heroTitleLine1} className="hero-title-line1">Elevate Your</span>
+            <span style={s.heroTitleLine2} className="hero-title-line2">{typedText}<span style={s.cursor} /></span>
           </h1>
           
           <p style={s.heroSubtitle}>
@@ -385,7 +385,7 @@ export default function LandingPage() {
             Experience luxury shopping redefined.
           </p>
 
-          <div style={s.heroButtons}>
+          <div style={s.heroButtons} className="hero-buttons">
             <button style={s.heroPrimaryBtn} onClick={() => navigate("/register")}>
               <span>Get Started</span>
               <FaArrowRight style={s.btnIcon} />
@@ -448,14 +448,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section ref={statsRef} style={s.statsSection}>
+      <section ref={statsRef} style={s.statsSection} className="stats-section">
         {[
           { value: "2000000", label: "Happy Customers", icon: <FaUsers /> },
           { value: "99", label: "Uptime %", icon: <FaRocket /> },
           { value: "50000", label: "Products", icon: <FaStore /> },
           { value: "4.9", label: "Rating", icon: <FaStar /> },
         ].map((stat, i) => (
-          <div key={i} style={s.statCard}>
+          <div key={i} style={s.statCard} className="stat-card">
             <div style={s.statIconWrapper}><span style={s.statIcon}>{stat.icon}</span></div>
             <span style={s.statValue}><AnimatedCounter value={stat.value} duration={2000} /></span>
             <span style={s.statLabel}>{stat.label}</span>
@@ -463,12 +463,12 @@ export default function LandingPage() {
         ))}
       </section>
 
-      <section style={s.showcaseTeaser}>
+      <section style={s.showcaseTeaser} className="showcase-teaser">
         <div style={s.showcaseHeader}>
           <span style={s.sectionTag}>QUICK ACCESS</span>
           <h2 style={s.sectionTitle}>What Awaits You</h2>
         </div>
-        <div style={s.showcaseGrid}>
+        <div style={s.showcaseGrid} className="showcase-grid">
           {showcases.map((item, i) => (
             <div key={i} style={{...s.showcaseCard, backgroundColor: i === currentShowcase ? `${accentColor}15` : cardBg, borderColor: i === currentShowcase ? `${accentColor}40` : borderColor}}>
               <div style={s.showcaseCardIcon}>{item.icon}</div>
@@ -479,13 +479,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section style={s.howItWorks}>
+      <section style={s.howItWorks} className="how-it-works">
         <div style={s.sectionHeader}>
           <span style={s.sectionTag}>HOW IT WORKS</span>
           <h2 style={s.sectionTitle}>Simple Steps, Big Results</h2>
           <p style={s.sectionSubtitle}>Get started in minutes with our streamlined process</p>
         </div>
-        <div style={s.stepsGrid}>
+        <div style={s.stepsGrid} className="steps-grid">
           {steps.map((step, i) => (
             <div key={i} style={s.stepCard}>
               <span style={s.stepNum}>{step.num}</span>
@@ -496,13 +496,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section style={s.features}>
+      <section style={s.features} className="features">
         <div style={s.sectionHeader}>
           <span style={s.sectionTag}>WHY CHOOSE US</span>
           <h2 style={s.sectionTitle}>Experience the Difference</h2>
           <p style={s.sectionSubtitle}>Premium features designed for an exceptional shopping journey</p>
         </div>
-        <div style={s.featuresGrid}>
+        <div style={s.featuresGrid} className="features-grid">
           {features.map((feature, i) => (
             <div key={i} style={s.featureCard}>
               <div style={{...s.featureIcon, background: `linear-gradient(135deg, ${feature.color}20 0%, ${feature.color}05 100%)`, border: `1px solid ${feature.color}30`}}>
@@ -516,24 +516,24 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section style={s.testimonials}>
+      <section style={s.testimonials} className="testimonials">
         <div style={s.sectionHeader}>
           <span style={s.sectionTag}>TESTIMONIALS</span>
           <h2 style={s.sectionTitle}>Trusted by Thousands</h2>
           <p style={s.sectionSubtitle}>See what our customers have to say</p>
         </div>
-        <div style={s.testimonialWrapper}>
+        <div style={s.testimonialWrapper} className="testimonial-wrapper">
           <button style={s.testimonialNav} onClick={() => setCurrentTestimonial(prev => prev === 0 ? testimonials.length - 1 : prev - 1)}>
             <FaChevronLeft />
           </button>
           <div style={s.testimonialContainer}>
             <FaQuoteLeft style={s.quoteIcon} />
-            <div style={s.testimonialCard}>
+            <div style={s.testimonialCard} className="testimonial-card">
               <div style={s.testimonialStars}>
                 {[...Array(5)].map((_, i) => <FaStar key={i} style={s.starIcon} />)}
               </div>
               <p style={s.testimonialText}>"{testimonials[currentTestimonial].text}"</p>
-              <div style={s.testimonialAuthor}>
+              <div style={s.testimonialAuthor} className="testimonial-author">
                 <div style={s.authorAvatar}>{testimonials[currentTestimonial].avatar}</div>
                 <div>
                   <span style={s.authorName}>{testimonials[currentTestimonial].name}</span>
@@ -553,14 +553,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section style={s.mapSection}>
+      <section style={s.mapSection} className="map-section">
         <div style={s.sectionHeader}>
           <span style={s.sectionTag}>FIND US</span>
           <h2 style={s.sectionTitle}>Visit Our Store</h2>
           <p style={s.sectionSubtitle}>Come see us in person at our flagship location</p>
         </div>
-        <div style={s.mapContainer}>
-          <div style={s.mapWrapper}>
+        <div style={s.mapContainer} className="map-container">
+          <div style={s.mapWrapper} className="map-wrapper">
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095343008!2d-74.00425878459418!3d40.74076794379132!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259bf5c1654f3%3A0xc80f9cfce5383d5d!2sGoogle!5e0!3m2!1sen!2sus!4v1635959283754!5m2!1sen!2sus"
               style={s.mapIframe}
@@ -570,7 +570,7 @@ export default function LandingPage() {
               title="Store Location"
             />
           </div>
-          <div style={s.mapInfo}>
+          <div style={s.mapInfo} className="map-info">
             <div style={s.mapInfoCard}>
               <h3 style={s.mapInfoTitle}>Flagship Store</h3>
               <p style={s.mapInfoText}>123 ShopEase Avenue, Manhattan</p>
@@ -585,7 +585,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section style={s.cta}>
+      <section style={s.cta} className="cta">
         <div style={s.ctaBg}>
           <div style={s.ctaOrb1} />
           <div style={s.ctaOrb2} />
@@ -604,7 +604,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer style={s.footer}>
+      <footer style={s.footer} className="footer">
         <div style={s.footerContent}>
           <div style={s.footerBrand}>
             <div style={s.logo}>
@@ -651,50 +651,114 @@ export default function LandingPage() {
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
         @keyframes rotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+        
+        /* Navbar Mobile */
+        .navbar { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; padding: 12px 0 !important; height: 60px !important; }
+        .nav-content { display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 0 16px !important; max-width: 100% !important; }
+        .nav-buttons { display: flex !important; gap: 8px !important; align-items: center !important; }
+        .nav-logo { font-size: 18px !important; }
+        .nav-register-btn { padding: 8px 14px !important; font-size: 12px !important; }
+        .nav-login-btn { display: none !important; }
+        
+        /* Hero Mobile */
+        .hero { flex-direction: column !important; padding: 100px 16px 40px !important; min-height: auto !important; text-align: center !important; display: flex !important; align-items: center !important; }
+        .hero-content { max-width: 100% !important; text-align: center !important; }
+        .hero-title { font-size: 26px !important; line-height: 1.2 !important; margin-bottom: 16px !important; }
+        .hero-title-line1 { font-size: 26px !important; }
+        .hero-title-line2 { font-size: 26px !important; }
+        .hero-subtitle { font-size: 14px !important; margin-bottom: 20px !important; max-width: 100% !important; line-height: 1.5 !important; }
+        .hero-buttons { display: flex !important; flex-direction: column !important; gap: 10px !important; width: 100% !important; margin-bottom: 24px !important; }
+        .hero-primary-btn { width: 100% !important; justify-content: center !important; padding: 14px 20px !important; font-size: 14px !important; }
+        .hero-secondary-btn { width: 100% !important; justify-content: center !important; padding: 14px 20px !important; font-size: 14px !important; }
+        .hero-trust { display: flex !important; justify-content: center !important; flex-wrap: wrap !important; gap: 12px !important; }
+        .hero-visual { display: none !important; }
+        .scroll-indicator { display: none !important; }
+        .hero-badge { padding: 6px 12px !important; font-size: 10px !important; }
+        
+        /* Stats Mobile */
+        .stats-section { padding: 24px 12px !important; gap: 10px !important; flex-wrap: wrap !important; justify-content: center !important; }
+        .stat-card { min-width: 120px !important; padding: 12px 16px !important; border-radius: 12px !important; }
+        .stat-value { font-size: 20px !important; }
+        .stat-label { font-size: 10px !important; }
+        .stat-icon-wrapper { width: 36px !important; height: 36px !important; }
+        .stat-icon { font-size: 16px !important; }
+        
+        /* Showcase Mobile */
+        .showcase-teaser { padding: 40px 16px !important; }
+        .showcase-header { margin-bottom: 24px !important; }
+        .section-tag { font-size: 10px !important; }
+        .section-title { font-size: 22px !important; }
+        .showcase-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+        .showcase-card { padding: 14px 10px !important; border-radius: 12px !important; }
+        .showcase-card-icon { width: 36px !important; height: 36px !important; font-size: 16px !important; margin-bottom: 10px !important; }
+        .showcase-card-title { font-size: 12px !important; }
+        .showcase-card-desc { font-size: 10px !important; }
+        
+        /* How It Works Mobile */
+        .how-it-works { padding: 40px 16px !important; }
+        .steps-grid { grid-template-columns: 1fr !important; gap: 12px !important; margin-top: 24px !important; }
+        .step-card { padding: 16px !important; border-radius: 16px !important; }
+        .step-num { font-size: 11px !important; padding: 4px 10px !important; }
+        .step-title { font-size: 15px !important; margin-bottom: 6px !important; }
+        .step-desc { font-size: 12px !important; }
+        
+        /* Features Mobile */
+        .features { padding: 40px 16px !important; }
+        .features-grid { grid-template-columns: 1fr !important; gap: 12px !important; margin-top: 24px !important; }
+        .feature-card { padding: 16px !important; border-radius: 16px !important; }
+        .feature-icon { width: 40px !important; height: 40px !important; }
+        .feature-title { font-size: 15px !important; margin-bottom: 8px !important; }
+        .feature-desc { font-size: 12px !important; line-height: 1.5 !important; }
+        
+        /* Testimonials Mobile */
+        .testimonials { padding: 40px 16px !important; }
+        .testimonial-wrapper { flex-direction: column !important; gap: 16px !important; align-items: center !important; }
+        .testimonial-nav { display: none !important; }
+        .testimonial-card { padding: 20px 16px !important; border-radius: 16px !important; }
+        .quote-icon { font-size: 32px !important; margin-bottom: 12px !important; }
+        .testimonial-text { font-size: 14px !important; line-height: 1.6 !important; margin-bottom: 20px !important; }
+        .testimonial-author { flex-direction: column !important; gap: 8px !important; }
+        .author-avatar { width: 40px !important; height: 40px !important; font-size: 14px !important; }
+        .author-name { font-size: 14px !important; }
+        .author-role { font-size: 11px !important; }
+        .testimonial-dots { margin-top: 20px !important; }
+        
+        /* Map Section Mobile */
+        .map-section { padding: 40px 16px !important; }
+        .map-container { flex-direction: column !important; gap: 16px !important; }
+        .map-wrapper { min-height: 250px !important; border-radius: 16px !important; flex: 1 !important; width: 100% !important; }
+        .map-iframe { min-height: 250px !important; }
+        .map-info { flex: 1 !important; width: 100% !important; }
+        .map-info-card { padding: 20px !important; border-radius: 16px !important; }
+        .map-info-title { font-size: 18px !important; margin-bottom: 12px !important; }
+        .map-info-text { font-size: 13px !important; }
+        .map-info-hours { margin-top: 16px !important; padding-top: 16px !important; }
+        .map-info-label { font-size: 10px !important; margin-bottom: 8px !important; }
+        
+        /* CTA Mobile */
+        .cta { padding: 60px 16px !important; }
+        .cta-title { font-size: 22px !important; margin-bottom: 12px !important; }
+        .cta-subtitle { font-size: 14px !important; margin-bottom: 20px !important; }
+        .cta-buttons { flex-direction: column !important; gap: 12px !important; }
+        .cta-button { width: 100% !important; justify-content: center !important; padding: 14px 24px !important; font-size: 14px !important; }
+        .cta-note { font-size: 11px !important; }
+        
+        /* Footer Mobile */
+        .footer { padding: 40px 16px 24px !important; }
+        .footer-content { flex-direction: column !important; gap: 24px !important; margin-bottom: 30px !important; }
+        .footer-brand { max-width: 100% !important; }
+        .footer-desc { font-size: 13px !important; }
+        .social-links { gap: 8px !important; }
+        .social-link { padding: 6px 12px !important; font-size: 11px !important; }
+        .footer-links { flex-wrap: wrap !important; gap: 20px !important; }
+        .footer-column-title { font-size: 11px !important; }
+        .footer-link { font-size: 13px !important; }
+        .footer-text { font-size: 13px !important; }
+        .footer-bottom { padding-top: 20px !important; }
+        .copyright { font-size: 11px !important; }
+        
         @media (max-width: 768px) {
-          .nav-content { padding: 0 20px !important; }
-          .nav-buttons { gap: 8px !important; }
-          .nav-login-btn, .nav-register-btn { padding: 8px 16px !important; font-size: 12px !important; }
-          .hero { flex-direction: column !important; text-align: center !important; padding: 120px 20px 60px !important; min-height: auto !important; }
-          .hero-content { max-width: 100% !important; }
-          .hero-title h1 { font-size: 28px !important; line-height: 1.2 !important; }
-          .hero-subtitle { font-size: 15px !important; margin-bottom: 24px !important; }
-          .hero-buttons { justify-content: center !important; flex-wrap: wrap !important; gap: 12px !important; margin-bottom: 30px !important; }
-          .hero-primary-btn, .hero-secondary-btn { padding: 14px 24px !important; font-size: 14px !important; }
-          .hero-trust { justify-content: center !important; flex-wrap: wrap !important; gap: 16px !important; }
-          .hero-visual { display: none !important; }
-          .scroll-indicator { display: none !important; }
-          .stats-section { padding: 30px 20px !important; gap: 16px !important; }
-          .stat-card { min-width: 140px !important; padding: 16px 20px !important; }
-          .stat-value { font-size: 22px !important; }
-          .showcase-teaser { padding: 60px 20px !important; }
-          .showcase-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
-          .showcase-card { padding: 20px 16px !important; }
-          .showcase-card-icon { width: 44px !important; height: 44px !important; font-size: 20px !important; }
-          .showcase-card-title { font-size: 14px !important; }
-          .showcase-card-desc { font-size: 12px !important; }
-          .how-it-works { padding: 60px 20px !important; }
-          .steps-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
-          .step-card { padding: 24px !important; }
-          .features { padding: 60px 20px !important; }
-          .features-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
-          .feature-card { padding: 24px !important; }
-          .testimonials { padding: 60px 20px !important; }
-          .testimonial-card { padding: 24px !important; }
-          .testimonial-text { font-size: 16px !important; }
-          .testimonial-wrapper { flex-direction: column !important; gap: 20px !important; }
-          .testimonial-nav { display: none !important; }
-          .map-section { padding: 60px 20px !important; }
-          .map-container { flex-direction: column !important; gap: 24px !important; }
-          .map-wrapper { min-height: 300px !important; }
-          .map-iframe { min-height: 300px !important; }
-          .cta { padding: 80px 20px !important; }
-          .cta-buttons { flex-wrap: wrap !important; justify-content: center !important; }
-          .cta-button { padding: 16px 32px !important; font-size: 15px !important; }
-          .footer { padding: 60px 20px 30px !important; }
-          .footer-content { flex-direction: column !important; gap: 40px !important; }
-          .footer-brand { max-width: 100% !important; }
-          .footer-links { flex-wrap: wrap !important; gap: 30px !important; }
+          .desktop-only { display: none !important; }
         }
       `}</style>
     </div>
