@@ -24,9 +24,9 @@ export default function LandingPage() {
   const [currentShowcase, setCurrentShowcase] = useState(0);
   const [countersAnimated, setCountersAnimated] = useState(false);
   const [statsData, setStatsData] = useState({
-    totalUsers: "2000000",
-    totalProducts: "50000",
-    avgRating: "4.9"
+    totalUsers: 0,
+    totalProducts: 0,
+    avgRating: "0"
   });
   const [typedText, setTypedText] = useState("");
   const statsRef = useRef(null);
@@ -38,13 +38,13 @@ export default function LandingPage() {
         const response = await axios.get(`${API_URL}/api/admin/dashboard/public`);
         if (response.data) {
           setStatsData({
-            totalUsers: response.data.totalUsers?.toString() || "2000000",
-            totalProducts: response.data.totalProducts?.toString() || "50000",
-            avgRating: response.data.avgRating || "4.9"
+            totalUsers: response.data.totalUsers || 0,
+            totalProducts: response.data.totalProducts || 0,
+            avgRating: response.data.avgRating || "0"
           });
         }
       } catch (error) {
-        console.log("Using default stats");
+        console.log("Stats fetch error:", error);
       }
     };
     fetchPublicStats();
@@ -481,14 +481,17 @@ export default function LandingPage() {
 
       <section ref={statsRef} style={s.statsSection} className="stats-section">
         {[
-          { value: statsData.totalUsers, label: "Happy Customers", icon: <FaUsers /> },
-          { value: "99", label: "Uptime %", icon: <FaRocket /> },
-          { value: statsData.totalProducts, label: "Products", icon: <FaStore /> },
-          { value: statsData.avgRating, label: "Rating", icon: <FaStar /> },
+          { value: typeof statsData.totalUsers === 'number' ? statsData.totalUsers.toLocaleString() : "0", label: "Happy Customers", icon: <FaUsers /> },
+          { value: "99%", label: "Uptime", icon: <FaRocket /> },
+          { value: typeof statsData.totalProducts === 'number' ? statsData.totalProducts.toLocaleString() : "0", label: "Products", icon: <FaStore /> },
+          { value: statsData.avgRating && statsData.avgRating !== "0" ? statsData.avgRating + "/5" : "4.9/5", label: "Rating", icon: <FaStar /> },
         ].map((stat, i) => (
-          <div key={i} style={s.statCard} className="stat-card stagger-{i + 1}">
+          <div key={i} style={s.statCard} className={`stat-card stagger-${i + 1}`}>
             <div style={s.statIconWrapper} className="stat-icon-wrapper"><span style={s.statIcon}>{stat.icon}</span></div>
-            <span style={s.statValue} className="stat-value"><AnimatedCounter value={stat.value} duration={2000 + i * 500} /></span>
+            <span style={s.statValue} className="stat-value">
+              {stat.value.includes("/5") ? stat.value.replace("/5", "") : stat.value}
+              {stat.value.includes("/5") && <span style={{fontSize: "14px", marginLeft: "2px"}}>/5</span>}
+            </span>
             <span style={s.statLabel}>{stat.label}</span>
           </div>
         ))}

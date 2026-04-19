@@ -24,18 +24,20 @@ const getPublicStats = async (req, res) => {
     const totalRevenue = revenueAggregation[0]?.totalRevenue || 0;
     
     const ordersWithRating = await Order.find({ rating: { $exists: true, $ne: null } });
-    let avgRating = 0;
+    let avgRating = "0";
     if (ordersWithRating.length > 0) {
       const totalRating = ordersWithRating.reduce((sum, order) => sum + order.rating, 0);
       avgRating = (totalRating / ordersWithRating.length).toFixed(1);
+    } else {
+      avgRating = "4.9";
     }
     
     res.json({
-      totalUsers,
-      totalProducts,
-      totalOrders,
-      totalRevenue,
-      avgRating: avgRating > 0 ? avgRating : "4.9"
+      totalUsers: totalUsers || 0,
+      totalProducts: totalProducts || 0,
+      totalOrders: totalOrders || 0,
+      totalRevenue: totalRevenue || 0,
+      avgRating
     });
   } catch (error) {
     console.error(error);
