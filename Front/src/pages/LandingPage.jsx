@@ -79,7 +79,7 @@ export default function LandingPage() {
       }
     }, 80);
     return () => clearInterval(timer);
-  }, []);
+  }, [isDarkMode]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -220,10 +220,10 @@ export default function LandingPage() {
     scrollIndicator: { position: "absolute", bottom: "30px", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", color: textSecondary },
     scrollIcon: { animation: "scrollBounce 2s infinite" },
     statsSection: { padding: "50px 40px", display: "flex", justifyContent: "center", gap: "30px", flexWrap: "wrap", backgroundColor: cardBg, borderTop: "1px solid", borderBottom: "1px solid", borderColor: borderColor, maxWidth: "1400px", margin: "0 auto" },
-    statCard: { display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "24px 40px", border: "1px solid", borderColor: borderColor, borderRadius: "20px", minWidth: "180px", transition: "all 0.3s ease", backdropFilter: "blur(10px)", boxShadow: "0 4px 20px rgba(0,0,0,0.05)" },
-    statIconWrapper: { width: "48px", height: "48px", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", background: `linear-gradient(135deg, ${accentColor}20 0%, ${accentColor}10 100%)`, boxShadow: `0 4px 15px ${accentColor}20` },
+    statCard: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px", padding: "24px 30px", border: "1px solid", borderColor: borderColor, borderRadius: "20px", minWidth: "180px", flex: "1 1 180px", maxWidth: "220px", transition: "all 0.3s ease", backdropFilter: "blur(10px)", boxShadow: "0 4px 20px rgba(0,0,0,0.05)", textAlign: "center" },
+    statIconWrapper: { width: "48px", height: "48px", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", background: `linear-gradient(135deg, ${accentColor}20 0%, ${accentColor}10 100%)`, boxShadow: `0 4px 15px ${accentColor}20`, flexShrink: 0 },
     statIcon: { fontSize: "20px", color: accentColor },
-    statValue: { fontSize: "28px", fontWeight: "700", color: textColor, textShadow: "0 2px 10px rgba(0,0,0,0.1)" },
+    statValue: { fontSize: "28px", fontWeight: "700", color: textColor, textShadow: "0 2px 10px rgba(0,0,0,0.1)", whiteSpace: "nowrap" },
     statLabel: { fontSize: "12px", fontWeight: "500", letterSpacing: "1px", textTransform: "uppercase", color: textSecondary },
     showcaseTeaser: { padding: "80px 40px", backgroundColor: cardBg, maxWidth: "1400px", margin: "0 auto" },
     showcaseHeader: { textAlign: "center", marginBottom: "50px" },
@@ -766,7 +766,7 @@ src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59545.2337809546!2d72
         .theme-toggle { transition: all 0.3s ease; }
         .theme-toggle:hover { transform: rotate(15deg) scale(1.1); box-shadow: 0 0 20px rgba(201, 169, 98, 0.4) !important; }
         
-        .stat-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; animation: fadeInUp 0.6s ease-out forwards; cursor: pointer; position: relative; overflow: hidden; }
+        .stat-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; animation: fadeInUp 0.6s ease-out forwards; cursor: pointer; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; }
         .stat-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(201, 169, 98, 0.15), transparent); transition: left 0.6s ease; }
         .stat-card:hover::before { left: 100%; }
         .stat-card:hover { transform: translateY(-8px) scale(1.02) !important; box-shadow: 0 25px 60px rgba(0,0,0,0.25), 0 0 30px rgba(201, 169, 98, 0.3) !important; border-color: #c9a962 !important; }
