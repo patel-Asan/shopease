@@ -44,12 +44,12 @@ const TrendingProducts = () => {
 
   const getImageUrl = (product) => {
     if (product.img) {
-      return `http://localhost:5000/uploads/products/${product.img}`;
+      return product.img.startsWith('http') ? product.img : `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dnrpj0v3l'}/image/upload/${product.img}`;
     }
     if (product.image) {
       return product.image.startsWith('http') 
         ? product.image 
-        : `http://localhost:5000/uploads/products/${product.image}`;
+        : `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dnrpj0v3l'}/image/upload/${product.image}`;
     }
     return "/default-image.jpg";
   };

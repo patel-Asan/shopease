@@ -1,5 +1,6 @@
 
 import { useEffect, useState, useContext } from "react";
+import { getImageUrl } from "../api/api";
 import { FavouritesContext } from "../context/FavouritesContext";
 import { CartContext } from "../context/CartContext";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
@@ -211,7 +212,7 @@ export default function Products() {
                 >
                   <Card.Img
                     variant="top"
-                    src={p.img ? `http://localhost:5000/uploads/products/${p.img}` : "/default-image.jpg"}
+                    src={p.img ? getImageUrl(p.img) : "/default-image.jpg"}
                     style={styles.cardImage}
                     onMouseEnter={(e) => {
                       if (!isMobile) e.currentTarget.style.transform = "scale(1.05)";

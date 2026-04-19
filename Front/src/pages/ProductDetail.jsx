@@ -1,7 +1,7 @@
 // pages/ProductDetail.jsx - Fully Responsive
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProductById, addToCart } from '../api/api';
+import { getProductById, addToCart, getImageUrl } from '../api/api';
 import { FavouritesContext } from '../context/FavouritesContext';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
@@ -606,7 +606,7 @@ const ProductDetail = () => {
                 <img
                   key={index}
                   src={!imageErrors[`thumb-${index}`] && img 
-                    ? `http://localhost:5000/uploads/products/${img}` 
+                    ? getImageUrl(img) 
                     : `https://ui-avatars.com/api/?name=P&background=ff6b6b&color=fff`
                   }
                   alt={`Thumbnail ${index + 1}`}

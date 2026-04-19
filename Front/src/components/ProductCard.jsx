@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { CartContext } from "../context/CartContext";
 import { FavouritesContext } from "../context/FavouritesContext";
 import { AuthContext } from "../context/AuthContext";
-import API from "../api/api";
+import API, { getImageUrl } from "../api/api";
 import { Modal, Button, Form, Spinner } from "react-bootstrap";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
@@ -442,7 +442,7 @@ const ProductCard = ({ product, onProductChange }) => {
     if (imageError || !product.img) {
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(product.name)}&background=c9a962&color=fff&size=300&bold=true`;
     }
-    return `http://localhost:5000/uploads/products/${product.img}`;
+    return getImageUrl(product.img);
   };
 
   if (!product.name || !product.price) {
