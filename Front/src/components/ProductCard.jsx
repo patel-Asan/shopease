@@ -438,7 +438,7 @@ const ProductCard = ({ product, onProductChange }) => {
 
   const discount = calculateDiscount();
 
-  const getImageUrl = () => {
+  const getProductImage = () => {
     if (imageError || !product.img) {
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(product.name)}&background=c9a962&color=fff&size=300&bold=true`;
     }
@@ -483,7 +483,7 @@ const ProductCard = ({ product, onProductChange }) => {
           )}
           
           <img
-            src={getImageUrl()}
+            src={getProductImage()}
             alt={product.name}
             style={styles.image}
             onLoad={() => setImageLoaded(true)}
