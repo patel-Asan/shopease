@@ -336,8 +336,8 @@ export default function LandingPage() {
             <div style={s.logoIcon}>
               <FaShoppingBag style={s.logoIconInner} />
             </div>
-            <span style={s.logoText}>ShopEase</span>
-            <span style={s.logoSubtext}>COLLECTIVE</span>
+            <span style={isMobile ? { ...s.logoText, fontSize: "18px" } : s.logoText}>ShopEase</span>
+            <span style={isMobile ? { ...s.logoSubtext, display: "none" } : s.logoSubtext}>COLLECTIVE</span>
           </div>
 
 
@@ -368,8 +368,8 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      <section style={isMobile ? { ...s.hero, flexDirection: "column", padding: "120px 20px 60px", textAlign: "center" } : s.hero} className="hero">
-        <div style={s.heroContent}>
+      <section style={isMobile ? { ...s.hero, flexDirection: "column", padding: "100px 16px 40px", textAlign: "center", minHeight: "auto" } : s.hero} className="hero">
+        <div style={isMobile ? { ...s.heroContent, maxWidth: "100%", textAlign: "center" } : s.heroContent} className="hero-content">
           <div style={s.heroBadge}>
             <span style={s.badgeDot} />
             <span style={{color: accentColor, fontSize: "12px", fontWeight: "600", letterSpacing: "2px"}}>NEW COLLECTION 2024</span>
@@ -386,17 +386,17 @@ export default function LandingPage() {
           </p>
 
           <div style={s.heroButtons} className="hero-buttons">
-            <button style={s.heroPrimaryBtn} onClick={() => navigate("/register")}>
+            <button style={isMobile ? { ...s.heroPrimaryBtn, width: "100%", justifyContent: "center" } : s.heroPrimaryBtn} className="hero-primary-btn" onClick={() => navigate("/register")}>
               <span>Get Started</span>
               <FaArrowRight style={s.btnIcon} />
             </button>
-            <button style={s.heroSecondaryBtn} onClick={() => navigate("/login")}>
+            <button style={isMobile ? { ...s.heroSecondaryBtn, width: "100%", justifyContent: "center" } : s.heroSecondaryBtn} className="hero-secondary-btn" onClick={() => navigate("/login")}>
               <FaPlay style={s.playIcon} />
               <span>Explore Demo</span>
             </button>
           </div>
 
-          <div style={s.heroTrust}>
+          <div style={isMobile ? { ...s.heroTrust, justifyContent: "center", flexWrap: "wrap", gap: "12px" } : s.heroTrust} className="hero-trust">
             <div style={s.trustItem}>
               <FaShieldAlt style={{...s.trustIcon, color: "#10b981"}} />
               <span style={{color: textSecondary}}>Secure Checkout</span>
@@ -412,7 +412,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div style={s.heroVisual}>
+        <div style={isMobile ? { display: "none" } : s.heroVisual} className="hero-visual">
           <div style={s.heroImageWrapper}>
             <div style={s.heroRing} />
             <div style={s.heroRing2} />
@@ -442,7 +442,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div style={s.scrollIndicator}>
+        <div style={isMobile ? { display: "none" } : s.scrollIndicator} className="scroll-indicator">
           <span style={{fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase"}}>Scroll</span>
           <FaChevronDown style={s.scrollIcon} />
         </div>
@@ -528,7 +528,7 @@ export default function LandingPage() {
           </button>
           <div style={s.testimonialContainer}>
             <FaQuoteLeft style={s.quoteIcon} />
-            <div style={s.testimonialCard} className="testimonial-card">
+            <div style={isMobile ? { ...s.testimonialCard, padding: "16px", borderRadius: "16px" } : s.testimonialCard} className="testimonial-card">
               <div style={s.testimonialStars}>
                 {[...Array(5)].map((_, i) => <FaStar key={i} style={s.starIcon} />)}
               </div>
@@ -560,7 +560,7 @@ export default function LandingPage() {
           <p style={s.sectionSubtitle}>Come see us in person at our flagship location</p>
         </div>
         <div style={s.mapContainer} className="map-container">
-          <div style={s.mapWrapper} className="map-wrapper">
+          <div style={isMobile ? { ...s.mapWrapper, minHeight: "250px", borderRadius: "16px", flex: 1, width: "100%" } : s.mapWrapper} className="map-wrapper">
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095343008!2d-74.00425878459418!3d40.74076794379132!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259bf5c1654f3%3A0xc80f9cfce5383d5d!2sGoogle!5e0!3m2!1sen!2sus!4v1635959283754!5m2!1sen!2sus"
               style={s.mapIframe}
@@ -570,8 +570,8 @@ export default function LandingPage() {
               title="Store Location"
             />
           </div>
-          <div style={s.mapInfo} className="map-info">
-            <div style={s.mapInfoCard}>
+          <div style={isMobile ? { ...s.mapInfo, flex: 1, width: "100%" } : s.mapInfo} className="map-info">
+            <div style={isMobile ? { ...s.mapInfoCard, padding: "16px", borderRadius: "16px" } : s.mapInfoCard}>
               <h3 style={s.mapInfoTitle}>Flagship Store</h3>
               <p style={s.mapInfoText}>123 ShopEase Avenue, Manhattan</p>
               <p style={s.mapInfoText}>New York, NY 10001</p>
