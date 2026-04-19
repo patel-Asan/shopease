@@ -2,10 +2,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { getProductReviews, addReview } from '../api/api';
 import { AuthContext } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { toast } from 'react-toastify';
 
 const Reviews = ({ productId }) => {
   const { user } = useContext(AuthContext);
+  const { isDarkMode } = useTheme();
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState({ rating: 5, comment: '' });
   const [loading, setLoading] = useState(false);
@@ -129,14 +131,14 @@ const Reviews = ({ productId }) => {
     title: {
       fontSize: isMobile ? '22px' : '24px',
       fontWeight: '600',
-      color: '#2d3436',
+      color: isDarkMode ? '#e8d5a3' : '#2d3436',
       margin: 0,
       position: 'relative',
     },
     titleAccent: {
       width: '60px',
       height: '4px',
-      background: 'linear-gradient(90deg, #ff6b6b, #ff8e8e)',
+      background: isDarkMode ? 'linear-gradient(90deg, #c9a962, #e8d5a3)' : 'linear-gradient(90deg, #ff6b6b, #ff8e8e)',
       borderRadius: '2px',
       marginTop: '8px',
     },
@@ -144,9 +146,10 @@ const Reviews = ({ productId }) => {
       display: 'flex',
       alignItems: 'center',
       gap: '20px',
-      backgroundColor: '#f8f9fa',
+      backgroundColor: isDarkMode ? 'rgba(201, 169, 98, 0.1)' : '#f8f9fa',
       padding: '10px 20px',
       borderRadius: '12px',
+      border: isDarkMode ? '1px solid rgba(201, 169, 98, 0.2)' : 'none',
     },
     averageRating: {
       display: 'flex',
@@ -156,11 +159,11 @@ const Reviews = ({ productId }) => {
     averageNumber: {
       fontSize: '32px',
       fontWeight: '700',
-      color: '#2d3436',
+      color: isDarkMode ? '#c9a962' : '#2d3436',
       lineHeight: 1,
     },
     totalReviews: {
-      color: '#7f8c8d',
+      color: isDarkMode ? 'rgba(255,255,255,0.6)' : '#7f8c8d',
       fontSize: isMobile ? '14px' : '15px',
     },
     reviewsGrid: {
@@ -170,12 +173,12 @@ const Reviews = ({ productId }) => {
       marginBottom: '30px',
     },
     reviewCard: {
-      backgroundColor: '#fff',
+      backgroundColor: isDarkMode ? 'rgba(30, 30, 40, 0.9)' : '#fff',
       borderRadius: '16px',
       padding: isMobile ? '20px' : '24px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+      boxShadow: isDarkMode ? 'none' : '0 4px 20px rgba(0,0,0,0.08)',
       transition: 'all 0.3s ease',
-      border: '1px solid #f0f0f0',
+      border: isDarkMode ? '1px solid rgba(201, 169, 98, 0.2)' : '1px solid #f0f0f0',
       height: 'fit-content',
       position: 'relative',
       overflow: 'hidden',
@@ -214,7 +217,7 @@ const Reviews = ({ productId }) => {
     },
     userName: {
       fontWeight: '600',
-      color: '#2d3436',
+      color: isDarkMode ? '#ffffff' : '#2d3436',
       fontSize: isMobile ? '16px' : '17px',
       marginBottom: '4px',
     },
@@ -224,27 +227,28 @@ const Reviews = ({ productId }) => {
       gap: '10px',
     },
     date: {
-      color: '#95a5a6',
+      color: isDarkMode ? 'rgba(255,255,255,0.5)' : '#95a5a6',
       fontSize: isMobile ? '12px' : '13px',
       display: 'flex',
       alignItems: 'center',
       gap: '5px',
     },
     verifiedBadge: {
-      backgroundColor: '#e8f5e9',
-      color: '#2e7d32',
+      backgroundColor: 'rgba(16, 185, 129, 0.15)',
+      color: '#10b981',
       fontSize: '11px',
       padding: '2px 8px',
       borderRadius: '12px',
       display: 'inline-flex',
       alignItems: 'center',
       gap: '4px',
+      border: '1px solid rgba(16, 185, 129, 0.3)',
     },
     rating: {
       marginBottom: '12px',
     },
     comment: {
-      color: '#4a5568',
+      color: isDarkMode ? 'rgba(255,255,255,0.7)' : '#4a5568',
       lineHeight: '1.7',
       fontSize: isMobile ? '14px' : '15px',
       marginBottom: '15px',
@@ -263,7 +267,7 @@ const Reviews = ({ productId }) => {
     readMoreBtn: {
       background: 'none',
       border: 'none',
-      color: '#ff6b6b',
+      color: isDarkMode ? '#c9a962' : '#ff6b6b',
       fontSize: '13px',
       fontWeight: '600',
       cursor: 'pointer',
@@ -277,33 +281,33 @@ const Reviews = ({ productId }) => {
       gap: '15px',
       marginTop: '15px',
       paddingTop: '15px',
-      borderTop: '1px solid #f0f0f0',
+      borderTop: isDarkMode ? '1px solid rgba(201, 169, 98, 0.2)' : '1px solid #f0f0f0',
     },
     helpfulBtn: {
       display: 'flex',
       alignItems: 'center',
       gap: '6px',
       background: 'none',
-      border: '1px solid #e0e0e0',
+      border: isDarkMode ? '1px solid rgba(201, 169, 98, 0.3)' : '1px solid #e0e0e0',
       borderRadius: '20px',
       padding: '6px 12px',
       fontSize: '13px',
-      color: '#666',
+      color: isDarkMode ? 'rgba(255,255,255,0.6)' : '#666',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
     },
     form: {
       marginTop: '40px',
       padding: isMobile ? '20px' : '30px',
-      backgroundColor: '#fff',
+      backgroundColor: isDarkMode ? 'rgba(30, 30, 40, 0.9)' : '#fff',
       borderRadius: '16px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-      border: '1px solid #f0f0f0',
+      boxShadow: isDarkMode ? 'none' : '0 4px 20px rgba(0,0,0,0.08)',
+      border: isDarkMode ? '1px solid rgba(201, 169, 98, 0.2)' : '1px solid #f0f0f0',
     },
     formTitle: {
       fontSize: isMobile ? '20px' : '22px',
       marginBottom: '20px',
-      color: '#2d3436',
+      color: isDarkMode ? '#e8d5a3' : '#2d3436',
       fontWeight: '600',
     },
     ratingSelector: {
@@ -318,24 +322,25 @@ const Reviews = ({ productId }) => {
       alignItems: 'center',
       gap: '5px',
       padding: '10px 15px',
-      border: selected ? '2px solid #ff6b6b' : '1px solid #e0e0e0',
+      border: selected ? (isDarkMode ? '2px solid #c9a962' : '2px solid #ff6b6b') : (isDarkMode ? '1px solid rgba(201,169,98,0.3)' : '1px solid #e0e0e0'),
       borderRadius: '12px',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
-      backgroundColor: selected ? '#fff5f5' : 'white',
+      backgroundColor: selected ? (isDarkMode ? 'rgba(201,169,98,0.15)' : '#fff5f5') : (isDarkMode ? 'rgba(30,30,40,0.9)' : 'white'),
       minWidth: isMobile ? '60px' : '80px',
     }),
     ratingStars: {
       fontSize: isMobile ? '16px' : '18px',
+      color: isDarkMode ? '#c9a962' : '#ffc107',
     },
     ratingLabel: {
       fontSize: '12px',
-      color: '#666',
+      color: isDarkMode ? 'rgba(255,255,255,0.6)' : '#666',
     },
     textarea: {
       width: '100%',
       padding: isMobile ? '15px' : '16px',
-      border: '1px solid #e0e0e0',
+      border: isDarkMode ? '1px solid rgba(201,169,98,0.3)' : '1px solid #e0e0e0',
       borderRadius: '12px',
       marginBottom: '20px',
       fontSize: isMobile ? '15px' : '16px',
@@ -343,22 +348,24 @@ const Reviews = ({ productId }) => {
       resize: 'vertical',
       transition: 'border-color 0.2s ease',
       outline: 'none',
+      backgroundColor: isDarkMode ? 'rgba(30,30,40,0.9)' : 'white',
+      color: isDarkMode ? '#ffffff' : '#2d3436',
     },
     textareaFocus: {
-      borderColor: '#ff6b6b',
-      boxShadow: '0 0 0 3px rgba(255,107,107,0.1)',
+      borderColor: isDarkMode ? '#c9a962' : '#ff6b6b',
+      boxShadow: isDarkMode ? '0 0 0 3px rgba(201,169,98,0.2)' : '0 0 0 3px rgba(255,107,107,0.1)',
     },
     submitBtn: {
       padding: isMobile ? '14px 24px' : '14px 32px',
-      background: 'linear-gradient(135deg, #ff6b6b, #ff8e8e)',
-      color: 'white',
+      background: isDarkMode ? 'linear-gradient(135deg, #c9a962, #e8d5a3)' : 'linear-gradient(135deg, #ff6b6b, #ff8e8e)',
+      color: isDarkMode ? '#1e293b' : 'white',
       border: 'none',
       borderRadius: '12px',
       cursor: 'pointer',
       fontSize: isMobile ? '15px' : '16px',
       fontWeight: '600',
       transition: 'all 0.3s ease',
-      boxShadow: '0 4px 15px rgba(255,107,107,0.3)',
+      boxShadow: isDarkMode ? '0 4px 15px rgba(201,169,98,0.3)' : '0 4px 15px rgba(255,107,107,0.3)',
       width: isMobile ? '100%' : 'auto',
     },
     loadingContainer: {
@@ -368,8 +375,8 @@ const Reviews = ({ productId }) => {
     spinner: {
       width: '40px',
       height: '40px',
-      border: '3px solid #f3f3f3',
-      borderTop: '3px solid #ff6b6b',
+      border: isDarkMode ? '3px solid rgba(201,169,98,0.2)' : '3px solid #f3f3f3',
+      borderTop: isDarkMode ? '3px solid #c9a962' : '3px solid #ff6b6b',
       borderRadius: '50%',
       animation: 'spin 1s linear infinite',
       margin: '0 auto 15px',
@@ -377,10 +384,11 @@ const Reviews = ({ productId }) => {
     emptyState: {
       textAlign: 'center',
       padding: '50px',
-      color: '#666',
-      backgroundColor: '#f9f9f9',
+      color: isDarkMode ? 'rgba(255,255,255,0.6)' : '#666',
+      backgroundColor: isDarkMode ? 'rgba(30,30,40,0.9)' : '#f9f9f9',
       borderRadius: '16px',
       fontSize: isMobile ? '15px' : '16px',
+      border: isDarkMode ? '1px solid rgba(201, 169, 98, 0.2)' : 'none',
     },
     loginPrompt: {
       textAlign: 'center',
