@@ -79,6 +79,10 @@ export default function LandingPage() {
       }
     }, 80);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    setTypedText(fullText);
   }, [isDarkMode]);
 
   useEffect(() => {
