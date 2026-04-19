@@ -28,7 +28,9 @@ export default function LandingPage() {
     totalProducts: "50000",
     avgRating: "4.9"
   });
+  const [typedText, setTypedText] = useState("");
   const statsRef = useRef(null);
+  const fullText = "Elevate Your Shopping Experience";
 
   useEffect(() => {
     const fetchPublicStats = async () => {
