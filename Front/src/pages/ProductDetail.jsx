@@ -458,11 +458,12 @@ thumbnail: (index) => ({
     tab: {
       padding: getSpacing('12px 0', '15px 0', '20px 0'),
       fontSize: getFontSize('14px', '16px', '20px'),
-      color: isDarkMode ? 'rgba(255,255,255,0.5)' : '#64748b',
       cursor: 'pointer',
       borderBottom: '3px solid transparent',
       transition: 'all 0.3s ease',
       fontWeight: '600',
+      display: 'flex',
+      alignItems: 'center',
     },
     activeTab: {
       color: isDarkMode ? '#c9a962' : '#ff6b6b',
@@ -734,9 +735,27 @@ thumbnail: (index) => ({
       {/* Tabs */}
       <div>
         <div style={styles.tabs}>
-          <span style={{...styles.tab, ...(activeTab==='description'?styles.activeTab:{})}} onClick={()=>setActiveTab('description')}>📝 Description</span>
-          <span style={{...styles.tab, ...(activeTab==='specifications'?styles.activeTab:{})}} onClick={()=>setActiveTab('specifications')}>⚙️ Specs</span>
-          <span style={{...styles.tab, ...(activeTab==='reviews'?styles.activeTab:{})}} onClick={()=>setActiveTab('reviews')}>⭐ Reviews ({product.reviews?.length||0})</span>
+          <span style={{
+            ...styles.tab, 
+            ...(activeTab==='description'?styles.activeTab:{})
+          }} onClick={()=>setActiveTab('description')}>
+            <span style={{marginRight: '6px'}}>📝</span>
+            <span style={{color: isDarkMode ? (activeTab === 'description' ? '#c9a962' : 'rgba(255,255,255,0.5)') : (activeTab === 'description' ? '#ff6b6b' : '#64748b')}}>Description</span>
+          </span>
+          <span style={{
+            ...styles.tab, 
+            ...(activeTab==='specifications'?styles.activeTab:{})
+          }} onClick={()=>setActiveTab('specifications')}>
+            <span style={{marginRight: '6px'}}>⚙️</span>
+            <span style={{color: isDarkMode ? (activeTab === 'specifications' ? '#c9a962' : 'rgba(255,255,255,0.5)') : (activeTab === 'specifications' ? '#ff6b6b' : '#64748b')}}>Specs</span>
+          </span>
+          <span style={{
+            ...styles.tab, 
+            ...(activeTab==='reviews'?styles.activeTab:{})
+          }} onClick={()=>setActiveTab('reviews')}>
+            <span style={{marginRight: '6px'}}>⭐</span>
+            <span style={{color: isDarkMode ? (activeTab === 'reviews' ? '#c9a962' : 'rgba(255,255,255,0.5)') : (activeTab === 'reviews' ? '#ff6b6b' : '#64748b')}}>Reviews ({product.reviews?.length||0})</span>
+          </span>
         </div>
         <div style={styles.tabContent}>{renderTabContent()}</div>
       </div>
