@@ -5,6 +5,7 @@ import { getProductById, addToCart, getImageUrl } from '../api/api';
 import { FavouritesContext } from '../context/FavouritesContext';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
+import { useTheme } from '../context/ThemeContext';
 import { toast } from 'react-toastify';
 import RelatedProducts from '../components/RelatedProducts';
 import Reviews from '../components/Reviews';
@@ -15,6 +16,7 @@ const ProductDetail = () => {
   const { user } = useContext(AuthContext);
   const { addToFavourites, removeFromFavourites, isFavourite } = useContext(FavouritesContext);
   const { cart, fetchCart } = useContext(CartContext);
+  const { isDarkMode } = useTheme();
   
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -188,35 +190,35 @@ const ProductDetail = () => {
       animation: 'spin 1s linear infinite',
       marginBottom: getSpacing('15px', '20px', '25px'),
     },
-    container: {
+container: {
       maxWidth: '1400px',
       margin: '0 auto',
       padding: getSpacing('16px', '24px', '40px'),
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      background: 'linear-gradient(135deg, rgba(201, 169, 98, 0.03) 0%, rgba(232, 213, 163, 0.05) 100%)',
+      background: isDarkMode ? 'linear-gradient(135deg, rgba(201, 169, 98, 0.03) 0%, rgba(232, 213, 163, 0.05) 100%)' : 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)',
       minHeight: '100vh',
     },
-    breadcrumb: {
+breadcrumb: {
       display: 'flex',
       alignItems: 'center',
       gap: getSpacing('6px', '8px', '12px'),
       marginBottom: getSpacing('20px', '30px', '40px'),
       fontSize: getFontSize('12px', '14px', '16px'),
-      color: 'rgba(255,255,255,0.6)',
+      color: isDarkMode ? 'rgba(255,255,255,0.6)' : '#64748b',
       flexWrap: 'wrap',
-      padding: getSpacing('10px 16px', '12px 20px', '14px 24px'),
-      background: 'rgba(30, 30, 40, 0.8)',
+      padding: getSpacing('8px 12px', '10px 16px', '12px 20px'),
+      background: isDarkMode ? 'rgba(30, 30, 40, 0.8)' : '#ffffff',
       borderRadius: getSpacing('30px', '40px', '50px'),
-      border: '1px solid rgba(201, 169, 98, 0.2)',
-      backdropFilter: 'blur(10px)',
+      border: isDarkMode ? '1px solid rgba(201, 169, 98, 0.2)' : 'none',
+      boxShadow: isDarkMode ? 'none' : '0 2px 10px rgba(0,0,0,0.02)',
     },
-    breadcrumbLink: {
-      color: '#c9a962',
+breadcrumbLink: {
+      color: isDarkMode ? '#c9a962' : '#ff6b6b',
       cursor: 'pointer',
       textDecoration: 'none',
       transition: 'all 0.3s ease',
       fontWeight: '600',
-      padding: getSpacing('4px 10px', '5px 12px', '6px 14px'),
+      padding: getSpacing('4px 6px', '5px 8px', '5px 10px'),
       borderRadius: '20px',
       fontSize: getFontSize('11px', '13px', '14px'),
     },
@@ -244,10 +246,10 @@ const ProductDetail = () => {
       height: getSpacing('60px', '70px', '100px'),
       borderRadius: getSpacing('10px', '12px', '16px'),
       cursor: 'pointer',
-      border: selectedImage === index ? '3px solid #ff6b6b' : '2px solid transparent',
+      border: selectedImage === index ? (isDarkMode ? '3px solid #c9a962' : '3px solid #ff6b6b') : '2px solid transparent',
       transition: 'all 0.3s ease',
       objectFit: 'cover',
-      boxShadow: hoveredThumbnail === index ? '0 10px 20px rgba(255,107,107,0.3)' : '0 4px 10px rgba(0,0,0,0.05)',
+      boxShadow: hoveredThumbnail === index ? '0 10px 20px rgba(201,169,98,0.3)' : '0 4px 10px rgba(0,0,0,0.05)',
       transform: hoveredThumbnail === index ? 'scale(1.05)' : 'scale(1)',
       opacity: selectedImage === index ? 1 : 0.8,
     }),
@@ -290,7 +292,7 @@ const ProductDetail = () => {
     productName: {
       fontSize: getFontSize('24px', '32px', '48px'),
       fontWeight: '800',
-      color: '#1e293b',
+      color: isDarkMode ? '#ffffff' : '#1e293b',
       marginBottom: getSpacing('12px', '15px', '20px'),
       lineHeight: 1.2,
       letterSpacing: '-0.02em',
@@ -302,7 +304,7 @@ const ProductDetail = () => {
       marginBottom: getSpacing('15px', '20px', '25px'),
       flexWrap: 'wrap',
       padding: getSpacing('10px 15px', '12px 18px', '15px 20px'),
-      background: '#f8fafc',
+      background: isDarkMode ? 'rgba(201, 169, 98, 0.1)' : '#f8fafc',
       borderRadius: getSpacing('30px', '40px', '50px'),
       width: 'fit-content',
     },
@@ -316,28 +318,27 @@ const ProductDetail = () => {
       gap: '3px',
     },
     starFilled: {
-      color: '#ffc107',
+      color: isDarkMode ? '#c9a962' : '#ffc107',
       fontSize: getFontSize('16px', '18px', '24px'),
     },
     starEmpty: {
-      color: '#e0e0e0',
+      color: isDarkMode ? 'rgba(255,255,255,0.2)' : '#e0e0e0',
       fontSize: getFontSize('16px', '18px', '24px'),
     },
     averageRating: {
       fontSize: getFontSize('16px', '18px', '24px'),
       fontWeight: '700',
-      color: '#1e293b',
+      color: isDarkMode ? '#c9a962' : '#1e293b',
     },
     reviewsCount: {
-      color: '#64748b',
+      color: isDarkMode ? 'rgba(255,255,255,0.6)' : '#64748b',
       fontSize: getFontSize('12px', '14px', '16px'),
-      textDecoration: 'underline',
       cursor: 'pointer',
     },
     price: {
       fontSize: getFontSize('28px', '36px', '56px'),
       fontWeight: '800',
-      color: '#ff6b6b',
+      color: isDarkMode ? '#c9a962' : '#ff6b6b',
       display: 'flex',
       alignItems: 'center',
       gap: getSpacing('10px', '15px', '20px'),
@@ -346,7 +347,7 @@ const ProductDetail = () => {
     },
     originalPrice: {
       fontSize: getFontSize('16px', '20px', '28px'),
-      color: '#94a3b8',
+      color: isDarkMode ? 'rgba(255,255,255,0.4)' : '#94a3b8',
       textDecoration: 'line-through',
       fontWeight: '500',
     },
@@ -360,13 +361,13 @@ const ProductDetail = () => {
     },
     description: {
       fontSize: getFontSize('14px', '16px', '18px'),
-      color: '#475569',
+      color: isDarkMode ? 'rgba(255,255,255,0.7)' : '#475569',
       lineHeight: '1.8',
       marginBottom: getSpacing('20px', '30px', '40px'),
       padding: getSpacing('15px', '20px', '25px'),
-      background: '#fff',
+      background: isDarkMode ? 'rgba(30, 30, 40, 0.8)' : '#ffffff',
       borderRadius: getSpacing('12px', '16px', '24px'),
-      border: '1px solid #f0f0f0',
+      border: isDarkMode ? '1px solid rgba(201, 169, 98, 0.15)' : '1px solid #f0f0f0',
     },
     actionButtons: {
       display: 'flex',
@@ -378,15 +379,15 @@ const ProductDetail = () => {
       flex: isMobile ? '1 1 100%' : (isTablet ? '2' : '3'),
       minWidth: isMobile ? '100%' : (isTablet ? '200px' : '280px'),
       padding: getSpacing('14px 20px', '16px 30px', '20px 40px'),
-      background: isInCart ? '#10b981' : '#ff6b6b',
-      color: 'white',
+      background: isInCart ? '#10b981' : (isDarkMode ? '#c9a962' : '#ff6b6b'),
+      color: isDarkMode && !isInCart ? '#1e293b' : 'white',
       border: 'none',
       borderRadius: getSpacing('40px', '50px', '60px'),
       fontSize: getFontSize('16px', '18px', '20px'),
       fontWeight: '700',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
-      boxShadow: isInCart ? '0 10px 20px rgba(16,185,129,0.3)' : '0 10px 20px rgba(255,107,107,0.3)',
+      boxShadow: isInCart ? '0 10px 20px rgba(16,185,129,0.3)' : '0 10px 20px rgba(201,169,98,0.3)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -396,9 +397,9 @@ const ProductDetail = () => {
       flex: isMobile ? '1 1 100%' : (isTablet ? '1' : '1'),
       minWidth: isMobile ? '100%' : '60px',
       padding: getSpacing('14px', '16px', '20px'),
-      backgroundColor: isFavLocal ? '#ff6b6b' : 'white',
-      color: isFavLocal ? 'white' : '#ff6b6b',
-      border: '2px solid #ff6b6b',
+      backgroundColor: isFavLocal ? (isDarkMode ? '#c9a962' : '#ff6b6b') : (isDarkMode ? 'rgba(30,30,40,0.9)' : 'white'),
+      color: isFavLocal ? (isDarkMode ? '#1e293b' : 'white') : (isDarkMode ? '#c9a962' : '#ff6b6b'),
+      border: isDarkMode ? '2px solid #c9a962' : '2px solid #ff6b6b',
       borderRadius: getSpacing('40px', '50px', '60px'),
       fontSize: getFontSize('20px', '24px', '28px'),
       cursor: 'pointer',
@@ -441,7 +442,7 @@ const ProductDetail = () => {
     tabs: {
       display: 'flex',
       gap: getSpacing('15px', '25px', '40px'),
-      borderBottom: '2px solid #f0f0f0',
+      borderBottom: isDarkMode ? '2px solid rgba(201, 169, 98, 0.2)' : '2px solid #f0f0f0',
       marginBottom: getSpacing('20px', '30px', '40px'),
       flexWrap: 'wrap',
       padding: getSpacing('0 10px', '0 15px', '0 20px'),
@@ -449,21 +450,22 @@ const ProductDetail = () => {
     tab: {
       padding: getSpacing('12px 0', '15px 0', '20px 0'),
       fontSize: getFontSize('14px', '16px', '20px'),
-      color: '#64748b',
+      color: isDarkMode ? 'rgba(255,255,255,0.5)' : '#64748b',
       cursor: 'pointer',
       borderBottom: '3px solid transparent',
       transition: 'all 0.3s ease',
       fontWeight: '600',
     },
     activeTab: {
-      color: '#ff6b6b',
-      borderBottom: '3px solid #ff6b6b',
+      color: isDarkMode ? '#c9a962' : '#ff6b6b',
+      borderBottom: isDarkMode ? '3px solid #c9a962' : '3px solid #ff6b6b',
     },
     tabContent: {
       padding: getSpacing('20px', '30px', '40px'),
       minHeight: isMobile ? '300px' : '400px',
-      background: '#fff',
+      background: isDarkMode ? 'rgba(30, 30, 40, 0.9)' : '#ffffff',
       borderRadius: getSpacing('12px', '16px', '24px'),
+      border: isDarkMode ? '1px solid rgba(201, 169, 98, 0.2)' : 'none',
     },
     specTable: {
       width: '100%',
