@@ -644,8 +644,18 @@ src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59545.2337809546!2d72
 <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; }
         html { scroll-behavior: smooth; }
+        
+        /* Base Styles Override */
+        nav.navbar { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; }
+        nav.navbar + div { margin-top: 0 !important; }
+        div[class*="hero"] { min-height: auto !important; }
+        section[class*="hero"] { min-height: auto !important; }
+        
+        /* Hide elements on mobile */
+        .mobile-hidden { display: none !important; }
+        .desktop-only { display: none !important; }
+        
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
