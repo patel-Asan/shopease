@@ -37,6 +37,12 @@ export default function OrderDetail() {
 
   useEffect(() => {
     loadOrder();
+    
+    const interval = setInterval(() => {
+      loadOrder();
+    }, 10000);
+    
+    return () => clearInterval(interval);
   }, [id]);
 
   const formatDate = (dateString) => {
@@ -57,7 +63,7 @@ export default function OrderDetail() {
   };
 
   const getStatusIndex = (status) => {
-    const statuses = ["Confirmed", "Packed", "Shipped", "Out Of Delivery", "Delivered"];
+    const statuses = ["Pending", "Confirmed", "Processing", "Shipped", "Out Of Delivery", "Delivered"];
     return statuses.indexOf(status);
   };
 
@@ -394,8 +400,9 @@ export default function OrderDetail() {
   };
 
   const progressSteps = [
+    { key: "Pending", label: "Pending" },
     { key: "Confirmed", label: "Placed" },
-    { key: "Packed", label: "Packed" },
+    { key: "Processing", label: "Packed" },
     { key: "Shipped", label: "Shipped" },
     { key: "Out Of Delivery", label: "Out" },
     { key: "Delivered", label: "Done" },
@@ -422,11 +429,12 @@ export default function OrderDetail() {
   const progressWidth = currentIndex >= 0 ? `${(currentIndex / (progressSteps.length - 1)) * 100}%` : "0%";
 
   const timelineEvents = [
-    { status: "Order Placed", date: order.createdAt, completed: true },
-    { status: "Packed", date: order.assignedAt, completed: currentIndex >= 1 },
-    { status: "Shipped", date: order.assignedAt, completed: currentIndex >= 2 },
-    { status: "Out For Delivery", date: order.assignedAt, completed: currentIndex >= 3, active: currentIndex === 3 },
-    { status: "Delivered", date: order.deliveredAt, completed: currentIndex >= 4 },
+    { status: "Pending", date: order.createdAt, completed: currentIndex >= 0 },
+    { status: "Order Placed", date: order.createdAt, completed: currentIndex >= 1, active: currentIndex === 1 },
+    { status: "Packed", date: order.createdAt, completed: currentIndex >= 2, active: currentIndex === 2 },
+    { status: "Shipped", date: order.createdAt, completed: currentIndex >= 3, active: currentIndex === 3 },
+    { status: "Out For Delivery", date: order.assignedAt, completed: currentIndex >= 4, active: currentIndex === 4 },
+    { status: "Delivered", date: order.deliveredAt, completed: currentIndex >= 5, active: currentIndex === 5 },
   ];
 
   const deliveryPartner = order.deliveryBoyName 
