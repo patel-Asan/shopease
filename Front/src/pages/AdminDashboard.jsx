@@ -913,7 +913,7 @@ const AdminDashboard = () => {
         display: "flex",
         flexDirection: "column",
       }}>
-        {/* Sticky Header */}
+        {/* Sticky Header - Desktop */}
         {!isMobile && (
           <div style={{
             display: "flex",
@@ -995,6 +995,67 @@ const AdminDashboard = () => {
                     {formattedTime}
                   </span>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Sticky Header - Mobile */}
+        {isMobile && (
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "0.75rem",
+            padding: "0.75rem 1rem",
+            background: isDarkMode ? "rgba(15, 15, 20, 0.95)" : "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(20px)",
+            borderBottom: `1px solid ${borderColor}`,
+            position: "sticky",
+            top: 0,
+            zIndex: 100,
+            boxShadow: isDarkMode ? "0 4px 20px rgba(0,0,0,0.3)" : "0 4px 20px rgba(0,0,0,0.05)",
+          }}>
+            {/* Menu Button */}
+            <button
+              onClick={handleMenuToggle}
+              style={{
+                background: accentColor,
+                border: "none",
+                borderRadius: "10px",
+                width: "40px",
+                height: "40px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                color: "#fff",
+              }}
+            >
+              {mobileMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+            </button>
+
+            {/* Title */}
+            <div>
+              <h1 style={{
+                fontSize: "1.1rem",
+                fontWeight: 700,
+                color: textColor,
+                margin: 0,
+              }}>
+                Admin Panel
+              </h1>
+            </div>
+
+            {/* Right Actions */}
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}>
+              <NotificationBell />
+              <div style={{ width: "36px", height: "36px" }}>
+                <ProfileDropdown />
               </div>
             </div>
           </div>
