@@ -794,14 +794,14 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Profile Section */}
-        {(!isMobile || (isMobile && mobileMenuOpen)) && (
+        {/* Profile Section - Desktop Only */}
+        {!isMobile && (
           <div style={{
             width: "100%",
-            padding: isMobile ? "0 1.5rem" : (sidebarOpen ? "0 1.5rem" : "0 0.5rem"),
+            padding: sidebarOpen ? "0 1.5rem" : "0 0.5rem",
             marginBottom: "1.5rem",
           }}>
-            <ProfileDropdown sidebarOpen={isMobile ? true : sidebarOpen} />
+            <ProfileDropdown sidebarOpen={sidebarOpen} />
           </div>
         )}
 
