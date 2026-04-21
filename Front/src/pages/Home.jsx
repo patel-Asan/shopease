@@ -86,20 +86,68 @@ export default function Home() {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      minHeight: "60vh",
-      gap: "20px",
+      minHeight: "calc(100vh - 150px)",
+      gap: "30px",
     },
-    spinner: {
-      width: "50px",
-      height: "50px",
-      border: `4px solid ${accentColor}30`,
+    loaderWrapper: {
+      position: "relative",
+      width: "120px",
+      height: "120px",
+    },
+    loaderCircle: {
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+      border: `4px solid transparent`,
       borderTopColor: accentColor,
       borderRadius: "50%",
       animation: "spin 1s linear infinite",
     },
+    loaderCircle2: {
+      position: "absolute",
+      width: "80%",
+      height: "80%",
+      top: "10%",
+      left: "10%",
+      border: `4px solid transparent`,
+      borderTopColor: accentLight,
+      borderRadius: "50%",
+      animation: "spin 1.5s linear infinite reverse",
+    },
+    loaderCenter: {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      fontSize: "40px",
+      color: accentColor,
+    },
+    skeletonCard: {
+      width: "280px",
+      height: "350px",
+      borderRadius: "16px",
+      background: cardBg,
+      overflow: "hidden",
+    },
+    skeletonImage: {
+      width: "100%",
+      height: "200px",
+      background: `linear-gradient(90deg, ${borderColor} 25%, ${cardBg} 50%, ${borderColor} 75%)`,
+      backgroundSize: "200% 100%",
+      animation: "shimmer 1.5s infinite",
+    },
+    skeletonText: {
+      height: "16px",
+      margin: "16px",
+      borderRadius: "4px",
+      background: `linear-gradient(90deg, ${borderColor} 25%, ${cardBg} 50%, ${borderColor} 75%)`,
+      backgroundSize: "200% 100%",
+      animation: "shimmer 1.5s infinite",
+    },
     loadingText: {
       color: textSecondary,
-      fontSize: "16px",
+      fontSize: "18px",
+      fontWeight: "500",
     },
     emptyContainer: {
       textAlign: "center",
@@ -177,12 +225,21 @@ export default function Home() {
   if (loading) {
     return (
       <div style={mergedStyles.container}>
-        <div style={mergedStyles.loadingContainer}>
-          <div style={mergedStyles.spinner} />
-          <p style={mergedStyles.loadingText}>Loading products...</p>
+        <div style={styles.heroSection}>
+          <div style={styles.loadingContainer}>
+            <div style={styles.loaderWrapper}>
+              <div style={styles.loaderCircle} />
+              <div style={styles.loaderCircle2} />
+              <div style={styles.loaderCenter}>
+                <FaShoppingBag />
+              </div>
+            </div>
+            <p style={styles.loadingText}>Loading products...</p>
+          </div>
         </div>
         <style>{`
           @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+          @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
         `}</style>
       </div>
     );

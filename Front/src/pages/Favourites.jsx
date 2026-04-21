@@ -64,12 +64,9 @@ export default function Favourites() {
 
   const styles = {
     container: {
-      paddingTop: isMobile ? "1.5rem" : "2rem",
-      paddingBottom: isMobile ? "1.5rem" : "2rem",
-      paddingLeft: isMobile ? "0.5rem" : "1rem",
-      paddingRight: isMobile ? "0.5rem" : "1rem",
-      minHeight: "80vh",
-      maxWidth: "1200px",
+      padding: isMobile ? "20px 16px" : "40px 20px",
+      minHeight: "calc(100vh - 80px)",
+      maxWidth: "1400px",
       margin: "0 auto",
       width: "100%",
       position: "relative",

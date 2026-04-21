@@ -60,7 +60,7 @@ function AppContent() {
     mainContent: {
       flex: 1,
       padding: isMobile ? "0" : "0",
-      marginTop: user?.role === "user" && isMobile ? "60px" : "0",
+      marginTop: user?.role === "user" && isMobile ? "0" : "0",
     },
     toastContainer: {
       position: "fixed",

@@ -1,24 +1,27 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { FavouritesContext } from "../context/FavouritesContext";
 import { useTheme } from "../context/ThemeContext";
-import { FaShoppingBag, FaSun, FaMoon, FaHome, FaHeart, FaShoppingCart, FaBox, FaHeadset, FaCrown } from "react-icons/fa";
+import { FaShoppingBag, FaSun, FaMoon, FaHome, FaHeart, FaShoppingCart, FaBox, FaHeadset, FaCrown, FaUser, FaSignOutAlt, FaBell, FaEdit, FaMapMarkerAlt, FaEnvelope } from "react-icons/fa";
 import ProfileDropdown from "./ProfileDropdown";
 import NotificationBell from "./NotificationBell";
 
 export default function Navbar() {
-  const { user } = useContext(AuthContext);
+  const { user, logoutUser } = useContext(AuthContext);
   const { cartCount } = useContext(CartContext);
   const { favouritesCount } = useContext(FavouritesContext);
   const { isDarkMode, toggleTheme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const menuRef = useRef(null);
+  const profileRef = useRef(null);
 
   useEffect(() => {
     const checkScreenSize = () => setIsMobile(window.innerWidth <= 768);
@@ -30,6 +33,16 @@ export default function Navbar() {
       window.removeEventListener('resize', checkScreenSize);
       window.removeEventListener('scroll', handleScroll);
     };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -221,18 +234,20 @@ export default function Navbar() {
 
           <div style={styles.rightSection}>
             <button
-              style={styles.themeBtn}
+              style={{...styles.themeBtn, display: isMobile ? "none" : "flex"}}
               onClick={toggleTheme}
             >
               {isDarkMode ? <FaSun style={{ fontSize: "16px" }} /> : <FaMoon style={{ fontSize: "16px" }} />}
             </button>
 
-            {user && <NotificationBell />}
+            {user && <div style={{ display: isMobile ? "none" : "flex" }}><NotificationBell /></div>}
 
-            <ProfileDropdown />
+            <div ref={profileRef}>
+              <ProfileDropdown />
+            </div>
 
             <button
-              style={styles.menuBtn}
+              style={{...styles.menuBtn, display: isMobile ? "flex" : "none"}}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? "✕" : "☰"}
@@ -254,6 +269,18 @@ export default function Navbar() {
             {item.count > 0 && <span style={styles.badge}>{item.count}</span>}
           </Link>
         ))}
+
+        <div style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", marginTop: 8, paddingTop: 12, borderTop: `1px solid ${borderColor}` }}>
+          <button
+            style={{ ...styles.themeBtn, display: "flex", width: 40, height: 40 }}
+            onClick={() => { toggleTheme(); setMobileMenuOpen(false); }}
+          >
+            {isDarkMode ? <FaSun style={{ fontSize: "16px" }} /> : <FaMoon style={{ fontSize: "16px" }} />}
+          </button>
+          {user && (
+            <div style={{ flex: 1 }}><NotificationBell /></div>
+          )}
+        </div>
       </div>
 
       <style>{`
