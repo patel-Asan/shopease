@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { FavouritesContext } from "../context/FavouritesContext";
 import { useTheme } from "../context/ThemeContext";
-import { FaShoppingBag, FaSun, FaMoon, FaHome, FaHeart, FaShoppingCart, FaBox, FaHeadset, FaCrown, FaUser, FaSignOutAlt, FaBell, FaEdit, FaMapMarkerAlt, FaEnvelope } from "react-icons/fa";
+import { FaShoppingBag, FaSun, FaMoon, FaHome, FaHeart, FaShoppingCart, FaBox, FaHeadset, FaCrown, FaUser, FaSignOutAlt, FaBell, FaEdit, FaMapMarkerAlt, FaEnvelope, FaBoxOpen } from "react-icons/fa";
 import ProfileDropdown from "./ProfileDropdown";
 import NotificationBell from "./NotificationBell";
 
@@ -79,6 +79,7 @@ export default function Navbar() {
     container: {
       maxWidth: "1400px",
       margin: "0 auto",
+      width: "100%",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
@@ -86,20 +87,21 @@ export default function Navbar() {
     logo: {
       display: "flex",
       alignItems: "center",
-      gap: "10px",
+      gap: isMobile ? "8px" : "10px",
       textDecoration: "none",
+      flexShrink: 0,
     },
     logoIcon: {
-      width: "40px",
-      height: "40px",
-      borderRadius: "10px",
+      width: isMobile ? "36px" : "40px",
+      height: isMobile ? "36px" : "40px",
+      borderRadius: isMobile ? "8px" : "10px",
       background: `linear-gradient(135deg, ${accentColor}, ${accentLight})`,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
     },
     logoText: {
-      fontSize: "20px",
+      fontSize: isMobile ? "18px" : "20px",
       fontWeight: "700",
       color: textColor,
       letterSpacing: "2px",
