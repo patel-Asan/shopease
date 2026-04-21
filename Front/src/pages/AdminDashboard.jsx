@@ -1018,7 +1018,7 @@ const AdminDashboard = () => {
           }}>
             {/* Menu Button */}
             <button
-              onClick={handleMenuToggle}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               style={{
                 background: accentColor,
                 border: "none",
