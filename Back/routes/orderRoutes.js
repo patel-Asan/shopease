@@ -8,6 +8,7 @@ const {
   cancelOrder,
   getAllOrders,
   updateOrderStatus,
+  updatePaymentStatus,
   assignDeliveryBoy,
   getMyDeliveryOrders,
   markDelivered,
@@ -26,6 +27,7 @@ router.post("/:id/request-otp", auth, requestDeliveryOtp);
 // Admin routes
 router.get("/admin/all", auth, adminAuth, getAllOrders);
 router.patch("/admin/update/:id", auth, adminAuth, updateOrderStatus);
+router.patch("/admin/update-payment/:id", auth, adminAuth, updatePaymentStatus);
 router.patch("/admin/assign/:id", auth, adminAuth, assignDeliveryBoy);
  
 // Delivery routes

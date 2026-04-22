@@ -87,9 +87,28 @@ export default function AdminOrders() {
     } catch (err) {
       console.error(err);
       toast.error("Failed to update order status");
+}
+  };
+
+  // Update payment status
+  const updatePaymentStatus = async (orderId, newStatus) => {
+    try {
+      await apiFetch(`/orders/admin/update-payment/${orderId}`, {
+        method: "PATCH",
+        body: { paymentStatus: newStatus },
+      });
+      setOrders((prev) =>
+        prev.map((order) =>
+          order._id === orderId ? { ...order, paymentStatus: newStatus } : order
+        )
+      );
+      toast.success(`Payment status updated to ${newStatus}`);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update payment status");
     }
   };
- 
+
   // Cancel order
   const cancelOrder = async (orderId) => {
     try {
@@ -555,15 +574,29 @@ export default function AdminOrders() {
                             {order.paymentMethod === "Online" ? "QR Code" : "COD"}
                           </span>
                           {order.paymentMethod === "Online" && (
-                            <div style={{ marginTop: "4px" }}>
-                              <span style={{
-                                fontSize: "0.65rem",
-                                color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                            <select
+                              value={order.paymentStatus || "Pending"}
+                              onChange={(e) => updatePaymentStatus(order._id, e.target.value)}
+                              style={{
+                                marginTop: "4px",
+                                padding: "4px 8px",
+                                borderRadius: "6px",
+                                fontSize: "0.7rem",
                                 fontWeight: 600,
-                              }}>
-                                {order.paymentStatus === "Paid" ? "Paid" : (order.paymentStatus === "Initiated" ? "Initiated" : "Pending")}
-                              </span>
-                            </div>
+                                border: "1px solid",
+                                borderColor: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                                background: order.paymentStatus === "Paid" ? "rgba(34, 197, 94, 0.1)" : (order.paymentStatus === "Initiated" ? "rgba(245, 158, 11, 0.1)" : "rgba(148, 163, 184, 0.1)"),
+                                color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                                cursor: "pointer",
+                                width: "100%",
+                              }}
+                            >
+                              <option value="Pending">Pending</option>
+                              <option value="Initiated">Initiated</option>
+                              <option value="QR Generated">QR Sent</option>
+                              <option value="Paid">Paid ✅</option>
+                              <option value="Failed">Failed</option>
+                            </select>
                           )}
                         </td>
                         <td style={styles.td}>
@@ -701,14 +734,28 @@ export default function AdminOrders() {
                           {order.paymentMethod === "Online" ? "QR Code" : "COD"}
                         </span>
                         {order.paymentMethod === "Online" && (
-                          <span style={{
-                            marginLeft: "8px",
-                            fontSize: "0.7rem",
-                            color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
-                            fontWeight: 600,
-                          }}>
-                            ({order.paymentStatus === "Paid" ? "Paid" : order.paymentStatus === "Initiated" ? "Initiated" : "Pending"})
-                          </span>
+                          <select
+                            value={order.paymentStatus || "Pending"}
+                            onChange={(e) => updatePaymentStatus(order._id, e.target.value)}
+                            style={{
+                              marginLeft: "8px",
+                              padding: "4px 8px",
+                              borderRadius: "6px",
+                              fontSize: "0.7rem",
+                              fontWeight: 600,
+                              border: "1px solid",
+                              borderColor: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                              background: order.paymentStatus === "Paid" ? "rgba(34, 197, 94, 0.1)" : (order.paymentStatus === "Initiated" ? "rgba(245, 158, 11, 0.1)" : "rgba(148, 163, 184, 0.1)"),
+                              color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                              cursor: "pointer",
+                            }}
+                          >
+                            <option value="Pending">Pending</option>
+                            <option value="Initiated">Initiated</option>
+                            <option value="QR Generated">QR Sent</option>
+                            <option value="Paid">Paid ✅</option>
+                            <option value="Failed">Failed</option>
+                          </select>
                         )}
                       </div>
  

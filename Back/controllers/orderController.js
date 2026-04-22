@@ -348,10 +348,50 @@ exports.updateOrderStatus = async (req, res) => {
     res.status(500).json({ message: "Failed to update order" });
   }
 };
- 
- 
-/**
 
+
+/**
+ * @desc    Admin - Update Payment Status
+ * @route   PATCH /api/orders/admin/update-payment/:id
+ * @access  Admin
+ */
+exports.updatePaymentStatus = async (req, res) => {
+  try {
+    const { paymentStatus } = req.body;
+    
+    const allowedStatuses = [
+      "Pending",
+      "QR Generated",
+      "Initiated",
+      "Paid",
+      "Failed",
+    ];
+
+    if (!allowedStatuses.includes(paymentStatus)) {
+      return res.status(400).json({ message: "Invalid payment status value" });
+    }
+
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    
+    order.paymentStatus = paymentStatus;
+    await order.save();
+
+    res.json({ 
+      success: true, 
+      message: `Payment status updated to ${paymentStatus}`,
+      order 
+    });
+  } catch (error) {
+    console.error("Error updating payment status:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+/**
  * @desc    Admin - Assign Delivery Boy
  * @route   PATCH /api/orders/admin/assign/:id
  * @access  Admin
@@ -360,32 +400,32 @@ exports.updateOrderStatus = async (req, res) => {
 exports.assignDeliveryBoy = async (req, res) => {
   try {
     const { deliveryBoyId } = req.body;
- 
+  
     const order = await Order.findById(req.params.id);
     if (!order)
       return res.status(404).json({ message: "Order not found" });
- 
+  
     // ✅ PROTECTION ADDED
     if (order.status === "Delivered" || order.status === "Cancelled") {
       return res.status(400).json({
         message: "Cannot assign delivery boy to delivered or cancelled order"
       });
     }
- 
+  
     const deliveryBoy = await User.findOne({
       _id: deliveryBoyId,
       role: "delivery",
     });
- 
+  
     if (!deliveryBoy)
       return res.status(400).json({ message: "Invalid delivery boy" });
- 
+  
     order.deliveryBoy = deliveryBoyId;
     order.status = "Out Of Delivery";
     order.assignedAt = new Date();
   
     await order.save();
-   
+    
     // Get user ID as string
     let userId;
     if (typeof order.user === 'object' && order.user._id) {
@@ -395,7 +435,7 @@ exports.assignDeliveryBoy = async (req, res) => {
     } else {
       userId = order.user;
     }
-    
+     
     // Create notification for delivery boy
     try {
       await createNotification({
