@@ -422,11 +422,14 @@ const ProductPage = () => {
                   <img
                     src={
                       p.img
-                        ? `http://localhost:5000/uploads/products/${p.img}`
-                        : "/default-image.jpg"
+                        ? getImageUrl(p.img)
+                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=c9a962&color=fff&size=300&bold=true`
                     }
                     alt={p.name}
                     style={styles.image}
+                    onError={(e) => {
+                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=c9a962&color=fff&size=300&bold=true`;
+                    }}
                   />
                 </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { apiFetch } from "../api/api";
@@ -18,6 +18,7 @@ function Contact() {
   const [loading, setLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
   const [errors, setErrors] = useState({});
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 480);
 
   const validateField = (name, value) => {
     switch (name) {
@@ -80,6 +81,15 @@ function Contact() {
     newFiles.splice(index, 1);
     setFiles(newFiles);
   };
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 480);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const s = useMemo(() => getStyles(isMobile), [isMobile]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -309,10 +319,10 @@ function Contact() {
   );
 }
 
-const s = {
+const getStyles = (isMobile) => ({
   wrapper: {
     minHeight: "100vh",
-    padding: "60px 20px",
+    padding: isMobile ? "60px 12px 40px" : "60px 20px 40px",
     position: "relative",
     overflow: "hidden",
   },
@@ -320,8 +330,8 @@ const s = {
     position: "fixed",
     top: "-20%",
     right: "-10%",
-    width: "500px",
-    height: "500px",
+    width: isMobile ? "250px" : "500px",
+    height: isMobile ? "250px" : "500px",
     borderRadius: "50%",
     background: "radial-gradient(circle, rgba(201, 169, 98, 0.12) 0%, transparent 70%)",
     filter: "blur(80px)",
@@ -331,89 +341,74 @@ const s = {
     position: "fixed",
     bottom: "-20%",
     left: "-10%",
-    width: "400px",
-    height: "400px",
+    width: isMobile ? "200px" : "400px",
+    height: isMobile ? "200px" : "400px",
     borderRadius: "50%",
     background: "radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%)",
     filter: "blur(80px)",
     pointerEvents: "none",
   },
-  themeBtn: {
-    position: "fixed",
-    top: "20px",
-    right: "20px",
-    width: "44px",
-    height: "44px",
-    borderRadius: "50%",
-    border: "1px solid",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer",
-    transition: "all 0.3s ease",
-    zIndex: 10,
-  },
   container: {
-    maxWidth: "700px",
+    maxWidth: isMobile ? "100%" : "700px",
     margin: "0 auto",
     background: "rgba(255,255,255,0.03)",
     border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "24px",
+    borderRadius: isMobile ? "16px" : "24px",
     overflow: "hidden",
     animation: "fadeIn 0.5s ease",
     position: "relative",
     zIndex: 1,
   },
   header: {
-    padding: "40px 40px 30px",
+    padding: isMobile ? "24px 20px 20px" : "40px 40px 30px",
     textAlign: "center",
   },
   title: {
-    fontSize: "28px",
+    fontSize: isMobile ? "24px" : "28px",
     fontWeight: "700",
     marginBottom: "8px",
   },
   subtitle: {
-    fontSize: "15px",
+    fontSize: isMobile ? "14px" : "15px",
   },
   content: {
-    padding: "0 40px 40px",
+    padding: isMobile ? "0 16px 24px" : "0 40px 40px",
   },
   infoGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-    gap: "16px",
-    marginBottom: "32px",
+    gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: isMobile ? "12px" : "16px",
+    marginBottom: isMobile ? "24px" : "32px",
   },
   infoCard: {
     display: "flex",
     alignItems: "center",
-    gap: "14px",
-    padding: "20px",
+    gap: "12px",
+    padding: isMobile ? "14px" : "20px",
     border: "1px solid",
-    borderRadius: "16px",
+    borderRadius: "12px",
   },
   infoIcon: {
-    width: "44px",
-    height: "44px",
-    borderRadius: "12px",
+    width: isMobile ? "36px" : "44px",
+    height: isMobile ? "36px" : "44px",
+    borderRadius: "10px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
   },
   infoTitle: {
-    fontSize: "14px",
+    fontSize: isMobile ? "13px" : "14px",
     fontWeight: "600",
-    marginBottom: "4px",
+    marginBottom: "2px",
   },
   infoText: {
-    fontSize: "13px",
+    fontSize: isMobile ? "12px" : "13px",
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "20px",
+    gap: isMobile ? "16px" : "20px",
   },
   inputGroup: {
     textAlign: "left",
@@ -428,13 +423,13 @@ const s = {
     display: "flex",
     alignItems: "center",
     border: "1px solid",
-    borderRadius: "14px",
-    padding: "0 16px",
+    borderRadius: "12px",
+    padding: "0 14px",
     transition: "all 0.3s ease",
   },
   input: {
     flex: 1,
-    padding: "14px 0",
+    padding: isMobile ? "12px 0" : "14px 0",
     border: "none",
     outline: "none",
     fontSize: "15px",
@@ -443,8 +438,8 @@ const s = {
   },
   textareaWrapper: {
     border: "1px solid",
-    borderRadius: "14px",
-    padding: "14px 16px",
+    borderRadius: "12px",
+    padding: "12px 14px",
     transition: "all 0.3s ease",
   },
   textarea: {
@@ -454,7 +449,7 @@ const s = {
     fontSize: "15px",
     background: "transparent",
     resize: "vertical",
-    minHeight: "120px",
+    minHeight: isMobile ? "100px" : "120px",
     fontFamily: "inherit",
   },
   error: {
@@ -465,8 +460,8 @@ const s = {
   },
   uploadBox: {
     border: "2px dashed",
-    borderRadius: "14px",
-    padding: "24px",
+    borderRadius: "12px",
+    padding: isMobile ? "16px" : "24px",
     textAlign: "center",
     cursor: "pointer",
   },
@@ -474,11 +469,11 @@ const s = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: "8px",
+    gap: "6px",
     cursor: "pointer",
   },
   uploadHint: {
-    fontSize: "12px",
+    fontSize: "11px",
   },
   filesGrid: {
     display: "flex",
@@ -496,7 +491,7 @@ const s = {
     fontSize: "13px",
   },
   fileName: {
-    maxWidth: "120px",
+    maxWidth: isMobile ? "100px" : "120px",
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
@@ -515,10 +510,10 @@ const s = {
     alignItems: "center",
     justifyContent: "center",
     gap: "10px",
-    padding: "16px",
+    padding: isMobile ? "14px" : "16px",
     border: "none",
-    borderRadius: "14px",
-    fontSize: "16px",
+    borderRadius: "12px",
+    fontSize: isMobile ? "15px" : "16px",
     fontWeight: "600",
     color: "#050507",
     cursor: "pointer",
@@ -526,33 +521,33 @@ const s = {
     marginTop: "8px",
   },
   mapSection: {
-    maxWidth: "1200px",
-    margin: "40px auto 0",
-    padding: "0 20px",
+    maxWidth: isMobile ? "100%" : "1200px",
+    margin: isMobile ? "24px auto 0" : "40px auto 0",
+    padding: "0",
     position: "relative",
     zIndex: 1,
   },
   mapContainer: {
     background: "rgba(255,255,255,0.03)",
     border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "24px",
+    borderRadius: isMobile ? "16px" : "24px",
     overflow: "hidden",
-    padding: "30px",
+    padding: isMobile ? "16px" : "30px",
   },
   mapWrapper: {
-    borderRadius: "16px",
+    borderRadius: "12px",
     overflow: "hidden",
-    height: "400px",
+    height: isMobile ? "250px" : "400px",
     border: "1px solid rgba(255,255,255,0.08)",
   },
   mapHeader: {
     display: "flex",
     alignItems: "center",
-    gap: "12px",
-    marginBottom: "20px",
+    gap: "10px",
+    marginBottom: "14px",
   },
   mapTitle: {
-    fontSize: "20px",
+    fontSize: isMobile ? "16px" : "20px",
     fontWeight: "700",
     margin: 0,
   },
@@ -561,6 +556,6 @@ const s = {
     height: "100%",
     border: "none",
   },
-};
+});
 
 export default Contact;

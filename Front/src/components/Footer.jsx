@@ -245,7 +245,7 @@ export default function Footer() {
         </div>
 
         <div style={styles.bottomBar}>
-          <p style={styles.copyright}>© 2024 ShopEase Collective. All rights reserved.</p>
+          <p style={styles.copyright}>© 2026 ShopEase Collective. All rights reserved.</p>
           <div style={styles.bottomLinks}>
             {["Privacy Policy", "Terms of Service", "Shipping"].map((item, i) => (
               <span key={i} style={styles.bottomLink}>{item}</span>

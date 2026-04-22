@@ -15,7 +15,8 @@ const orderRoutes = require("./routes/orderRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const newsletterRoutes = require("./routes/newsletterRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
- 
+const paymentRoutes = require("./routes/paymentRoutes");
+
 const app = express();
 connectDB();
  
@@ -48,6 +49,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/payments", paymentRoutes);
  
 // Global error handler
 app.use((err, req, res, next) => {

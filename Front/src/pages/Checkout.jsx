@@ -2,9 +2,10 @@ import { useEffect, useState, useContext } from "react";
 import { apiFetch, validateCoupon, getImageUrl } from "../api/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { FaGift, FaTicketAlt, FaCopy, FaCheck, FaShoppingBag, FaMapMarkerAlt, FaCreditCard } from "react-icons/fa";
+import { FaGift, FaTicketAlt, FaCopy, FaCheck, FaShoppingBag, FaMapMarkerAlt, FaCreditCard, FaQrcode } from "react-icons/fa";
 import { CartContext } from "../context/CartContext";
 import { useTheme } from "../context/ThemeContext";
+import QRPayment from "../components/QRPayment";
 
 export default function Checkout() {
   const { cart: globalCart, clearCart, cartCount } = useContext(CartContext);
@@ -23,6 +24,7 @@ export default function Checkout() {
   const [validatingCoupon, setValidatingCoupon] = useState(false);
   const [discountedTotal, setDiscountedTotal] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
  
   const navigate = useNavigate();
  
@@ -801,6 +803,35 @@ export default function Checkout() {
           />
           <span style={styles.paymentLabel}>Online Payment</span>
         </label>
+
+        <label
+          style={{
+            ...styles.paymentOption,
+            borderColor: paymentMethod === "UPI" ? "#c9a962" : "rgba(201, 169, 98, 0.15)",
+            background: paymentMethod === "UPI" ? "rgba(201, 169, 98, 0.1)" : "rgba(201, 169, 98, 0.03)",
+          }}
+          onMouseEnter={(e) => {
+            if (!isMobile) {
+              e.currentTarget.style.background = "rgba(201, 169, 98, 0.1)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isMobile) {
+              e.currentTarget.style.background = paymentMethod === "UPI" ? "rgba(201, 169, 98, 0.1)" : "rgba(201, 169, 98, 0.03)";
+            }
+          }}
+        >
+          <input
+            type="radio"
+            checked={paymentMethod === "UPI"}
+            onChange={() => setPaymentMethod("UPI")}
+            style={styles.paymentRadio}
+          />
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <FaQrcode style={{ color: "#c9a962" }} />
+            <span style={styles.paymentLabel}>Pay with QR Code</span>
+          </div>
+        </label>
  
         {paymentMethod === "Online" && (
           <div style={styles.onlinePaymentGrid}>
@@ -837,6 +868,49 @@ export default function Checkout() {
             ))}
           </div>
         )}
+
+        {paymentMethod === "UPI" && (
+          <div style={{
+            ...styles.onlinePaymentGrid,
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "1.5rem",
+            background: isDarkMode ? "rgba(201, 169, 98, 0.05)" : "rgba(201, 169, 98, 0.05)",
+            borderRadius: "16px",
+            marginTop: "1rem",
+            border: `1px solid ${isDarkMode ? "rgba(201, 169, 98, 0.2)" : "rgba(201, 169, 98, 0.2)"}`,
+          }}>
+            <FaQrcode style={{ fontSize: "2.5rem", color: "#c9a962", marginBottom: "0.75rem" }} />
+            <p style={{
+              fontSize: "0.95rem",
+              color: isDarkMode ? "rgba(255,255,255,0.7)" : "#64748b",
+              textAlign: "center",
+              marginBottom: "1rem",
+              lineHeight: 1.5,
+            }}>
+              Pay easily using QR Code with any UPI app
+            </p>
+            <button
+              onClick={() => setShowQRModal(true)}
+              style={{
+                padding: "12px 24px",
+                borderRadius: "12px",
+                background: `linear-gradient(135deg, #c9a962, #e8d5a3)`,
+                border: "none",
+                color: "#0f172a",
+                fontSize: "0.95rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                boxShadow: "0 4px 15px rgba(201, 169, 98, 0.3)",
+              }}
+            >
+              <FaQrcode /> Show QR Code
+            </button>
+          </div>
+        )}
       </div>
  
       <div style={{ textAlign: "center", marginBottom: "2rem", position: "relative", zIndex: 1 }}>
@@ -864,6 +938,53 @@ export default function Checkout() {
           {isPlacingOrder ? "Placing Order..." : `Place Order • ₹${finalTotal.toLocaleString()}`}
         </button>
       </div>
+
+      {showQRModal && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0,0,0,0.8)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 9999,
+          backdropFilter: "blur(8px)",
+        }}>
+          <div style={{ position: "relative" }}>
+            <button
+              onClick={() => setShowQRModal(false)}
+              style={{
+                position: "absolute",
+                top: "-40px",
+                right: 0,
+                background: "rgba(255,255,255,0.1)",
+                border: "none",
+                color: "#fff",
+                fontSize: "1.2rem",
+                cursor: "pointer",
+                padding: "8px 12px",
+                borderRadius: "8px",
+              }}
+            >
+              ✕
+            </button>
+            <QRPayment
+              amount={finalTotal}
+              orderId={`ORD${Date.now()}`}
+              customerName={globalCart[0]?.product?.name || "Multiple Items"}
+              onSuccess={() => {
+                setShowQRModal(false);
+                toast.success("Payment initiated! Admin will confirm after verification.");
+                placeOrder();
+              }}
+              onCancel={() => setShowQRModal(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

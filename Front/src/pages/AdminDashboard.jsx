@@ -691,32 +691,73 @@ const AdminDashboard = () => {
         />
       )}
 
-      {/* Mobile Menu Button */}
+      {/* Mobile Header Bar */}
       {isMobile && (
-        <button
-          onClick={toggleSidebar}
-          style={{
-            position: "fixed",
-            top: "1rem",
-            left: "1rem",
-            zIndex: 1100,
-            background: cardBg,
-            color: accentColor,
-            border: `1px solid ${borderColor}`,
-            borderRadius: "16px",
-            padding: "0.75rem",
-            cursor: "pointer",
-            boxShadow: isDarkMode 
-              ? "0 10px 40px rgba(0,0,0,0.4)" 
-              : "0 4px 20px rgba(0,0,0,0.1)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "all 0.3s ease",
-          }}
-        >
-          {mobileMenuOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
-        </button>
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "60px",
+          background: sidebarBg,
+          borderBottom: `1px solid ${borderColor}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 1rem",
+          zIndex: 1100,
+          backdropFilter: isDarkMode ? "blur(20px)" : "none",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <button
+              onClick={toggleSidebar}
+              style={{
+                background: cardBg,
+                color: accentColor,
+                border: `1px solid ${borderColor}`,
+                borderRadius: "12px",
+                padding: "0.6rem",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {mobileMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+            </button>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}>
+              <div style={{
+                width: "36px",
+                height: "36px",
+                borderRadius: "10px",
+                background: "linear-gradient(135deg, #c9a962 0%, #e8d5a3 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}>
+                <FaGem style={{ color: "#0f172a", fontSize: "1rem" }} />
+              </div>
+              <span style={{
+                fontSize: "1.1rem",
+                fontWeight: 700,
+                background: "linear-gradient(135deg, #c9a962, #e8d5a3)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}>
+                ShopEase
+              </span>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <ProfileDropdown />
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Premium Sidebar - Sticky */}
@@ -1000,64 +1041,11 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Sticky Header - Mobile */}
-        {isMobile && (
+        {/* Sticky Header - Mobile - Hidden, using top bar instead */}
+        {isMobile && false && (
           <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: "0.75rem",
-            padding: "0.75rem 1rem",
-            background: isDarkMode ? "rgba(15, 15, 20, 0.95)" : "rgba(255, 255, 255, 0.95)",
-            backdropFilter: "blur(20px)",
-            borderBottom: `1px solid ${borderColor}`,
-            position: "sticky",
-            top: 0,
-            zIndex: 100,
-            boxShadow: isDarkMode ? "0 4px 20px rgba(0,0,0,0.3)" : "0 4px 20px rgba(0,0,0,0.05)",
+            display: "none",
           }}>
-            {/* Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{
-                background: accentColor,
-                border: "none",
-                borderRadius: "10px",
-                width: "40px",
-                height: "40px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                color: "#fff",
-              }}
-            >
-              {mobileMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-            </button>
-
-            {/* Title */}
-            <div>
-              <h1 style={{
-                fontSize: "1.1rem",
-                fontWeight: 700,
-                color: textColor,
-                margin: 0,
-              }}>
-                Admin Panel
-              </h1>
-            </div>
-
-            {/* Right Actions */}
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-            }}>
-              <NotificationBell />
-              <div style={{ width: "36px", height: "36px" }}>
-                <ProfileDropdown />
-              </div>
-            </div>
           </div>
         )}
 
@@ -1065,6 +1053,7 @@ const AdminDashboard = () => {
         <div style={{
           flex: 1,
           padding: isMobile ? "1rem" : "1.5rem",
+          paddingTop: isMobile ? "80px" : "1.5rem",
           overflowY: "auto",
           overflowX: "hidden",
         }}>

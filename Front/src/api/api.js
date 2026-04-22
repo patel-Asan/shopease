@@ -198,7 +198,15 @@ export const toggleBlockDeliveryBoy = (id) =>
 export const getAllOrders = () => apiFetch("/orders/admin/all");
 export const updateOrderStatus = (orderId, status) =>
   apiFetch(`/orders/admin/update/${orderId}`, { method: "PATCH", body: { status } });
- 
+
+// Payment APIs
+export const generateQRCode = (data) =>
+  apiFetch("/payments/generate-qr", { method: "POST", body: data });
+export const verifyPayment = (orderId) =>
+  apiFetch(`/payments/verify-upi?orderId=${orderId}`);
+export const getPaymentConfig = () =>
+  apiFetch("/payments/config");
+
 export default API;
  
  

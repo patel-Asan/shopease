@@ -22,7 +22,7 @@ import {
   FaUnlock,
 } from "react-icons/fa";
 
-const NotificationBell = ({ size = 40, fontSize = 18 }) => {
+const NotificationBell = ({ size = 38, fontSize = 14 }) => {
   const { 
     notifications, 
     unreadCount, 
@@ -39,6 +39,7 @@ const NotificationBell = ({ size = 40, fontSize = 18 }) => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 480);
   const accentColor = "#c9a962";
 
   const handleNotificationClick = (notification) => {
@@ -61,8 +62,15 @@ const NotificationBell = ({ size = 40, fontSize = 18 }) => {
       }
     };
 
+    const checkMobile = () => setIsMobile(window.innerWidth <= 480);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   const getIcon = (type) => {
@@ -151,16 +159,16 @@ const NotificationBell = ({ size = 40, fontSize = 18 }) => {
     bellButton: {
       width: `${size}px`,
       height: `${size}px`,
-      borderRadius: "12px",
-      background: isDarkMode ? "rgba(20, 20, 28, 0.98)" : "#ffffff",
-      border: `1px solid ${isDarkMode ? "rgba(201, 169, 98, 0.2)" : "rgba(0,0,0,0.05)"}`,
+      borderRadius: "10px",
+      background: isDarkMode ? "rgba(255,255,255,0.05)" : "#ffffff",
+      border: `1px solid ${isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}`,
       cursor: "pointer",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       color: accentColor,
       fontSize: `${fontSize}px`,
-      transition: "all 0.3s ease",
+      transition: "all 0.2s ease",
       position: "relative",
     },
     badge: {
@@ -184,12 +192,14 @@ const NotificationBell = ({ size = 40, fontSize = 18 }) => {
     dropdown: {
       position: "absolute",
       top: "100%",
-      right: 0,
+      right: isMobile ? "50%" : 0,
+      transform: isMobile ? "translateX(20%)" : "none",
       marginTop: "0.5rem",
-      width: "380px",
+      width: isMobile ? "calc(100vw - 32px)" : "380px",
+      maxWidth: isMobile ? "380px" : "none",
       maxHeight: "500px",
       background: isDarkMode ? "rgba(20, 20, 28, 0.98)" : "#ffffff",
-      borderRadius: "20px",
+      borderRadius: isMobile ? "16px" : "20px",
       boxShadow: isDarkMode 
         ? "0 25px 60px rgba(0,0,0,0.5), 0 0 40px rgba(201, 169, 98, 0.1)" 
         : "0 25px 60px rgba(0,0,0,0.15)",
@@ -198,6 +208,7 @@ const NotificationBell = ({ size = 40, fontSize = 18 }) => {
       zIndex: 1000,
       display: "flex",
       flexDirection: "column",
+      marginTop: isMobile ? "1.75rem" : "0.5rem",
     },
     dropdownHeader: {
       padding: "1rem 1.25rem",

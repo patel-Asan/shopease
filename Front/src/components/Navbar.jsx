@@ -140,12 +140,25 @@ export default function Navbar() {
     rightSection: {
       display: "flex",
       alignItems: "center",
-      gap: "12px",
+      gap: "8px",
+    },
+    iconBtn: {
+      width: "38px",
+      height: "38px",
+      borderRadius: "10px",
+      border: `1px solid ${borderColor}`,
+      backgroundColor: cardBg,
+      color: textSecondary,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+      transition: "all 0.2s ease",
     },
     themeBtn: {
-      width: "40px",
-      height: "40px",
-      borderRadius: "50%",
+      width: "38px",
+      height: "38px",
+      borderRadius: "10px",
       border: `1px solid ${borderColor}`,
       backgroundColor: cardBg,
       color: accentColor,
@@ -153,20 +166,20 @@ export default function Navbar() {
       alignItems: "center",
       justifyContent: "center",
       cursor: "pointer",
-      transition: "all 0.3s ease",
+      transition: "all 0.2s ease",
     },
     menuBtn: {
-      width: "40px",
-      height: "40px",
-      borderRadius: "12px",
+      width: "38px",
+      height: "38px",
+      borderRadius: "10px",
       border: "none",
       background: `linear-gradient(135deg, ${accentColor}, ${accentLight})`,
       color: "white",
-      display: isMobile ? "flex" : "none",
+      display: "flex",
       alignItems: "center",
       justifyContent: "center",
       cursor: "pointer",
-      fontSize: "18px",
+      fontSize: "16px",
     },
     mobileMenu: {
       position: "fixed",
@@ -235,21 +248,21 @@ export default function Navbar() {
           </div>
 
           <div style={styles.rightSection}>
-            <button
-              style={{...styles.themeBtn, display: isMobile ? "none" : "flex"}}
-              onClick={toggleTheme}
-            >
-              {isDarkMode ? <FaSun style={{ fontSize: "16px" }} /> : <FaMoon style={{ fontSize: "16px" }} />}
-            </button>
-
-            {user && <div style={{ display: isMobile ? "none" : "flex" }}><NotificationBell /></div>}
-
             <div ref={profileRef}>
               <ProfileDropdown />
             </div>
 
             <button
-              style={{...styles.menuBtn, display: isMobile ? "flex" : "none"}}
+              style={styles.themeBtn}
+              onClick={toggleTheme}
+            >
+              {isDarkMode ? <FaSun style={{ fontSize: "16px" }} /> : <FaMoon style={{ fontSize: "16px" }} />}
+            </button>
+
+            {user && <NotificationBell />}
+
+            <button
+              style={styles.menuBtn}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? "✕" : "☰"}
@@ -271,18 +284,6 @@ export default function Navbar() {
             {item.count > 0 && <span style={styles.badge}>{item.count}</span>}
           </Link>
         ))}
-
-        <div style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", marginTop: 8, paddingTop: 12, borderTop: `1px solid ${borderColor}` }}>
-          <button
-            style={{ ...styles.themeBtn, display: "flex", width: 40, height: 40 }}
-            onClick={() => { toggleTheme(); setMobileMenuOpen(false); }}
-          >
-            {isDarkMode ? <FaSun style={{ fontSize: "16px" }} /> : <FaMoon style={{ fontSize: "16px" }} />}
-          </button>
-          {user && (
-            <div style={{ flex: 1 }}><NotificationBell /></div>
-          )}
-        </div>
       </div>
 
       <style>{`
