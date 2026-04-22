@@ -801,15 +801,12 @@ export default function Checkout() {
             onChange={() => setPaymentMethod("Online")}
             style={styles.paymentRadio}
           />
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <FaQrcode style={{ color: "#c9a962" }} />
             <span style={styles.paymentLabel}>UPI / QR Code</span>
           </div>
         </label>
 
-
-        </label>
- 
         {paymentMethod === "Online" && (
           <div style={{
             ...styles.onlinePaymentGrid,
