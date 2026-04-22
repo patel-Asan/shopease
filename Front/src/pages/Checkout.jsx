@@ -807,7 +807,7 @@ export default function Checkout() {
           </div>
         </label>
 
-        {paymentMethod === "Online" && (
+{paymentMethod === "Online" && (
           <div style={{
             ...styles.onlinePaymentGrid,
             flexDirection: "column",
@@ -868,6 +868,16 @@ export default function Checkout() {
             >
               <FaQrcode /> Generate QR Code
             </button>
+            <div style={{ marginTop: "1.5rem", paddingTop: "1rem", borderTop: `1px dashed ${isDarkMode ? "rgba(201, 169, 98, 0.2)" : "#e2e8f0"}`, width: "100%", textAlign: "center" }}>
+              <p style={{ fontSize: "0.8rem", color: isDarkMode ? "rgba(255,255,255,0.4)" : "#94a3b8", marginBottom: "0.5rem" }}>
+                Coming Soon
+              </p>
+              <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+                <div style={{ padding: "8px 16px", background: isDarkMode ? "rgba(255,255,255,0.05)" : "#f8fafc", borderRadius: "8px", fontSize: "0.75rem", color: isDarkMode ? "rgba(255,255,255,0.5)" : "#64748b" }}>Razorpay</div>
+                <div style={{ padding: "8px 16px", background: isDarkMode ? "rgba(255,255,255,0.05)" : "#f8fafc", borderRadius: "8px", fontSize: "0.75rem", color: isDarkMode ? "rgba(255,255,255,0.5)" : "#64748b" }}>PhonePe</div>
+                <div style={{ padding: "8px 16px", background: isDarkMode ? "rgba(255,255,255,0.05)" : "#f8fafc", borderRadius: "8px", fontSize: "0.75rem", color: isDarkMode ? "rgba(255,255,255,0.5)" : "#64748b" }}>Paytm</div>
+              </div>
+            </div>
           </div>
         )}
       </div>
