@@ -627,6 +627,7 @@ export default function DeliveryDashboard() {
                     <th style={styles.th}>Total</th>
                     <th style={styles.th}>Phone</th>
                     <th style={styles.th}>Address</th>
+                    <th style={styles.th}>Payment</th>
                     <th style={styles.th}>Status</th>
                     <th style={styles.th}>Assigned</th>
                     <th style={styles.th}>Delivered</th>
@@ -637,7 +638,7 @@ export default function DeliveryDashboard() {
                   <AnimatePresence>
                     {orders.length === 0 ? (
                       <tr>
-                        <td colSpan="9" style={{ ...styles.td, textAlign: "center", padding: "3rem" }}>
+                        <td colSpan="10" style={{ ...styles.td, textAlign: "center", padding: "3rem" }}>
                           <div style={styles.emptyState}>
                             <div style={styles.emptyIcon}>📦</div>
                             <h3 style={{ color: textColor, marginBottom: "0.5rem" }}>
@@ -696,6 +697,32 @@ export default function DeliveryDashboard() {
                             <div style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
                               <FaRupeeSign style={{ color: accentColor, fontSize: "0.85rem" }} />
                               {order.totalAmount}
+                            </div>
+                          </td>
+                          <td style={styles.td}>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                              <span style={{
+                                padding: "3px 8px",
+                                borderRadius: "6px",
+                                fontSize: "0.7rem",
+                                fontWeight: 600,
+                                background: order.paymentMethod === "Online" ? "rgba(201, 169, 98, 0.2)" : "rgba(100, 100, 100, 0.1)",
+                                color: order.paymentMethod === "Online" ? "#c9a962" : "#888",
+                              }}>
+                                {order.paymentMethod === "Online" ? "QR Code" : "COD"}
+                              </span>
+                              {order.paymentMethod === "Online" && (
+                                <span style={{
+                                  fontSize: "0.65rem",
+                                  fontWeight: 700,
+                                  color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                                  padding: "2px 6px",
+                                  borderRadius: "4px",
+                                  background: order.paymentStatus === "Paid" ? "rgba(34, 197, 94, 0.1)" : (order.paymentStatus === "Initiated" ? "rgba(245, 158, 11, 0.1)" : "rgba(148, 163, 184, 0.1)"),
+                                }}>
+                                  {order.paymentStatus === "Paid" ? "PAID ✅" : order.paymentStatus === "Initiated" ? "INITIATED" : "PENDING"}
+                                </span>
+                              )}
                             </div>
                           </td>
                           <td style={styles.td}>
@@ -854,6 +881,34 @@ export default function DeliveryDashboard() {
                         <span style={{ fontWeight: 700, color: accentColor }}>
                           ₹{order.totalAmount}
                         </span>
+                      </div>
+
+                      <div style={styles.mobileInfo}>
+                        <span style={{ color: textSecondary }}>Payment:</span>
+                        <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                          <span style={{
+                            padding: "3px 8px",
+                            borderRadius: "6px",
+                            fontSize: "0.75rem",
+                            fontWeight: 600,
+                            background: order.paymentMethod === "Online" ? "rgba(201, 169, 98, 0.2)" : "rgba(100, 100, 100, 0.1)",
+                            color: order.paymentMethod === "Online" ? "#c9a962" : "#888",
+                          }}>
+                            {order.paymentMethod === "Online" ? "QR Code" : "COD"}
+                          </span>
+                          {order.paymentMethod === "Online" && (
+                            <span style={{
+                              fontSize: "0.7rem",
+                              fontWeight: 700,
+                              color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                              padding: "3px 8px",
+                              borderRadius: "6px",
+                              background: order.paymentStatus === "Paid" ? "rgba(34, 197, 94, 0.1)" : (order.paymentStatus === "Initiated" ? "rgba(245, 158, 11, 0.1)" : "rgba(148, 163, 184, 0.1)"),
+                            }}>
+                              {order.paymentStatus === "Paid" ? "PAID" : order.paymentStatus === "Initiated" ? "INITIATED" : "PENDING"}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       <div style={styles.mobileInfo}>
