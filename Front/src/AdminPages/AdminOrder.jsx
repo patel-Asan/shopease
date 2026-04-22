@@ -563,41 +563,64 @@ export default function AdminOrders() {
                         </td>
                         <td style={styles.td}>₹{order.totalAmount || 0}</td>
                         <td style={styles.td}>
-                          <span style={{
-                            padding: "4px 10px",
-                            borderRadius: "8px",
-                            fontSize: "0.75rem",
-                            fontWeight: 600,
-                            background: order.paymentMethod === "Online" ? "rgba(201, 169, 98, 0.2)" : "rgba(100, 100, 100, 0.1)",
-                            color: order.paymentMethod === "Online" ? "#c9a962" : "#888",
-                          }}>
-                            {order.paymentMethod === "Online" ? "QR Code" : "COD"}
-                          </span>
-                          {order.paymentMethod === "Online" && (
-                            <select
-                              value={order.paymentStatus || "Pending"}
-                              onChange={(e) => updatePaymentStatus(order._id, e.target.value)}
-                              style={{
-                                marginTop: "4px",
-                                padding: "4px 8px",
-                                borderRadius: "6px",
-                                fontSize: "0.7rem",
-                                fontWeight: 600,
-                                border: "1px solid",
-                                borderColor: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
-                                background: order.paymentStatus === "Paid" ? "rgba(34, 197, 94, 0.1)" : (order.paymentStatus === "Initiated" ? "rgba(245, 158, 11, 0.1)" : "rgba(148, 163, 184, 0.1)"),
-                                color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
-                                cursor: "pointer",
-                                width: "100%",
-                              }}
-                            >
-                              <option value="Pending">Pending</option>
-                              <option value="Initiated">Initiated</option>
-                              <option value="QR Generated">QR Sent</option>
-                              <option value="Paid">Paid ✅</option>
-                              <option value="Failed">Failed</option>
-                            </select>
-                          )}
+                          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                            <span style={{
+                              padding: "4px 10px",
+                              borderRadius: "8px",
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                              background: order.paymentMethod === "Online" ? "rgba(201, 169, 98, 0.2)" : "rgba(100, 100, 100, 0.1)",
+                              color: order.paymentMethod === "Online" ? "#c9a962" : "#888",
+                            }}>
+                              {order.paymentMethod === "Online" ? "QR Code" : "COD"}
+                            </span>
+                            {order.paymentMethod === "Online" && (
+                              <select
+                                value={order.paymentStatus || "Pending"}
+                                onChange={(e) => updatePaymentStatus(order._id, e.target.value)}
+                                style={{
+                                  padding: "4px 8px",
+                                  borderRadius: "6px",
+                                  fontSize: "0.7rem",
+                                  fontWeight: 600,
+                                  border: "1px solid",
+                                  borderColor: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                                  background: order.paymentStatus === "Paid" ? "rgba(34, 197, 94, 0.1)" : (order.paymentStatus === "Initiated" ? "rgba(245, 158, 11, 0.1)" : "rgba(148, 163, 184, 0.1)"),
+                                  color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                                  cursor: "pointer",
+                                  width: "100%",
+                                }}
+                              >
+                                <option value="Pending">Pending</option>
+                                <option value="Initiated">Initiated</option>
+                                <option value="QR Generated">QR Sent</option>
+                                <option value="Paid">Paid ✅</option>
+                                <option value="Failed">Failed</option>
+                              </select>
+                            )}
+                            <span style={{
+                              padding: "5px 10px",
+                              borderRadius: "8px",
+                              fontSize: "0.75rem",
+                              fontWeight: 700,
+                              background: order.paymentMethod === "COD" 
+                                ? "rgba(239, 68, 68, 0.15)" 
+                                : order.paymentStatus === "Paid" 
+                                  ? "rgba(34, 197, 94, 0.15)" 
+                                  : "rgba(245, 158, 11, 0.15)",
+                              color: order.paymentMethod === "COD" 
+                                ? "#ef4444" 
+                                : order.paymentStatus === "Paid" 
+                                  ? "#22c55e" 
+                                  : "#f59e0b",
+                            }}>
+                              {order.paymentMethod === "COD" 
+                                ? "💰 COLLECT CASH" 
+                                : order.paymentStatus === "Paid" 
+                                  ? "✅ NO CASH NEEDED" 
+                                  : "⚠️ VERIFY & UPDATE"}
+                            </span>
+                          </div>
                         </td>
                         <td style={styles.td}>
                           <select
@@ -719,46 +742,70 @@ export default function AdminOrders() {
                       </div>
                       <div style={styles.mobileInfo}>
                         <strong>Total:</strong> ₹{order.totalAmount || 0}
-                      </div>
+</div>
                       <div style={styles.mobileInfo}>
                         <strong>Payment:</strong>
-                        <span style={{
-                          padding: "4px 10px",
-                          borderRadius: "8px",
-                          fontSize: "0.75rem",
-                          fontWeight: 600,
-                          background: order.paymentMethod === "Online" ? "rgba(201, 169, 98, 0.2)" : "rgba(100, 100, 100, 0.1)",
-                          color: order.paymentMethod === "Online" ? "#c9a962" : "#888",
-                          marginLeft: "6px",
-                        }}>
-                          {order.paymentMethod === "Online" ? "QR Code" : "COD"}
-                        </span>
-                        {order.paymentMethod === "Online" && (
-                          <select
-                            value={order.paymentStatus || "Pending"}
-                            onChange={(e) => updatePaymentStatus(order._id, e.target.value)}
-                            style={{
-                              marginLeft: "8px",
-                              padding: "4px 8px",
-                              borderRadius: "6px",
-                              fontSize: "0.7rem",
+                        <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginTop: "6px" }}>
+                          <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                            <span style={{
+                              padding: "4px 10px",
+                              borderRadius: "8px",
+                              fontSize: "0.75rem",
                               fontWeight: 600,
-                              border: "1px solid",
-                              borderColor: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
-                              background: order.paymentStatus === "Paid" ? "rgba(34, 197, 94, 0.1)" : (order.paymentStatus === "Initiated" ? "rgba(245, 158, 11, 0.1)" : "rgba(148, 163, 184, 0.1)"),
-                              color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
-                              cursor: "pointer",
-                            }}
-                          >
-                            <option value="Pending">Pending</option>
-                            <option value="Initiated">Initiated</option>
-                            <option value="QR Generated">QR Sent</option>
-                            <option value="Paid">Paid ✅</option>
-                            <option value="Failed">Failed</option>
-                          </select>
-                        )}
+                              background: order.paymentMethod === "Online" ? "rgba(201, 169, 98, 0.2)" : "rgba(100, 100, 100, 0.1)",
+                              color: order.paymentMethod === "Online" ? "#c9a962" : "#888",
+                            }}>
+                              {order.paymentMethod === "Online" ? "QR Code" : "COD"}
+                            </span>
+                            {order.paymentMethod === "Online" && (
+                              <select
+                                value={order.paymentStatus || "Pending"}
+                                onChange={(e) => updatePaymentStatus(order._id, e.target.value)}
+                                style={{
+                                  padding: "4px 8px",
+                                  borderRadius: "6px",
+                                  fontSize: "0.7rem",
+                                  fontWeight: 600,
+                                  border: "1px solid",
+                                  borderColor: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                                  background: order.paymentStatus === "Paid" ? "rgba(34, 197, 94, 0.1)" : (order.paymentStatus === "Initiated" ? "rgba(245, 158, 11, 0.1)" : "rgba(148, 163, 184, 0.1)"),
+                                  color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <option value="Pending">Pending</option>
+                                <option value="Initiated">Initiated</option>
+                                <option value="QR Generated">QR Sent</option>
+                                <option value="Paid">Paid ✅</option>
+                                <option value="Failed">Failed</option>
+                              </select>
+                            )}
+                          </div>
+                          <span style={{
+                            padding: "6px 12px",
+                            borderRadius: "8px",
+                            fontSize: "0.8rem",
+                            fontWeight: 700,
+                            background: order.paymentMethod === "COD" 
+                              ? "rgba(239, 68, 68, 0.15)" 
+                              : order.paymentStatus === "Paid" 
+                                ? "rgba(34, 197, 94, 0.15)" 
+                                : "rgba(245, 158, 11, 0.15)",
+                            color: order.paymentMethod === "COD" 
+                              ? "#ef4444" 
+                              : order.paymentStatus === "Paid" 
+                                ? "#22c55e" 
+                                : "#f59e0b",
+                          }}>
+                            {order.paymentMethod === "COD" 
+                              ? "💰 COLLECT CASH" 
+                              : order.paymentStatus === "Paid" 
+                                ? "✅ NO CASH NEEDED" 
+                                : "⚠️ VERIFY & UPDATE"}
+                          </span>
+                        </div>
                       </div>
- 
+  
                       <div style={styles.mobileInfo}>
                         <strong>Status:</strong>
                         <select
