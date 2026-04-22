@@ -801,113 +801,75 @@ export default function Checkout() {
             onChange={() => setPaymentMethod("Online")}
             style={styles.paymentRadio}
           />
-          <span style={styles.paymentLabel}>Online Payment</span>
-        </label>
-
-        <label
-          style={{
-            ...styles.paymentOption,
-            borderColor: paymentMethod === "UPI" ? "#c9a962" : "rgba(201, 169, 98, 0.15)",
-            background: paymentMethod === "UPI" ? "rgba(201, 169, 98, 0.1)" : "rgba(201, 169, 98, 0.03)",
-          }}
-          onMouseEnter={(e) => {
-            if (!isMobile) {
-              e.currentTarget.style.background = "rgba(201, 169, 98, 0.1)";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isMobile) {
-              e.currentTarget.style.background = paymentMethod === "UPI" ? "rgba(201, 169, 98, 0.1)" : "rgba(201, 169, 98, 0.03)";
-            }
-          }}
-        >
-          <input
-            type="radio"
-            checked={paymentMethod === "UPI"}
-            onChange={() => setPaymentMethod("UPI")}
-            style={styles.paymentRadio}
-          />
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <FaQrcode style={{ color: "#c9a962" }} />
-            <span style={styles.paymentLabel}>Pay with QR Code</span>
+            <span style={styles.paymentLabel}>UPI / QR Code</span>
           </div>
+        </label>
+
+
         </label>
  
         {paymentMethod === "Online" && (
-          <div style={styles.onlinePaymentGrid}>
-            {[
-              { name: "Razorpay", src: "https://cdn.razorpay.com/static/assets/merchant-badge/badge-dark.png" },
-              { name: "PhonePe", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnHdIGLWRg80BYG3oZsXAbmqsAZ2PvTUH1lQ&s" },
-              { name: "Google Pay", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3xJkS9kYnTnVATuI9rUY_6BbB20O5pW04AQ&s" },
-              { name: "Paytm", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgL2zA8HqXqjgFQqkWc5nYgW0KJvY9yXpQ_g&s" },
-            ].map((opt) => (
-              <div
-                key={opt.name}
-                style={styles.onlinePaymentCard}
-                onMouseEnter={(e) => {
-                  if (!isMobile) {
-                    e.currentTarget.style.transform = "scale(1.03)";
-                    e.currentTarget.style.borderColor = "#c9a962";
-                    e.currentTarget.style.boxShadow = "0 4px 15px rgba(201, 169, 98, 0.2)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isMobile) {
-                    e.currentTarget.style.transform = "scale(1)";
-                    e.currentTarget.style.borderColor = "rgba(201, 169, 98, 0.15)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }
-                }}
-                onClick={() => toast.info(`${opt.name} integration coming soon!`)}
-              >
-                <img src={opt.src} alt={opt.name} style={styles.paymentImg} />
-                <span style={{ fontSize: isMobile ? "0.9rem" : "1rem", fontWeight: 600 }}>
-                  Pay with {opt.name}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {paymentMethod === "UPI" && (
           <div style={{
             ...styles.onlinePaymentGrid,
             flexDirection: "column",
             alignItems: "center",
-            padding: "1.5rem",
+            padding: "2rem",
             background: isDarkMode ? "rgba(201, 169, 98, 0.05)" : "rgba(201, 169, 98, 0.05)",
             borderRadius: "16px",
             marginTop: "1rem",
             border: `1px solid ${isDarkMode ? "rgba(201, 169, 98, 0.2)" : "rgba(201, 169, 98, 0.2)"}`,
           }}>
-            <FaQrcode style={{ fontSize: "2.5rem", color: "#c9a962", marginBottom: "0.75rem" }} />
+            <div style={{
+              width: "80px",
+              height: "80px",
+              borderRadius: "50%",
+              background: `linear-gradient(135deg, #c9a962, #e8d5a3)`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "1rem",
+              boxShadow: "0 8px 30px rgba(201, 169, 98, 0.3)",
+            }}>
+              <FaQrcode style={{ fontSize: "2.5rem", color: "#0f172a" }} />
+            </div>
+            <h4 style={{
+              fontSize: "1.1rem",
+              fontWeight: 700,
+              color: isDarkMode ? "#e8d5a3" : "#0f172a",
+              marginBottom: "0.5rem",
+            }}>
+              QR Code Payment
+            </h4>
             <p style={{
-              fontSize: "0.95rem",
-              color: isDarkMode ? "rgba(255,255,255,0.7)" : "#64748b",
+              fontSize: "0.9rem",
+              color: isDarkMode ? "rgba(255,255,255,0.6)" : "#64748b",
               textAlign: "center",
               marginBottom: "1rem",
               lineHeight: 1.5,
             }}>
-              Pay easily using QR Code with any UPI app
+              Pay instantly using any UPI app<br/>
+              (PhonePe, Google Pay, Paytm, etc.)
             </p>
             <button
               onClick={() => setShowQRModal(true)}
               style={{
-                padding: "12px 24px",
-                borderRadius: "12px",
+                padding: "14px 28px",
+                borderRadius: "14px",
                 background: `linear-gradient(135deg, #c9a962, #e8d5a3)`,
                 border: "none",
                 color: "#0f172a",
-                fontSize: "0.95rem",
+                fontSize: "1rem",
                 fontWeight: 700,
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
-                boxShadow: "0 4px 15px rgba(201, 169, 98, 0.3)",
+                gap: "10px",
+                boxShadow: "0 8px 25px rgba(201, 169, 98, 0.4)",
               }}
             >
-              <FaQrcode /> Show QR Code
+              <FaQrcode /> Generate QR Code
             </button>
           </div>
         )}
