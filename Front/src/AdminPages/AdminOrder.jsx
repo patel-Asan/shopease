@@ -543,7 +543,29 @@ export default function AdminOrders() {
                           ))}
                         </td>
                         <td style={styles.td}>₹{order.totalAmount || 0}</td>
-                        <td style={styles.td}>{order.paymentMethod || "N/A"}</td>
+                        <td style={styles.td}>
+                          <span style={{
+                            padding: "4px 10px",
+                            borderRadius: "8px",
+                            fontSize: "0.75rem",
+                            fontWeight: 600,
+                            background: order.paymentMethod === "Online" ? "rgba(201, 169, 98, 0.2)" : "rgba(100, 100, 100, 0.1)",
+                            color: order.paymentMethod === "Online" ? "#c9a962" : "#888",
+                          }}>
+                            {order.paymentMethod === "Online" ? "QR Code" : "COD"}
+                          </span>
+                          {order.paymentMethod === "Online" && (
+                            <div style={{ marginTop: "4px" }}>
+                              <span style={{
+                                fontSize: "0.65rem",
+                                color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                                fontWeight: 600,
+                              }}>
+                                {order.paymentStatus === "Paid" ? "Paid" : (order.paymentStatus === "Initiated" ? "Initiated" : "Pending")}
+                              </span>
+                            </div>
+                          )}
+                        </td>
                         <td style={styles.td}>
                           <select
                             value={order.status || "Pending"}
@@ -666,7 +688,28 @@ export default function AdminOrders() {
                         <strong>Total:</strong> ₹{order.totalAmount || 0}
                       </div>
                       <div style={styles.mobileInfo}>
-                        <strong>Payment:</strong> {order.paymentMethod || "N/A"}
+                        <strong>Payment:</strong>
+                        <span style={{
+                          padding: "4px 10px",
+                          borderRadius: "8px",
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          background: order.paymentMethod === "Online" ? "rgba(201, 169, 98, 0.2)" : "rgba(100, 100, 100, 0.1)",
+                          color: order.paymentMethod === "Online" ? "#c9a962" : "#888",
+                          marginLeft: "6px",
+                        }}>
+                          {order.paymentMethod === "Online" ? "QR Code" : "COD"}
+                        </span>
+                        {order.paymentMethod === "Online" && (
+                          <span style={{
+                            marginLeft: "8px",
+                            fontSize: "0.7rem",
+                            color: order.paymentStatus === "Paid" ? "#22c55e" : (order.paymentStatus === "Initiated" ? "#f59e0b" : "#94a3b8"),
+                            fontWeight: 600,
+                          }}>
+                            ({order.paymentStatus === "Paid" ? "Paid" : order.paymentStatus === "Initiated" ? "Initiated" : "Pending"})
+                          </span>
+                        )}
                       </div>
  
                       <div style={styles.mobileInfo}>

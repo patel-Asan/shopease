@@ -71,13 +71,21 @@ const orderSchema = new mongoose.Schema({
   estimatedDelivery: Date,
   paymentMethod: {
     type: String,
-    enum: ["COD", "UPI", "Card"],
+    enum: ["COD", "Online"],
     default: "COD"
   },
   paymentStatus: {
     type: String,
-    enum: ["Pending", "Paid", "Failed"],
+    enum: ["Pending", "QR Generated", "Initiated", "Paid", "Failed"],
     default: "Pending"
+  },
+  qrOrderId: {
+    type: String,
+    default: null
+  },
+  qrCodeSent: {
+    type: Boolean,
+    default: false
   },
   shippingAddress: {
     name: String,
