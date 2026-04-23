@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import API from "../api/api";
 import { useTheme } from "../context/ThemeContext";
+import NotificationBell from "../components/NotificationBell";
 import {
   FaUsers,
   FaBoxOpen,
@@ -98,7 +99,9 @@ useEffect(() => {
       marginBottom: isMobile ? "1.5rem" : "2rem",
       display: "flex",
       alignItems: "center",
+      justifyContent: "space-between",
       gap: "1rem",
+      flexWrap: "wrap",
     },
     iconContainer: {
       width: isMobile ? "50px" : "60px",
@@ -230,6 +233,9 @@ useEffect(() => {
             Welcome back! Here's what's happening with your platform today.
           </p>
         </div>
+        {isMobile && (
+          <NotificationBell />
+        )}
       </div>
 
       <div style={styles.cardsGrid}>
