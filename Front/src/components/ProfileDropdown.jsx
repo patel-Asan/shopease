@@ -4,14 +4,14 @@ import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import API, { getInitialsAvatar } from "../api/api";
+import API, { getImageUrl, getInitialsAvatar } from "../api/api";
 import { 
-  FaEye, FaEyeSlash, FaSave, FaTimes,
+  FaEye, FaEyeSlash, FaSave, FaTimes, FaCamera,
   FaUser, FaLock, FaEnvelope, FaCalendarAlt, FaShieldAlt 
 } from "react-icons/fa";
  
 export default function ProfileDropdown() {
-  const { user, logoutUser, updateUsername } = useContext(AuthContext);
+  const { user, logoutUser, updateUsername, updateProfileImage } = useContext(AuthContext);
   const { isDarkMode } = useTheme();
  
   const navigate = useNavigate();
@@ -34,11 +34,15 @@ export default function ProfileDropdown() {
     new: false,
     confirm: false,
   });
-  const [passwordStrength, setPasswordStrength] = useState(0);
+const [passwordStrength, setPasswordStrength] = useState(0);
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
- 
+  const [newProfileImage, setNewProfileImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [imageError, setImageError] = useState(false);
+
   const dropdownRef = useRef();
+  const fileInputRef = useRef();
  
   // Current user role style
   const currentRoleStyle = {
@@ -161,6 +165,26 @@ const handleBlur = (field) => {
     setTouched(prev => ({ ...prev, [field]: true }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      toast.error("Please upload a valid image file (JPEG, PNG, GIF, WEBP)");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image size should be less than 5MB");
+      return;
+    }
+
+    setImageError(false);
+    setNewProfileImage(file);
+    setPreviewImage(URL.createObjectURL(file));
+  };
+
   // ========== MAIN HANDLE SAVE FUNCTION ==========
   const handleSave = async () => {
     // Validate form first
@@ -186,12 +210,18 @@ const handleBlur = (field) => {
         formDataToSend.append("newPassword", formData.newPassword);
       }
 
+      // Send image if changed
+      if (newProfileImage) {
+        formDataToSend.append("profileImage", newProfileImage);
+      }
+
       // Debug log
       console.log("📤 Sending update request:", {
         username: formData.username,
         isChangingPassword: isChangingPassword,
         hasOldPassword: isChangingPassword ? !!formData.oldPassword : false,
         hasNewPassword: isChangingPassword ? !!formData.newPassword : false,
+        hasImage: !!newProfileImage
       });
  
       // API call
@@ -205,6 +235,9 @@ const handleBlur = (field) => {
       if (res.data?.status === "success" && res.data?.user) {
         // Update context
         updateUsername(res.data.user.username);
+        if (res.data.user.profileImage) {
+          updateProfileImage(res.data.user.profileImage);
+        }
 
         toast.success("Profile updated successfully!");
 
@@ -240,6 +273,9 @@ const handleBlur = (field) => {
       newPassword: "",
       confirmPassword: "",
     });
+    setNewProfileImage(null);
+    setPreviewImage(null);
+    setImageError(false);
     setIsChangingPassword(false);
     setErrors({});
     setTouched({});
@@ -249,6 +285,7 @@ const handleBlur = (field) => {
       confirm: false,
     });
     setEditMode(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
  
   const handleCloseDropdown = () => {
@@ -311,6 +348,24 @@ const handleBlur = (field) => {
       alignItems: "center",
       justifyContent: "center",
       background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+      overflow: "hidden",
+    },
+    fileInput: { display: "none" },
+    fileInputLabel: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "0.5rem",
+      padding: "0.5rem 1rem",
+      margin: "0.5rem auto",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "0.8rem",
+      fontWeight: 600,
+      background: `${currentRoleStyle.borderColor}20`,
+      color: currentRoleStyle.borderColor,
+      transition: "all 0.2s",
+      width: "fit-content",
     },
     username: {
       fontWeight: "bold",
@@ -485,8 +540,9 @@ const handleBlur = (field) => {
     <div style={styles.container} ref={dropdownRef}>
       <img
         onClick={() => setOpen(!open)}
-        src={getInitialsAvatar(user?.username || "User", "6366f1")}
+        src={user?.profileImage && !imageError ? getImageUrl(user.profileImage) : getInitialsAvatar(user?.username || "User", "6366f1")}
         alt="Profile"
+        onError={() => setImageError(true)}
         style={styles.profileImage}
         onMouseEnter={(e) => !isMobile && (e.currentTarget.style.transform = "scale(1.05)", e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)")}
         onMouseLeave={(e) => !isMobile && (e.currentTarget.style.transform = "scale(1)", e.currentTarget.style.boxShadow = "none")}
@@ -496,11 +552,22 @@ const handleBlur = (field) => {
         <div style={styles.dropdown}>
           <div style={styles.profileHeader}>
             <div style={styles.avatar}>
-              <span style={{ fontSize: "2rem", fontWeight: "bold", color: "#fff" }}>
-                {(user?.username || "U").charAt(0).toUpperCase()}
-              </span>
+              {previewImage ? (
+                <img src={previewImage} alt="Profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              ) : user?.profileImage && !imageError ? (
+                <img 
+                  src={getImageUrl(user.profileImage)} 
+                  alt="Profile" 
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                <span style={{ fontSize: "2rem", fontWeight: "bold", color: "#fff" }}>
+                  {(user?.username || "U").charAt(0).toUpperCase()}
+                </span>
+              )}
             </div>
- 
+
             {!editMode && (
               <>
                 <h6 style={styles.username}>{user.username}</h6>
@@ -531,7 +598,25 @@ const handleBlur = (field) => {
           {editMode ? (
             <>
               {/* Hidden file input */}
-{/* Username field */}
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={styles.fileInput}
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+
+              {/* Upload Profile Photo Button */}
+              <div 
+                style={styles.fileInputLabel}
+                onClick={() => fileInputRef.current?.click()}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = "0.8"}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+              >
+                <FaCamera /> Change Profile Photo
+              </div>
+
+              {/* Username field */}
               <div style={styles.formGroup}>
                 <label style={styles.label}>
                   <FaUser style={{ marginRight: 4, fontSize: 11 }} />
