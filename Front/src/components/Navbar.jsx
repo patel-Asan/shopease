@@ -175,7 +175,7 @@ export default function Navbar() {
       border: "none",
       background: `linear-gradient(135deg, ${accentColor}, ${accentLight})`,
       color: "white",
-      display: "flex",
+      display: isMobile ? "flex" : "none",
       alignItems: "center",
       justifyContent: "center",
       cursor: "pointer",
@@ -191,7 +191,7 @@ export default function Navbar() {
       borderRadius: "20px",
       padding: "16px",
       zIndex: 999,
-      display: mobileMenuOpen ? "block" : "none",
+      display: isMobile && mobileMenuOpen ? "block" : "none",
       backdropFilter: "blur(20px)",
       boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
     },
@@ -216,7 +216,7 @@ export default function Navbar() {
       bottom: 0,
       backgroundColor: "rgba(0,0,0,0.5)",
       zIndex: 998,
-      display: mobileMenuOpen ? "block" : "none",
+      display: isMobile && mobileMenuOpen ? "block" : "none",
     },
   };
 
