@@ -194,7 +194,6 @@ const NotificationBell = ({ size = 38, fontSize = 14 }) => {
       top: "100%",
       right: isMobile ? "50%" : 0,
       transform: isMobile ? "translateX(20%)" : "none",
-      marginTop: "0.5rem",
       width: isMobile ? "calc(100vw - 32px)" : "380px",
       maxWidth: isMobile ? "380px" : "none",
       maxHeight: "500px",
