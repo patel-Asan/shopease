@@ -140,8 +140,7 @@ export default function Navbar() {
     rightSection: {
       display: "flex",
       alignItems: "center",
-      gap: isMobile ? "4px" : "8px",
-      flexWrap: "nowrap",
+      gap: "8px",
     },
     iconBtn: {
       width: "38px",
@@ -250,7 +249,6 @@ export default function Navbar() {
 
           <div style={styles.rightSection}>
             <div ref={profileRef}>
-              {user && <NotificationBell />}
               <ProfileDropdown />
             </div>
 
@@ -260,6 +258,8 @@ export default function Navbar() {
             >
               {isDarkMode ? <FaSun style={{ fontSize: "16px" }} /> : <FaMoon style={{ fontSize: "16px" }} />}
             </button>
+
+            {user && <NotificationBell />}
 
             <button
               style={styles.menuBtn}

@@ -1,13 +1,5 @@
 {
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
-  ],
-  "headers": [
-    {
-      "source": "/google*.html",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache" }
-      ]
-    }
   ]
 }
