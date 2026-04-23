@@ -753,9 +753,24 @@ const AdminDashboard = () => {
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <ProfileDropdown />
+            <div
+              onClick={toggleTheme}
+              style={{
+                background: cardBg,
+                color: accentColor,
+                border: `1px solid ${borderColor}`,
+                borderRadius: "12px",
+                padding: "0.5rem",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {isDarkMode ? <FaSun size={16} /> : <FaMoon size={16} />}
             </div>
+            <NotificationBell />
+            <ProfileDropdown />
           </div>
         </div>
       )}
