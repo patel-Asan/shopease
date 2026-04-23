@@ -140,7 +140,8 @@ export default function Navbar() {
     rightSection: {
       display: "flex",
       alignItems: "center",
-      gap: "8px",
+      gap: isMobile ? "4px" : "8px",
+      flexWrap: "nowrap",
     },
     iconBtn: {
       width: "38px",
