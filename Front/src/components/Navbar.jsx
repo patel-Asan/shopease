@@ -249,6 +249,7 @@ export default function Navbar() {
 
           <div style={styles.rightSection}>
             <div ref={profileRef}>
+              {user && <NotificationBell />}
               <ProfileDropdown />
             </div>
 
@@ -258,8 +259,6 @@ export default function Navbar() {
             >
               {isDarkMode ? <FaSun style={{ fontSize: "16px" }} /> : <FaMoon style={{ fontSize: "16px" }} />}
             </button>
-
-            {user && <NotificationBell />}
 
             <button
               style={styles.menuBtn}
