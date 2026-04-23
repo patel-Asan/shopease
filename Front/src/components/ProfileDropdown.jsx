@@ -448,23 +448,6 @@ const handleBlur = (field) => {
       marginTop: 4,
       marginLeft: 4,
     },
-    fileInput: {
-      display: "none",
-    },
-    fileInputLabel: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 8,
-      padding: isMobile ? "12px" : "10px",
-      border: `1px dashed ${isDarkMode ? "#c9a962" : "#6366f1"}`,
-      borderRadius: 8,
-      cursor: "pointer",
-      color: "#c9a962",
-      fontSize: 13,
-      marginBottom: 16,
-      transition: "all 0.2s",
-    },
     passwordStrength: {
       marginTop: 6,
       height: 4,
