@@ -220,6 +220,18 @@ useEffect(() => {
 
   return (
     <div style={styles.container}>
+      <div style={styles.header}>
+        <div style={styles.iconContainer}>
+          <FaUserShield />
+        </div>
+        <div style={styles.titleSection}>
+          <h1 style={styles.title}>Admin Dashboard</h1>
+          <p style={styles.subtitle}>
+            Welcome back! Here's what's happening with your platform today.
+          </p>
+        </div>
+      </div>
+
       <div style={styles.cardsGrid}>
         {infoCardsData.map((card, index) => (
           <div
