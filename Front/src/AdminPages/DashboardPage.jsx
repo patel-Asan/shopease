@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import API from "../api/api";
 import { useTheme } from "../context/ThemeContext";
-import NotificationBell from "../components/NotificationBell";
 import {
   FaUsers,
   FaBoxOpen,
@@ -99,9 +98,7 @@ useEffect(() => {
       marginBottom: isMobile ? "1.5rem" : "2rem",
       display: "flex",
       alignItems: "center",
-      justifyContent: "space-between",
       gap: "1rem",
-      flexWrap: "wrap",
     },
     iconContainer: {
       width: isMobile ? "50px" : "60px",
@@ -223,21 +220,6 @@ useEffect(() => {
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <div style={styles.iconContainer}>
-          <FaUserShield />
-        </div>
-        <div style={styles.titleSection}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-            <h1 style={styles.title}>Admin Dashboard</h1>
-            {isMobile && <NotificationBell />}
-          </div>
-          <p style={styles.subtitle}>
-            Welcome back! Here's what's happening with your platform today.
-          </p>
-        </div>
-      </div>
-
       <div style={styles.cardsGrid}>
         {infoCardsData.map((card, index) => (
           <div
