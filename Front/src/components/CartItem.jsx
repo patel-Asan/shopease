@@ -1,7 +1,7 @@
 
  
 import React, { useEffect, useState } from "react";
-import { getCart, addToCart, removeFromCart, getImageUrl } from "../api/api";
+import { getCart, addToCart, removeFromCart, getImageUrl, getInitialsAvatar } from "../api/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
  
@@ -213,7 +213,7 @@ export default function Cart() {
  
         const imgSrc = item.product.img
           ? getImageUrl(item.product.img)
-          : `https://ui-avatars.com/api/?name=${encodeURIComponent(item.product.name)}`;
+          : getInitialsAvatar(item.product.name);
  
         return (
           <div

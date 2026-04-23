@@ -1,7 +1,7 @@
 // pages/ProductDetail.jsx - Fully Responsive
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProductById, addToCart, getImageUrl } from '../api/api';
+import { getProductById, addToCart, getImageUrl, getInitialsAvatar } from '../api/api';
 import { FavouritesContext } from '../context/FavouritesContext';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
@@ -626,7 +626,7 @@ thumbnail: (index) => ({
                   key={index}
                   src={!imageErrors[`thumb-${index}`] && img 
                     ? getImageUrl(img) 
-                    : `https://ui-avatars.com/api/?name=P&background=ff6b6b&color=fff`
+                    : getInitialsAvatar("P", "ff6b6b")
                   }
                   alt={`Thumbnail ${index + 1}`}
                   style={styles.thumbnail(index)}
@@ -646,7 +646,7 @@ thumbnail: (index) => ({
             <img
               src={!imageErrors['main'] && productImages[selectedImage]
                 ? getImageUrl(productImages[selectedImage])
-                : `https://ui-avatars.com/api/?name=${product.name}&background=ff6b6b&color=fff`
+                : getInitialsAvatar(product.name, "ff6b6b")
               }
               alt={product.name}
               style={styles.mainImageImg}

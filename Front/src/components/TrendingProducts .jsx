@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getTrendingProducts } from '../api/api';
+import { getTrendingProducts, getImageUrl, getInitialsAvatar } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
 const TrendingProducts = () => {
@@ -323,7 +323,7 @@ const TrendingProducts = () => {
             const isHovered = hoveredCard === index;
             const imageUrl = !imageErrors[product.id || product._id] 
               ? getImageUrl(product)
-              : `https://ui-avatars.com/api/?name=${encodeURIComponent(product.name)}&background=6366f1&color=fff&size=200`;
+              : getInitialsAvatar(product.name, "6366f1", "ffffff", 200);
 
             return (
               <div

@@ -1,7 +1,7 @@
 // components/RelatedProducts.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getRelatedProducts, getImageUrl } from '../api/api';
+import { getRelatedProducts, getImageUrl, getInitialsAvatar } from '../api/api';
 
 const RelatedProducts = ({ category, currentProductId }) => {
   const [products, setProducts] = useState([]);
@@ -345,7 +345,7 @@ const RelatedProducts = ({ category, currentProductId }) => {
           const discount = getDiscount(product);
           const imageUrl = !imageErrors[product._id] && product.img
             ? getImageUrl(product.img)
-            : `https://ui-avatars.com/api/?name=${encodeURIComponent(product.name)}&background=ff6b6b&color=fff&size=200`;
+            : getInitialsAvatar(product.name, "ff6b6b", "ffffff", 200);
 
           return (
             <div

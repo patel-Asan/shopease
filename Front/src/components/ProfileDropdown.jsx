@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import API, { getImageUrl } from "../api/api";
+import API, { getImageUrl, getInitialsAvatar } from "../api/api";
 import { 
   FaEye, FaEyeSlash, FaSave, FaTimes, FaCamera, 
   FaUser, FaLock, FaEnvelope, FaCalendarAlt, FaShieldAlt 
@@ -547,10 +547,10 @@ export default function ProfileDropdown() {
     <div style={styles.container} ref={dropdownRef}>
       <img
         onClick={() => setOpen(!open)}
-        src={getImageUrl(previewImage) || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.username || "User")}&background=random&size=128`}
+        src={getImageUrl(previewImage) || getInitialsAvatar(user?.username || "User", "6366f1")}
         alt="Profile"
         onError={(e) => {
-          e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.username || "User")}&background=random&size=128`;
+          e.target.src = getInitialsAvatar(user?.username || "User", "6366f1");
         }}
         style={styles.profileImage}
         onMouseEnter={(e) => !isMobile && (e.currentTarget.style.transform = "scale(1.05)", e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)")}
@@ -575,7 +575,7 @@ export default function ProfileDropdown() {
               }}
             >
               <img
-                src={getImageUrl(previewImage) || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.username || "User")}&background=random&size=128`}
+                src={getImageUrl(previewImage) || getInitialsAvatar(user?.username || "User", "6366f1")}
                 alt="Profile"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />

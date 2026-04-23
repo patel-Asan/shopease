@@ -17,6 +17,22 @@ export const getImageUrl = (path) => {
   if (path.startsWith("http")) return path; // Already full URL
   return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${path}`;
 };
+
+// Generate initials avatar (local, no external dependencies)
+export const getInitialsAvatar = (name, background = "c9a962", color = "ffffff", size = 128) => {
+  const initials = (name || "U")
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .substring(0, 2)
+    .toUpperCase();
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <rect width="100%" height="100%" fill="#${background}"/>
+    <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="${size * 0.4}px" font-weight="bold" fill="#${color}" 
+          text-anchor="middle" dominant-baseline="central">${initials}</text>
+  </svg>`;
+  return `data:image/svg+xml;base64,${btoa(svg)}`;
+};
  
 // Axios instance
 const API = axios.create({

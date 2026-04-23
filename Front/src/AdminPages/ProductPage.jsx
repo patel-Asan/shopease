@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Container, Spinner, Modal, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FaSearch, FaEdit, FaTrash, FaImage, FaPlus, FaBox } from "react-icons/fa";
-import API, { getImageUrl } from "../api/api";
+import API, { getImageUrl, getInitialsAvatar } from "../api/api";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import AddProduct from "../components/AddProduct";
@@ -423,12 +423,12 @@ const ProductPage = () => {
                     src={
                       p.img
                         ? getImageUrl(p.img)
-                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=c9a962&color=fff&size=300&bold=true`
+                        : getInitialsAvatar(p.name, "c9a962")
                     }
                     alt={p.name}
                     style={styles.image}
                     onError={(e) => {
-                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=c9a962&color=fff&size=300&bold=true`;
+                      e.target.src = getInitialsAvatar(p.name, "c9a962");
                     }}
                   />
                 </div>
