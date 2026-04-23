@@ -228,14 +228,14 @@ useEffect(() => {
           <FaUserShield />
         </div>
         <div style={styles.titleSection}>
-          <h1 style={styles.title}>Admin Dashboard</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+            <h1 style={styles.title}>Admin Dashboard</h1>
+            {isMobile && <NotificationBell />}
+          </div>
           <p style={styles.subtitle}>
             Welcome back! Here's what's happening with your platform today.
           </p>
         </div>
-        {isMobile && (
-          <NotificationBell />
-        )}
       </div>
 
       <div style={styles.cardsGrid}>
