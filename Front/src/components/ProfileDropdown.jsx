@@ -4,14 +4,14 @@ import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import API, { getImageUrl, getInitialsAvatar } from "../api/api";
+import API, { getInitialsAvatar } from "../api/api";
 import { 
-  FaEye, FaEyeSlash, FaSave, FaTimes, FaCamera, 
+  FaEye, FaEyeSlash, FaSave, FaTimes,
   FaUser, FaLock, FaEnvelope, FaCalendarAlt, FaShieldAlt 
 } from "react-icons/fa";
  
 export default function ProfileDropdown() {
-  const { user, logoutUser, updateUsername, updateProfileImage } = useContext(AuthContext);
+  const { user, logoutUser, updateUsername } = useContext(AuthContext);
   const { isDarkMode } = useTheme();
  
   const navigate = useNavigate();
@@ -29,8 +29,6 @@ export default function ProfileDropdown() {
     confirmPassword: "",
   });
  
-  const [newProfileImage, setNewProfileImage] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
   const [showPassword, setShowPassword] = useState({
     old: false,
     new: false,
@@ -41,7 +39,6 @@ export default function ProfileDropdown() {
   const [touched, setTouched] = useState({});
  
   const dropdownRef = useRef();
-  const fileInputRef = useRef();
  
   // Current user role style
   const currentRoleStyle = {
@@ -65,7 +62,6 @@ export default function ProfileDropdown() {
         ...prev,
         username: user.username || "",
       }));
-      setPreviewImage(user.profileImage || null);
     }
   }, [user]);
  
@@ -80,14 +76,7 @@ export default function ProfileDropdown() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
  
-  // Cleanup object URLs
-  useEffect(() => {
-    return () => {
-      if (previewImage?.startsWith("blob:")) URL.revokeObjectURL(previewImage);
-    };
-  }, [previewImage]);
- 
-  // Password strength calculator
+// Password strength calculator
   useEffect(() => {
     const password = formData.newPassword;
     let strength = 0;
@@ -168,30 +157,10 @@ export default function ProfileDropdown() {
     }
   };
  
-  const handleBlur = (field) => {
+const handleBlur = (field) => {
     setTouched(prev => ({ ...prev, [field]: true }));
   };
- 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
- 
-    // Validate file
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (!validTypes.includes(file.type)) {
-      toast.error("Please upload a valid image file (JPEG, PNG, GIF, WEBP)");
-      return;
-    }
- 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image size should be less than 5MB");
-      return;
-    }
- 
-    setNewProfileImage(file);
-    setPreviewImage(URL.createObjectURL(file));
-  };
- 
+
   // ========== MAIN HANDLE SAVE FUNCTION ==========
   const handleSave = async () => {
     // Validate form first
@@ -208,27 +177,21 @@ export default function ProfileDropdown() {
  
       const formDataToSend = new FormData();
  
-      // Always send username
+// Always send username
       formDataToSend.append("username", formData.username.trim());
- 
+
       // ✅ CRITICAL FIX: Only send password fields if changing password
       if (isChangingPassword) {
         formDataToSend.append("oldPassword", formData.oldPassword);
         formDataToSend.append("newPassword", formData.newPassword);
       }
- 
-      // Send image if changed
-      if (newProfileImage) {
-        formDataToSend.append("profileImage", newProfileImage);
-      }
- 
+
       // Debug log
       console.log("📤 Sending update request:", {
         username: formData.username,
         isChangingPassword: isChangingPassword,
         hasOldPassword: isChangingPassword ? !!formData.oldPassword : false,
         hasNewPassword: isChangingPassword ? !!formData.newPassword : false,
-        hasImage: !!newProfileImage
       });
  
       // API call
@@ -242,13 +205,9 @@ export default function ProfileDropdown() {
       if (res.data?.status === "success" && res.data?.user) {
         // Update context
         updateUsername(res.data.user.username);
-        updateProfileImage(res.data.user.profileImage);
-  
-        // Update preview
-        setPreviewImage(res.data.user.profileImage || null);
-  
+
         toast.success("Profile updated successfully!");
- 
+
         // Reset form
         handleCancelEdit();
       } else {
@@ -281,13 +240,7 @@ export default function ProfileDropdown() {
       newPassword: "",
       confirmPassword: "",
     });
-    setNewProfileImage(null);
     setIsChangingPassword(false);
-    setPreviewImage(
-      user?.profileImage
-        ? getImageUrl(user.profileImage)
-        : null
-    );
     setErrors({});
     setTouched({});
     setShowPassword({
@@ -353,27 +306,12 @@ export default function ProfileDropdown() {
       height: isMobile ? 90 : 100,
       borderRadius: "50%",
       margin: "0 auto",
-      overflow: "hidden",
       border: `3px solid ${currentRoleStyle.borderColor}`,
-      position: "relative",
-      cursor: editMode ? "pointer" : "default",
-    },
-    avatarOverlay: editMode ? {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      background: "rgba(0,0,0,0.5)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      color: "white",
-      fontSize: 24,
-      opacity: 0,
-      transition: "opacity 0.2s",
-      cursor: "pointer",
-    } : {},
+      background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+    },
     username: {
       fontWeight: "bold",
       marginTop: 12,
@@ -547,11 +485,8 @@ export default function ProfileDropdown() {
     <div style={styles.container} ref={dropdownRef}>
       <img
         onClick={() => setOpen(!open)}
-        src={getImageUrl(previewImage) || getInitialsAvatar(user?.username || "User", "6366f1")}
+        src={getInitialsAvatar(user?.username || "User", "6366f1")}
         alt="Profile"
-        onError={(e) => {
-          e.target.src = getInitialsAvatar(user?.username || "User", "6366f1");
-        }}
         style={styles.profileImage}
         onMouseEnter={(e) => !isMobile && (e.currentTarget.style.transform = "scale(1.05)", e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)")}
         onMouseLeave={(e) => !isMobile && (e.currentTarget.style.transform = "scale(1)", e.currentTarget.style.boxShadow = "none")}
@@ -560,30 +495,10 @@ export default function ProfileDropdown() {
       {open && (
         <div style={styles.dropdown}>
           <div style={styles.profileHeader}>
-            <div 
-              style={styles.avatar}
-              onClick={() => editMode && fileInputRef.current?.click()}
-              onMouseEnter={(e) => {
-                if (editMode && !isMobile) {
-                  e.currentTarget.querySelector('.avatar-overlay').style.opacity = 1;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (editMode && !isMobile) {
-                  e.currentTarget.querySelector('.avatar-overlay').style.opacity = 0;
-                }
-              }}
-            >
-              <img
-                src={getImageUrl(previewImage) || getInitialsAvatar(user?.username || "User", "6366f1")}
-                alt="Profile"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-              {editMode && (
-                <div className="avatar-overlay" style={styles.avatarOverlay}>
-                  <FaCamera />
-                </div>
-              )}
+            <div style={styles.avatar}>
+              <span style={{ fontSize: "2rem", fontWeight: "bold", color: "#fff" }}>
+                {(user?.username || "U").charAt(0).toUpperCase()}
+              </span>
             </div>
  
             {!editMode && (
@@ -616,25 +531,7 @@ export default function ProfileDropdown() {
           {editMode ? (
             <>
               {/* Hidden file input */}
-              <input
-                type="file"
-                ref={fileInputRef}
-                style={styles.fileInput}
-                accept="image/*"
-                onChange={handleImageChange}
-              />
- 
-              {/* Manual file upload button */}
-              <div 
-                style={styles.fileInputLabel}
-                onClick={() => fileInputRef.current?.click()}
-                onMouseEnter={(e) => !isMobile && (e.currentTarget.style.background = "#e7f1ff")}
-                onMouseLeave={(e) => !isMobile && (e.currentTarget.style.background = "transparent")}
-              >
-                <FaCamera /> Change Profile Photo
-              </div>
- 
-              {/* Username field */}
+{/* Username field */}
               <div style={styles.formGroup}>
                 <label style={styles.label}>
                   <FaUser style={{ marginRight: 4, fontSize: 11 }} />
