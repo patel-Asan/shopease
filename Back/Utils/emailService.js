@@ -70,53 +70,6 @@ const getSmtpConfig = () => {
     secure: false,
   };
 };
-  }
- 
-  // Service-based configuration
-  if (service) {
-    switch (service) {
-      case 'gmail':
-        return {
-          host: 'smtp.gmail.com',
-          port: 587,
-          secure: false,
-        };
-      case 'outlook':
-      case 'hotmail':
-        return {
-          host: 'smtp-mail.outlook.com',
-          port: 587,
-          secure: false,
-        };
-      case 'brevo':
-      case 'sendinblue':
-        return {
-          host: 'smtp-relay.brevo.com',
-          port: 587,
-          secure: false,
-        };
-      case 'yahoo':
-        return {
-          host: 'smtp.mail.yahoo.com',
-          port: 587,
-          secure: false,
-        };
-      default:
-        return {
-          host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-          port: parseInt(process.env.EMAIL_PORT) || 587,
-          secure: process.env.EMAIL_SECURE === 'true' || false,
-        };
-    }
-  }
- 
-  // Default fallback
-  return {
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-  };
-};
  
 // Enhanced HTML email template with better UI
 const getResetPasswordEmailTemplate = (resetUrl, userEmail = '') => {
