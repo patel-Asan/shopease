@@ -749,22 +749,18 @@ const sendResetPasswordEmail = async (email, resetUrl) => {
       logger: true,
       tls: {
         rejectUnauthorized: false // For development only
-      }
+      },
+      family: 4 // Force IPv4 (Render blocks IPv6 SMTP)
     });
- 
-    // Verify connection
-    console.log("🔄 Verifying SMTP connection...");
-    await transporter.verify();
-    console.log("✅ SMTP connection verified!");
  
     // Get HTML template
     const htmlTemplate = getResetPasswordEmailTemplate(resetUrl, email);
  
     // Email content
     const message = {
-      // from: `"ShopEase" s ke aandar teen folder the product ke `,
+      from: `"ShopEase" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "🔐 Reset Your ShopEase Password",
+      subject: "Reset Your ShopEase Password",
       html: htmlTemplate,
       text: `
         Reset Your ShopEase Password
@@ -827,8 +823,9 @@ const sendPasswordChangedEmail = async (email) => {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      family: 4
     });
- 
+
     const htmlTemplate = getPasswordChangedConfirmationTemplate(email);
  
     const message = {
@@ -942,7 +939,8 @@ const sendWelcomeEmail = async (email, username) => {
       socketTimeout: 30000,
       tls: {
         rejectUnauthorized: false
-      }
+      },
+      family: 4
     });
 
     const message = {
@@ -1069,7 +1067,8 @@ const sendDeliveryOtpEmail = async (email, otp, orderId, username) => {
       },
       tls: {
         rejectUnauthorized: false
-      }
+      },
+      family: 4
     });
 
     const message = {
@@ -1189,7 +1188,8 @@ const sendOrderStatusEmail = async (email, orderId, status, username, note = '')
       },
       tls: {
         rejectUnauthorized: false
-      }
+      },
+      family: 4
     });
 
     const message = {
