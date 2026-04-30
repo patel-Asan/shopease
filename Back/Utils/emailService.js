@@ -5,13 +5,71 @@ const nodemailer = require("nodemailer");
 const getSmtpConfig = () => {
   const service = process.env.SMTP_SERVICE?.toLowerCase();
  
-  // Agar env mein EMAIL_HOST diya hai toh直接用
+  // Gmail hardcode IPs to avoid IPv6 DNS resolution on Render
+  const gmailHost = process.env.EMAIL_HOST;
+  if (gmailHost === 'smtp.gmail.com') {
+    return {
+      host: '74.125.200.109', // Gmail SMTP IPv4 IP
+      port: parseInt(process.env.EMAIL_PORT) || 465,
+      secure: process.env.EMAIL_SECURE === 'true' || process.env.EMAIL_PORT === '465',
+      servername: 'smtp.gmail.com', // TLS SNI ke liye
+    };
+  }
+ 
+  // Agar env mein EMAIL_HOST diya hai toh直接使用
   if (process.env.EMAIL_HOST) {
     return {
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT || 587,
       secure: process.env.EMAIL_SECURE === 'true' || false,
     };
+  }
+ 
+  // Service-based configuration
+  if (service) {
+    switch (service) {
+      case 'gmail':
+        return {
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false,
+        };
+      case 'outlook':
+      case 'hotmail':
+        return {
+          host: 'smtp-mail.outlook.com',
+          port: 587,
+          secure: false,
+        };
+      case 'brevo':
+      case 'sendinblue':
+        return {
+          host: 'smtp-relay.brevo.com',
+          port: 587,
+          secure: false,
+        };
+      case 'yahoo':
+        return {
+          host: 'smtp.mail.yahoo.com',
+          port: 587,
+          secure: false,
+        };
+      default:
+        return {
+          host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+          port: parseInt(process.env.EMAIL_PORT) || 587,
+          secure: process.env.EMAIL_SECURE === 'true' || false,
+        };
+    }
+  }
+ 
+  // Default fallback
+  return {
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+  };
+};
   }
  
   // Service-based configuration
