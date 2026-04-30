@@ -5,8 +5,9 @@ const nodemailer = require("nodemailer");
 const getSmtpConfig = () => {
   const service = process.env.SMTP_SERVICE?.toLowerCase();
  
-  // Gmail hardcode IPs to avoid IPv6 DNS resolution on Render
-  const gmailHost = process.env.EMAIL_HOST;
+  // Skip Gmail IP hardcode when using Resend
+  const isResend = process.env.EMAIL_PROVIDER === 'resend';
+  const gmailHost = isResend ? null : process.env.EMAIL_HOST;
   if (gmailHost === 'smtp.gmail.com') {
     return {
       host: '74.125.200.109', // Gmail SMTP IPv4 IP
@@ -769,7 +770,7 @@ const sendResetPasswordEmail = async (email, resetUrl) => {
  
     // Email content
     const message = {
-      from: `"ShopEase" <${process.env.EMAIL_USER}>`,
+      from: process.env.EMAIL_FROM || `"ShopEase" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Reset Your ShopEase Password",
       html: htmlTemplate,
@@ -840,7 +841,7 @@ const sendPasswordChangedEmail = async (email) => {
     const htmlTemplate = getPasswordChangedConfirmationTemplate(email);
  
     const message = {
-      from: `"ShopEase" <${process.env.EMAIL_USER}>`,
+      from: process.env.EMAIL_FROM || `"ShopEase" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "✅ Password Changed Successfully - ShopEase",
       html: htmlTemplate,
@@ -955,7 +956,7 @@ const sendWelcomeEmail = async (email, username) => {
     });
 
     const message = {
-      from: `"ShopEase" <${process.env.EMAIL_USER}>`,
+      from: process.env.EMAIL_FROM || `"ShopEase" <${process.env.EMAIL_USER}>`,
       replyTo: email,
       to: email,
       subject: "🎉 Welcome to ShopEase - Thank You for Joining!",
@@ -1083,7 +1084,7 @@ const sendDeliveryOtpEmail = async (email, otp, orderId, username) => {
     });
 
     const message = {
-      from: `"ShopEase" <${process.env.EMAIL_USER}>`,
+      from: process.env.EMAIL_FROM || `"ShopEase" <${process.env.EMAIL_USER}>`,
       replyTo: email,
       to: email,
       subject: `🔐 Delivery OTP for Order #${orderId}`,
@@ -1204,7 +1205,7 @@ const sendOrderStatusEmail = async (email, orderId, status, username, note = '')
     });
 
     const message = {
-      from: `"ShopEase" <${process.env.EMAIL_USER}>`,
+      from: process.env.EMAIL_FROM || `"ShopEase" <${process.env.EMAIL_USER}>`,
       replyTo: email,
       to: email,
       subject: `📦 Order #${orderId} - Status: ${status}`,
