@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Contact = require("../models/Contact");
 const { uploadContact } = require("../middleware/upload");
+const { auth } = require("../middleware/auth");
 
 // Verify reCAPTCHA token
 const verifyCaptcha = async (token) => {
@@ -23,7 +24,7 @@ const verifyCaptcha = async (token) => {
 };
 
 // -------------------- POST /api/contact --------------------
-router.post("/", uploadContact.array("files", 5), async (req, res) => {
+router.post("/", auth, uploadContact.array("files", 5), async (req, res) => {
   try {
     const { name, email, message, category, priority, captchaToken } = req.body;
     const files = req.files || [];
@@ -39,8 +40,9 @@ router.post("/", uploadContact.array("files", 5), async (req, res) => {
     }));
 
     const newContact = new Contact({
-      name,
-      email,
+      user: req.user._id,
+      name: req.user.username || name,
+      email: req.user.email || email,
       message,
       category: category || "inquiry",
       priority: priority || "normal",
@@ -56,13 +58,10 @@ router.post("/", uploadContact.array("files", 5), async (req, res) => {
   }
 });
 
-// -------------------- GET /api/contact/history?email=... --------------------
-router.get("/history", async (req, res) => {
+// -------------------- GET /api/contact/history --------------------
+router.get("/history", auth, async (req, res) => {
   try {
-    const { email } = req.query;
-    if (!email) return res.status(400).json({ message: "Email is required" });
-
-    const messages = await Contact.find({ email })
+    const messages = await Contact.find({ user: req.user._id })
       .sort({ createdAt: -1 })
       .select("name email message category priority reply replyAt createdAt attachments");
 

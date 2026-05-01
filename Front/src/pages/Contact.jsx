@@ -165,14 +165,13 @@ function Contact() {
   };
 
   const fetchHistory = async () => {
-    const email = formData.email || user?.email;
-    if (!email) {
-      toast.error("Please enter your email first");
+    if (!user) {
+      toast.error("Please login to view message history");
       return;
     }
     setHistoryLoading(true);
     try {
-      const data = await apiFetch(`/contact/history?email=${encodeURIComponent(email)}`);
+      const data = await apiFetch("/contact/history");
       setHistory(data);
       setShowHistory(true);
     } catch {
