@@ -3,11 +3,34 @@ const router = express.Router();
 const Contact = require("../models/Contact");
 const { uploadContact } = require("../middleware/upload");
 
+// Verify reCAPTCHA token
+const verifyCaptcha = async (token) => {
+  if (!token) return false;
+  try {
+    const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: process.env.RECAPTCHA_SECRET_KEY || "6LeIxAcTAAAAAGG-vFE1_0w-gC3G5y_M0n2g5X6b", // Google test key
+        response: token,
+      }),
+    });
+    const data = await res.json();
+    return data.success;
+  } catch {
+    return false;
+  }
+};
+
 // -------------------- POST /api/contact --------------------
 router.post("/", uploadContact.array("files", 5), async (req, res) => {
   try {
-    const { name, email, message, category, priority } = req.body;
+    const { name, email, message, category, priority, captchaToken } = req.body;
     const files = req.files || [];
+
+    if (!(await verifyCaptcha(captchaToken))) {
+      return res.status(400).json({ message: "CAPTCHA verification failed" });
+    }
 
     const attachments = files.map(f => ({
       filename: f.originalname,

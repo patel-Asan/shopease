@@ -147,7 +147,7 @@ export default function Checkout() {
       
       await new Promise(resolve => setTimeout(resolve, 500));
       
-      navigate("/orders");
+      navigate(`/success?orderId=${orderRes.data?._id || orderRes.order?._id || ''}`);
       
     } catch (err) {
       toast.error(err?.message || err?.response?.data?.message || "Failed to place order");

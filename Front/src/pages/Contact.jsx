@@ -4,7 +4,6 @@ import { useTheme } from "../context/ThemeContext";
 import { apiFetch } from "../api/api";
 import { toast } from "react-toastify";
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaUpload, FaTimes, FaFileAlt, FaMapMarkedAlt, FaChevronDown, FaQuestionCircle, FaClock, FaHeadset } from "react-icons/fa";
-import Footer from "../components/Footer";
 
 function Contact() {
   const { user } = useContext(AuthContext);
@@ -20,15 +19,27 @@ function Contact() {
   const [focusedField, setFocusedField] = useState(null);
   const [errors, setErrors] = useState({});
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
-  const [captchaAnswer, setCaptchaAnswer] = useState("");
-  const [captchaNums, setCaptchaNums] = useState({ a: 0, b: 0 });
+  const [captchaToken, setCaptchaToken] = useState(null);
   const [faqOpen, setFaqOpen] = useState(null);
 
   useEffect(() => {
-    const a = Math.floor(Math.random() * 10) + 1;
-    const b = Math.floor(Math.random() * 10) + 1;
-    setCaptchaNums({ a, b });
-  }, []);
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js?onload=onloadReCaptcha&render=explicit";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    window.onloadReCaptcha = () => {
+      if (window.grecaptcha && document.getElementById("recaptcha-box")) {
+        window.grecaptcha.render("recaptcha-box", {
+          sitekey: import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI", // Google test key
+          theme: isDarkMode ? "dark" : "light",
+          callback: (token) => setCaptchaToken(token),
+          "expired-callback": () => setCaptchaToken(null),
+        });
+      }
+    };
+  }, [isDarkMode]);
 
   const validateField = (name, value) => {
     switch (name) {
@@ -43,9 +54,6 @@ function Contact() {
       case "message":
         if (!value.trim()) return "Message is required";
         if (value.trim().length < 10) return "Min 10 characters";
-        return "";
-      case "captcha":
-        if (parseInt(value) !== captchaNums.a + captchaNums.b) return "Incorrect answer";
         return "";
       default:
         return "";
@@ -84,12 +92,23 @@ function Contact() {
       }
       return true;
     });
-    setFiles([...files, ...newFiles]);
+    const filesWithPreview = newFiles.map(file => ({
+      file,
+      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null
+    }));
+    setFiles([...files, ...filesWithPreview]);
   };
 
   const handleRemoveFile = (index) => {
+    if (files[index]?.preview) URL.revokeObjectURL(files[index].preview);
     setFiles(files.filter((_, i) => i !== index));
   };
+
+  useEffect(() => {
+    return () => {
+      files.forEach(f => { if (f?.preview) URL.revokeObjectURL(f.preview); });
+    };
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -104,11 +123,14 @@ function Contact() {
       name: validateField("name", formData.name),
       email: validateField("email", formData.email),
       message: validateField("message", formData.message),
-      captcha: validateField("captcha", captchaAnswer),
     };
     setErrors(newErrors);
     if (Object.values(newErrors).some(Boolean)) {
       toast.error("Please fix the errors above");
+      return;
+    }
+    if (!captchaToken) {
+      toast.error("Please complete the CAPTCHA");
       return;
     }
     setLoading(true);
@@ -119,15 +141,16 @@ function Contact() {
       form.append("message", formData.message.trim());
       form.append("category", formData.category);
       form.append("priority", formData.category === "complaint" || formData.category === "bug_report" ? "urgent" : "normal");
-      files.forEach((file) => form.append("files", file));
+      form.append("captchaToken", captchaToken);
+      files.forEach((f) => form.append("files", f.file));
       const data = await apiFetch("/contact", { method: "POST", body: form });
       if (data.message || data.success) {
         toast.success("Message sent successfully!");
         setFormData({ name: user?.username || "", email: user?.email || "", message: "", category: "inquiry" });
         setFiles([]);
         setErrors({});
-        setCaptchaAnswer("");
-        setCaptchaNums({ a: Math.floor(Math.random() * 10) + 1, b: Math.floor(Math.random() * 10) + 1 });
+        setCaptchaToken(null);
+        if (window.grecaptcha) window.grecaptcha.reset();
       } else {
         toast.error(data.message || "Failed to send message");
       }
@@ -148,7 +171,7 @@ function Contact() {
 
       <div style={st.inner}>
         <div style={st.hero}>
-          <h1 style={st.heroTitle}>Get in Touch</h1>
+          <h1 style={st.heroTitle}>Contact Us</h1>
           <p style={st.heroSub}>Have a question or feedback? We'd love to hear from you.</p>
         </div>
 
@@ -165,14 +188,14 @@ function Contact() {
               <div style={st.infoIcon}><FaPhone /></div>
               <div>
                 <h3 style={st.infoLabel}>Phone</h3>
-                <p style={st.infoValue}>+1 (555) 123-4567</p>
+                <p style={st.infoValue}>+91 12345 67890</p>
               </div>
             </div>
             <div style={st.infoCard}>
               <div style={st.infoIcon}><FaMapMarkerAlt /></div>
               <div>
                 <h3 style={st.infoLabel}>Address</h3>
-                <p style={st.infoValue}>123 ShopEase St, NYC</p>
+                <p style={st.infoValue}>123 ShopEase St,Bhestan</p>
               </div>
             </div>
             <div style={st.infoCard}>
@@ -230,10 +253,14 @@ function Contact() {
               </div>
               {files.length > 0 && (
                 <div style={st.filesGrid}>
-                  {files.map((file, i) => (
+                  {files.map((f, i) => (
                     <div key={i} style={st.fileChip}>
-                      <FaFileAlt style={{ color: c.accent, flexShrink: 0 }} />
-                      <span style={st.fileName}>{file.name}</span>
+                      {f.preview ? (
+                        <img src={f.preview} alt={f.file.name} style={st.filePreview} />
+                      ) : (
+                        <FaFileAlt style={{ color: c.accent, flexShrink: 0 }} />
+                      )}
+                      <span style={st.fileName}>{f.file.name}</span>
                       <button type="button" onClick={() => handleRemoveFile(i)} style={st.fileX}><FaTimes /></button>
                     </div>
                   ))}
@@ -241,11 +268,7 @@ function Contact() {
               )}
             </div>
 
-            <div style={st.field}>
-              <label style={st.label}>🔒 Verification: {captchaNums.a} + {captchaNums.b} = ?</label>
-              <input type="number" style={st.input(errors.captcha ? "red" : focusedField === 'captcha' ? c.accent : c.border)} placeholder="Enter sum" value={captchaAnswer} onChange={(e) => setCaptchaAnswer(e.target.value)} onFocus={() => setFocusedField('captcha')} onBlur={() => setErrors(p => ({ ...p, captcha: validateField("captcha", captchaAnswer) }))} />
-              {errors.captcha && <span style={st.err}>{errors.captcha}</span>}
-            </div>
+            <div id="recaptcha-box" style={{ display: "flex", justifyContent: "center", padding: "8px 0" }}></div>
 
             <button type="submit" style={st.submitBtn} disabled={loading}>
               <FaPaperPlane /> {loading ? "Sending..." : "Send Message"}
@@ -263,7 +286,6 @@ function Contact() {
         <FAQSection isDark={isDarkMode} accent={c.accent} openIdx={faqOpen} setOpenIdx={setFaqOpen} isMobile={isMobile} />
       </div>
 
-      <Footer />
       <style>{`
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:'Inter',system-ui,sans-serif; }
@@ -311,7 +333,7 @@ const FAQSection = ({ isDark, accent, openIdx, setOpenIdx, isMobile }) => {
 };
 
 const colors = (dark) => ({
-  bg: dark ? "#050507" : "#f0f2f5",
+  bg: dark ? "#1a1a2e" : "#f8fafc",
   card: dark ? "rgba(255,255,255,0.04)" : "#ffffff",
   cardBorder: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)",
   text: dark ? "#f0f0f0" : "#0f172a",
@@ -352,8 +374,9 @@ const styles = (m, c) => ({
   uploadLabel: { display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", cursor: "pointer" },
   uploadHint: { fontSize: "11px", color: c.textSec },
   filesGrid: { display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "10px" },
-  fileChip: { display: "flex", alignItems: "center", gap: "6px", padding: "6px 10px", background: c.inputBg, border: `1px solid ${c.cardBorder}`, borderRadius: "8px", fontSize: "12px", color: c.text },
-  fileName: { maxWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
+  fileChip: { display: "flex", alignItems: "center", gap: "8px", padding: "6px", background: c.inputBg, border: `1px solid ${c.cardBorder}`, borderRadius: "10px", fontSize: "12px", color: c.text, overflow: "hidden" },
+  filePreview: { width: "40px", height: "40px", objectFit: "cover", borderRadius: "6px", flexShrink: 0 },
+  fileName: { maxWidth: "90px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
   fileX: { background: "none", border: "none", cursor: "pointer", color: "#ef4444", display: "flex", alignItems: "center", padding: 0, fontSize: "10px" },
   submitBtn: { display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", padding: m ? "13px" : "14px", background: `linear-gradient(135deg,${c.accent},${c.accentLight})`, border: "none", borderRadius: "10px", fontSize: m ? "14px" : "15px", fontWeight: "700", color: c.submitText, cursor: "pointer", transition: "opacity .2s", marginTop: "4px", letterSpacing: "0.3px" },
   mapCard: { background: c.card, border: `1px solid ${c.cardBorder}`, borderRadius: "16px", padding: m ? "16px" : "24px", boxShadow: "0 2px 10px rgba(0,0,0,.03)", marginBottom: m ? "20px" : "28px" },

@@ -1,8 +1,119 @@
 import { Link } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
-import { FaShoppingBag, FaTwitter, FaInstagram, FaLinkedin, FaGithub, FaHeart } from "react-icons/fa";
+import { FaShoppingBag, FaTwitter, FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa";
+
+function ParticleCanvas({ isDarkMode, accentColor }) {
+  const canvasRef = useRef(null);
+  const particlesRef = useRef([]);
+  const animFrameRef = useRef();
+  const mouseRef = useRef({ x: null, y: null });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let running = true;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      initParticles();
+    };
+
+    const initParticles = () => {
+      const count = Math.floor((canvas.width * canvas.height) / 8000);
+      particlesRef.current = Array.from({ length: count }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * 1.5 + 0.5,
+      }));
+    };
+
+    const hexToRgb = (hex) => {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return { r, g, b };
+    };
+
+    const animate = () => {
+      if (!running) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const particles = particlesRef.current;
+      const color = hexToRgb(accentColor);
+      const maxDist = 120;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        p.x = Math.max(0, Math.min(canvas.width, p.x));
+        p.y = Math.max(0, Math.min(canvas.height, p.y));
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${color.r},${color.g},${color.b},0.5)`;
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const q = particles[j];
+          const dx = p.x - q.x;
+          const dy = p.y - q.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < maxDist) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = `rgba(${color.r},${color.g},${color.b},${0.15 * (1 - dist / maxDist)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      animFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    const onMouseMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    };
+    const onMouseLeave = () => { mouseRef.current = { x: null, y: null }; };
+
+    resize();
+    animate();
+    canvas.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mouseleave", onMouseLeave);
+    window.addEventListener("resize", resize);
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(animFrameRef.current);
+      canvas.removeEventListener("mousemove", onMouseMove);
+      canvas.removeEventListener("mouseleave", onMouseLeave);
+      window.removeEventListener("resize", resize);
+    };
+  }, [accentColor]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 0,
+      }}
+    />
+  );
+}
 
 export default function Footer() {
   const { user } = useContext(AuthContext);
@@ -35,28 +146,6 @@ export default function Footer() {
       borderTop: `1px solid ${borderColor}`,
       position: "relative",
       overflow: "hidden",
-    },
-    bgOrb1: {
-      position: "absolute",
-      top: "-30%",
-      right: "-10%",
-      width: "400px",
-      height: "400px",
-      borderRadius: "50%",
-      background: `radial-gradient(circle, ${accentColor}15 0%, transparent 70%)`,
-      filter: "blur(60px)",
-      pointerEvents: "none",
-    },
-    bgOrb2: {
-      position: "absolute",
-      bottom: "-20%",
-      left: "-10%",
-      width: "300px",
-      height: "300px",
-      borderRadius: "50%",
-      background: `radial-gradient(circle, ${accentLight}10 0%, transparent 70%)`,
-      filter: "blur(60px)",
-      pointerEvents: "none",
     },
     container: {
       maxWidth: "1200px",
@@ -177,8 +266,7 @@ export default function Footer() {
 
   return (
     <footer style={styles.footer}>
-      <div style={styles.bgOrb1} />
-      <div style={styles.bgOrb2} />
+      <ParticleCanvas isDarkMode={isDarkMode} accentColor={accentColor} />
 
       <div style={styles.container}>
         <div style={styles.topSection}>
