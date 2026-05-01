@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { apiFetch } from "../api/api";
 import { toast } from "react-toastify";
-import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaUpload, FaTimes, FaFileAlt, FaMapMarkedAlt, FaChevronDown, FaQuestionCircle, FaClock, FaHeadset } from "react-icons/fa";
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaUpload, FaTimes, FaFileAlt, FaMapMarkedAlt, FaChevronDown, FaQuestionCircle, FaClock, FaHeadset, FaHistory } from "react-icons/fa";
 
 function Contact() {
   const { user } = useContext(AuthContext);
@@ -21,6 +21,9 @@ function Contact() {
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
   const [captchaToken, setCaptchaToken] = useState(null);
   const [faqOpen, setFaqOpen] = useState(null);
+  const [showHistory, setShowHistory] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -161,6 +164,24 @@ function Contact() {
     }
   };
 
+  const fetchHistory = async () => {
+    const email = formData.email || user?.email;
+    if (!email) {
+      toast.error("Please enter your email first");
+      return;
+    }
+    setHistoryLoading(true);
+    try {
+      const data = await apiFetch(`/contact/history?email=${encodeURIComponent(email)}`);
+      setHistory(data);
+      setShowHistory(true);
+    } catch {
+      toast.error("Failed to load message history");
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
   const c = useMemo(() => colors(isDarkMode), [isDarkMode]);
   const st = useMemo(() => styles(isMobile, c), [isMobile, c]);
 
@@ -173,6 +194,12 @@ function Contact() {
         <div style={st.hero}>
           <h1 style={st.heroTitle}>Contact Us</h1>
           <p style={st.heroSub}>Have a question or feedback? We'd love to hear from you.</p>
+        </div>
+
+        <div style={st.historyBtnWrap}>
+          <button type="button" onClick={fetchHistory} style={st.historyBtn} disabled={historyLoading}>
+            <FaHistory /> {historyLoading ? "Loading..." : "Message History"}
+          </button>
         </div>
 
         <div style={st.grid}>
@@ -286,6 +313,52 @@ function Contact() {
         <FAQSection isDark={isDarkMode} accent={c.accent} openIdx={faqOpen} setOpenIdx={setFaqOpen} isMobile={isMobile} />
       </div>
 
+      {showHistory && (
+        <div style={st.modalOverlay} onClick={() => setShowHistory(false)}>
+          <div style={st.modal} onClick={(e) => e.stopPropagation()}>
+            <div style={st.modalHeader}>
+              <h2 style={st.modalTitle}>Message History</h2>
+              <button type="button" onClick={() => setShowHistory(false)} style={st.modalClose}><FaTimes /></button>
+            </div>
+            <div style={st.modalBody}>
+              {history.length === 0 ? (
+                <p style={st.noHistory}>No messages found for this email.</p>
+              ) : (
+                history.map((msg, i) => (
+                  <div key={i} style={st.historyItem}>
+                    <div style={st.historyMsg}>
+                      <div style={st.historyMeta}>
+                        <span style={st.historyCategory}>{msg.category.replace("_", " ").toUpperCase()}</span>
+                        <span style={st.historyPriority(msg.priority)}>{msg.priority.toUpperCase()}</span>
+                        <span style={st.historyDate}>{new Date(msg.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+                      </div>
+                      <p style={st.historyText}>{msg.message}</p>
+                      {msg.attachments?.length > 0 && (
+                        <div style={st.historyAttachments}>
+                          {msg.attachments.map((att, j) => (
+                            <span key={j} style={st.attachmentChip}><FaFileAlt /> {att.filename}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    {msg.reply && (
+                      <div style={st.historyReply}>
+                        <div style={st.replyHeader}>
+                          <FaHeadset style={{ color: c.accent }} />
+                          <span>Admin Reply</span>
+                          <span style={st.replyDate}>{new Date(msg.replyAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+                        </div>
+                        <p style={st.replyText}>{msg.reply}</p>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <style>{`
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:'Inter',system-ui,sans-serif; }
@@ -353,6 +426,8 @@ const styles = (m, c) => ({
   hero: { textAlign: "center", marginBottom: m ? "24px" : "32px" },
   heroTitle: { fontSize: m ? "24px" : "32px", fontWeight: "800", color: c.text, marginBottom: "8px", letterSpacing: "-0.5px" },
   heroSub: { fontSize: m ? "14px" : "16px", color: c.textSec },
+  historyBtnWrap: { display: "flex", justifyContent: "center", marginBottom: m ? "16px" : "20px" },
+  historyBtn: { display: "flex", alignItems: "center", gap: "8px", padding: m ? "10px 20px" : "12px 24px", background: "transparent", border: `2px solid ${c.accent}`, borderRadius: "10px", fontSize: m ? "13px" : "14px", fontWeight: "700", color: c.accent, cursor: "pointer", transition: "all .2s", letterSpacing: "0.3px" },
   grid: { display: "grid", gridTemplateColumns: m ? "1fr" : "320px 1fr", gap: m ? "20px" : "24px", marginBottom: m ? "24px" : "32px" },
   sidebar: { display: "flex", flexDirection: "column", gap: "12px" },
   infoCard: { display: "flex", alignItems: "center", gap: "12px", padding: m ? "14px" : "16px", background: c.card, border: `1px solid ${c.cardBorder}`, borderRadius: "12px", boxShadow: "0 1px 3px rgba(0,0,0,.04)" },
@@ -384,6 +459,26 @@ const styles = (m, c) => ({
   mapTitle: { fontSize: m ? "16px" : "18px", fontWeight: "700", margin: 0 },
   mapWrap: { borderRadius: "12px", overflow: "hidden", height: m ? "200px" : "320px", border: `1px solid ${c.cardBorder}` },
   iframe: { width: "100%", height: "100%", border: "none" },
+  modalOverlay: { position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: m ? "12px" : "24px", animation: "fadeIn .3s ease" },
+  modal: { background: c.card, border: `1px solid ${c.cardBorder}`, borderRadius: "16px", width: "100%", maxWidth: m ? "100%" : "640px", maxHeight: "80vh", display: "flex", flexDirection: "column", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" },
+  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: m ? "16px" : "20px", borderBottom: `1px solid ${c.cardBorder}` },
+  modalTitle: { fontSize: m ? "16px" : "20px", fontWeight: "800", color: c.text, margin: 0 },
+  modalClose: { background: "none", border: "none", color: c.textSec, fontSize: "18px", cursor: "pointer", padding: "4px", display: "flex", alignItems: "center" },
+  modalBody: { overflowY: "auto", padding: m ? "16px" : "20px", flex: 1 },
+  noHistory: { textAlign: "center", color: c.textSec, fontSize: "14px", padding: "40px 0" },
+  historyItem: { marginBottom: "16px", borderBottom: `1px solid ${c.cardBorder}`, paddingBottom: "16px" },
+  historyMsg: { background: c.inputBg, border: `1px solid ${c.cardBorder}`, borderRadius: "12px", padding: m ? "12px" : "16px" },
+  historyMeta: { display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "8px", alignItems: "center" },
+  historyCategory: { fontSize: "11px", fontWeight: "700", color: c.accent, background: `${c.accent}15`, padding: "3px 8px", borderRadius: "6px", textTransform: "uppercase" },
+  historyPriority: (p) => ({ fontSize: "11px", fontWeight: "700", color: p === "urgent" ? "#ef4444" : p === "low" ? "#22c55e" : "#3b82f6", background: p === "urgent" ? "#ef444415" : p === "low" ? "#22c55e15" : "#3b82f615", padding: "3px 8px", borderRadius: "6px", textTransform: "uppercase" }),
+  historyDate: { fontSize: "11px", color: c.textSec, marginLeft: "auto" },
+  historyText: { fontSize: m ? "13px" : "14px", color: c.text, lineHeight: "1.6", margin: "0 0 8px" },
+  historyAttachments: { display: "flex", flexWrap: "wrap", gap: "6px" },
+  attachmentChip: { display: "flex", alignItems: "center", gap: "4px", fontSize: "11px", color: c.textSec, background: c.card, border: `1px solid ${c.cardBorder}`, borderRadius: "6px", padding: "3px 8px" },
+  historyReply: { marginTop: "12px", background: `linear-gradient(135deg,${c.accent}10,${c.accentLight}05)`, border: `1px solid ${c.accent}30`, borderRadius: "12px", padding: m ? "12px" : "16px" },
+  replyHeader: { display: "flex", alignItems: "center", gap: "6px", fontSize: m ? "12px" : "13px", fontWeight: "700", color: c.accent, marginBottom: "8px" },
+  replyDate: { fontSize: "11px", color: c.textSec, fontWeight: "400", marginLeft: "auto" },
+  replyText: { fontSize: m ? "13px" : "14px", color: c.text, lineHeight: "1.6", margin: 0 },
 });
 
 export default Contact;

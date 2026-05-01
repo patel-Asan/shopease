@@ -56,6 +56,23 @@ router.post("/", uploadContact.array("files", 5), async (req, res) => {
   }
 });
 
+// -------------------- GET /api/contact/history?email=... --------------------
+router.get("/history", async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ message: "Email is required" });
+
+    const messages = await Contact.find({ email })
+      .sort({ createdAt: -1 })
+      .select("name email message category priority reply replyAt createdAt attachments");
+
+    res.json(messages);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch message history" });
+  }
+});
+
 // -------------------- GET /api/contact (with filters) --------------------
 router.get("/", async (req, res) => {
   try {
