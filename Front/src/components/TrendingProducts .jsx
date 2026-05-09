@@ -110,7 +110,7 @@ const TrendingProducts = () => {
     productsGrid: {
       display: 'grid',
       gridTemplateColumns: isMobile 
-        ? '1fr' 
+        ? 'repeat(2, 1fr)' 
         : 'repeat(5, 1fr)',
       gap: isMobile ? '20px' : '24px',
       marginTop: '40px',

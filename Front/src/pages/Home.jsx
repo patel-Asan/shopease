@@ -208,7 +208,7 @@ export default function Home() {
         productsHeader: { flexDirection: "column", alignItems: "flex-start", gap: "12px" },
         productsTitle: { fontSize: "20px" },
         productsCount: { fontSize: "12px", padding: "6px 12px" },
-        productsGrid: { gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" },
+        productsGrid: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" },
         emptyContainer: { padding: "40px 20px", borderRadius: "16px" },
         emptyIcon: { fontSize: "40px" },
         emptyTitle: { fontSize: "18px" },
