@@ -391,7 +391,7 @@ export default function Favourites() {
       </div>
  
       <Row 
-        xs={1} 
+        xs={2} 
         sm={isTablet ? 2 : 2} 
         md={isTablet ? 2 : 3} 
         lg={4} 
